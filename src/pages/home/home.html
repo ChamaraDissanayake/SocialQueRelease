@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <section style="font-weight: bold;">
+    <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>
+    <label style="padding-left: 40px; font-size: 36px;">85</label>
+  </section>
+
+
+    <table style="margin-top: 40px;">
+      <tr>
+        <td style="width: 45%;"></td>
+        <td><label class="quelabel">Current Que Numbers</label></td>
+      </tr>
+      <tr>
+        <td style="padding-top:30px;">
+          <circle-progress
+            [percent]="setPresentage"
+            [animation]="false"           
+            [clockwise]="true"
+            [showTitle]="true"
+            [title]="percent"
+            (click)="holdClock()">
+          </circle-progress>
+        </td>
+        <td><label class="numberset" (click)="clickNext()"><span style="padding: 4px;" *ngFor="let ocptId of occupentId"> {{ocptId}} </span></label></td>
+      </tr>
+    </table>
+
+    <div style="margin-top: 30%;">
+      <button ion-button danger round class="redbutton">Out</button>
+      <button ion-button danger round class="purplebutton" (click)="clickNext()">Next</button>
+      <!-- <button ion-button danger round class="purplebutton" (click)="nextOccupent(ocptId)">Next</button> -->
+    </div>
+</ion-content>

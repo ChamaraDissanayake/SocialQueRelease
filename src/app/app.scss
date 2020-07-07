@@ -1,0 +1,87 @@
+// http://ionicframework.com/docs/theming/
+
+
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.
+.mainbody{
+    background-color: #5B69E9;
+    font-family: Roboto;
+    color: #FFFFFF;
+}
+ion-input{
+    input::placeholder {
+    color:rgb(185, 195, 252)!important;
+    }
+}
+.inputboxdecoration{
+    position: unset;        
+    background-color: #6A77ED;
+    border-radius: 8px;
+}
+
+.inputtext{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+    align-items: center;
+    letter-spacing: 0.02em;
+
+    background-color: #6A77ED;
+    color: #FFFFFF;
+}
+
+.submitbutton{
+    width: 327px;
+    height: 56px;
+    background: #FFFFFF;
+    border-radius: 100px;
+    font-size: 18px;
+    line-height: 21px;
+    letter-spacing: 0.02em;
+}
+
+.subbody{
+    background-color: #E9E9FD;
+    font-family: Roboto;
+    // color: #E9E9FD;;
+}
+
+ion-menu[side=left] > .menu-inner {
+    margin-top: 58px;
+    height: 90px;
+}
+
+.custommenubutton{
+    color: #FFFFFF;
+    background-color: #0E0AD7;
+    font-size: 18px;
+    line-height: 16px;
+    font-weight: 500;
+}
+
+.custommenubutton:hover{
+    background-color: #6A77ED;
+}
+
+.submitbutton:hover{
+    background: #642EFF;
+}
+
+.backBtnLable{
+    color: #fff;
+    font-size: x-large;
+    vertical-align: -webkit-baseline-middle;
+}
