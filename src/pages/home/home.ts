@@ -28,7 +28,7 @@ export class HomePage {
 
   clickNext(){
     this.occupentId.splice(0, 1);
-    this.setPresentage = 45;
+    this.setPresentage = 100;
     this.percent = 45;
     this.skipCustomer();
   }
