@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { SMS } from '@ionic-native/sms';
 
 @Component({
   selector: 'page-home',
@@ -11,15 +12,28 @@ export class HomePage {
   // upperNumber:number;
   belowNumber:number;
   setPresentage: number;
-  occupentId:any[];
+  occupentId: Array<{id: number, pNumber: number}>;
   holdTime:boolean;
+  test:boolean;
 
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController, private sms: SMS) {
     this.percent = 45;
     this.belowNumber = 45;
     this.holdTime = false;
-    this.occupentId= [1,2,3,4,5,6,7,8,9,0,1,50, 20, 30, 50, 
-      10,1,2,3,6,4,765,84,14,1,50, 20, 30, 50, 10,1,2,3,6,4,765,84,14,1];
+    this.test = false;
+    
+    this.occupentId= [
+      {id:0, pNumber:+94714444440},
+      {id:1, pNumber:+94714444441},
+      {id:2, pNumber:+94714444442},
+      {id:3, pNumber:+94714444443},
+      {id:4, pNumber:+94714444444},
+      {id:5, pNumber:+94714444445},
+      {id:6, pNumber:+94714444446},
+      {id:7, pNumber:+94714444447},
+      {id:8, pNumber:+94714444448},
+      {id:9, pNumber:+94714444449}      
+    ];
   }
   
   ionViewDidLoad() {
@@ -44,14 +58,16 @@ export class HomePage {
 
   skipCustomer(){
     clearInterval(this.timer);
-    this.timer = setInterval(() => {
-      this.percent--;
-      if(this.percent == 0){
-        clearInterval(this.timer);        
-        this.clickNext();
-      }
-      this.setPresentage = ((this.percent/this.belowNumber)*100);
-    }, 1000);
+    if(this.occupentId[0]!=undefined){
+      this.timer = setInterval(() => {
+        this.percent--;
+        if(this.percent == 0){
+          clearInterval(this.timer);        
+          this.clickNext();
+        }
+        this.setPresentage = ((this.percent/this.belowNumber)*100);
+      }, 1000);    
+    }
   }
 
   holdClock(){
@@ -62,5 +78,17 @@ export class HomePage {
       this.skipCustomer();
       this.holdTime = false;
     }    
+  }
+
+  testSms(){    
+    if(this.test==false){
+      clearInterval(this.timer);
+      this.test = true;
+    } else {
+      this.skipCustomer();
+      this.test = false;
+    }   
+    console.log('sms working', this.test);
+    this.sms.send('+94714142387', 'Hello world!'); 
   }
 }

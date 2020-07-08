@@ -30,7 +30,6 @@ export class MyApp {
       { title: 'Settings', component: SettingsPage },
       { title: 'About', component: AboutPage }
     ];
-
   }
 
   initializeApp() {

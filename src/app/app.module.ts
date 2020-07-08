@@ -18,6 +18,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { SMS } from '@ionic-native/sms';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
     AboutPage
   ],
   providers: [
+    SMS,
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

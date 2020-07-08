@@ -28,12 +28,12 @@
             (click)="holdClock()">
           </circle-progress>
         </td>
-        <td><label class="numberset" (click)="clickNext()"><span style="padding: 4px;" *ngFor="let ocptId of occupentId"> {{ocptId}} </span></label></td>
+        <td><label class="numberset" (click)="clickNext()"><span style="padding: 4px;" *ngFor="let ocptId of occupentId"> {{ocptId.id}} </span></label></td>
       </tr>
     </table>
-
+    <div><label color= 'primary'>{{test}}</label></div>
     <div style="margin-top: 30%;">
-      <button ion-button danger round class="redbutton">Out</button>
+      <button ion-button danger round class="redbutton" (click)="testSms()">Out</button>
       <button ion-button danger round class="purplebutton" (click)="clickNext()">Next</button>
     </div>
 </ion-content>
