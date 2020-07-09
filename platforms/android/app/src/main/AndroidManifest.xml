@@ -10,5 +10,4 @@
             </intent-filter>
         </activity>
     </application>
-    <uses-feature android:name="android.hardware.telephony" android:required="false" />
 </manifest>

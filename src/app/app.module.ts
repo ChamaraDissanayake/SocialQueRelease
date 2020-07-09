@@ -16,9 +16,8 @@ import { AboutPage } from '../pages/about/about';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-
 import { NgCircleProgressModule } from 'ng-circle-progress';
-import { SMS } from '@ionic-native/sms';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 @NgModule({
   declarations: [
@@ -64,7 +63,7 @@ import { SMS } from '@ionic-native/sms';
     AboutPage
   ],
   providers: [
-    SMS,
+    AndroidPermissions,
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

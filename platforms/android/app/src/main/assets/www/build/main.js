@@ -103,7 +103,7 @@ module.exports = webpackAsyncContext;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_sms__ = __webpack_require__(207);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__ = __webpack_require__(207);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -117,9 +117,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var HomePage = /** @class */ (function () {
-    function HomePage(navCtrl, sms) {
+    function HomePage(navCtrl, androidPermissions) {
         this.navCtrl = navCtrl;
-        this.sms = sms;
+        this.androidPermissions = androidPermissions;
         this.percent = 45;
         this.belowNumber = 45;
         this.holdTime = false;
@@ -138,6 +138,7 @@ var HomePage = /** @class */ (function () {
         ];
     }
     HomePage.prototype.ionViewDidLoad = function () {
+        this.androidPermissions.requestPermissions([this.androidPermissions.PERMISSION.READ_SMS]);
         this.skipCustomer();
     };
     HomePage.prototype.clickNext = function () {
@@ -186,14 +187,65 @@ var HomePage = /** @class */ (function () {
             this.skipCustomer();
             this.test = false;
         }
-        console.log('sms working', this.test);
-        this.sms.send('+94714142387', 'Hello world!');
+        this.checkPermission();
+    };
+    HomePage.prototype.checkPermission = function () {
+        var _this = this;
+        this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.READ_SMS).then(function (success) {
+            console.log(success, "success1");
+            //if permission granted
+            if (success.hasPermission == false) {
+                console.log(success.hasPermission, "1111111");
+                _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.READ_SMS).
+                    then(function (success) {
+                    console.log(success, "success2");
+                    _this.ReadSMSList();
+                }, function (err) {
+                    console.log(err, "error2");
+                    alert("cancelled");
+                });
+            }
+            else {
+                _this.ReadSMSList();
+            }
+        }, function (err) {
+            console.log(err, "error1");
+            _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.READ_SMS).
+                then(function (success) {
+                console.log(success, "success3");
+                _this.ReadSMSList();
+            }, function (err) {
+                console.log(err, "error3");
+                alert("cancelled");
+            });
+        });
+        this.androidPermissions.requestPermissions([this.androidPermissions.PERMISSION.READ_SMS]);
+    };
+    HomePage.prototype.ReadSMSList = function () {
+        var _this = this;
+        console.log("ReadSMSList");
+        this.platform.ready().then(function (readySource) {
+            console.log(readySource, "readySource");
+            var filter = {
+                box: 'inbox',
+                indexFrom: 0,
+                maxCount: 20,
+            };
+            if (SMS)
+                SMS.listSMS(filter, function (ListSms) {
+                    _this.messages = ListSms;
+                    console.log("if1");
+                }, function (Error) {
+                    console.log(Error, "Error");
+                    alert(JSON.stringify(Error));
+                });
+        });
     };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>\n    <label style="padding-left: 40px; font-size: 36px;">85</label>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td><label class="numberset" (click)="clickNext()"><span style="padding: 4px;" *ngFor="let ocptId of occupentId"> {{ocptId.id}} </span></label></td>\n      </tr>\n    </table>\n    <div><label color= \'primary\'>{{test}}</label></div>\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton" (click)="testSms()">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="clickNext()">Next</button>\n    </div>\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_sms__["a" /* SMS */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */]])
     ], HomePage);
     return HomePage;
 }());
@@ -488,7 +540,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_native_status_bar__ = __webpack_require__(252);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__ionic_native_splash_screen__ = __webpack_require__(253);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_ng_circle_progress__ = __webpack_require__(397);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__ionic_native_sms__ = __webpack_require__(207);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__ionic_native_android_permissions__ = __webpack_require__(207);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -565,7 +617,7 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_12__pages_about_about__["a" /* AboutPage */]
             ],
             providers: [
-                __WEBPACK_IMPORTED_MODULE_16__ionic_native_sms__["a" /* SMS */],
+                __WEBPACK_IMPORTED_MODULE_16__ionic_native_android_permissions__["a" /* AndroidPermissions */],
                 __WEBPACK_IMPORTED_MODULE_13__ionic_native_status_bar__["a" /* StatusBar */],
                 __WEBPACK_IMPORTED_MODULE_14__ionic_native_splash_screen__["a" /* SplashScreen */],
                 { provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* ErrorHandler */], useClass: __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["b" /* IonicErrorHandler */] }

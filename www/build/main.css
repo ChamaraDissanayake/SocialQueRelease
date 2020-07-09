@@ -30685,6 +30685,10 @@ page-home .numberset {
   overflow: hidden;
 }
 
+page-home .scroll-content {
+  margin-bottom: 0px !important;
+}
+
 page-login .loginlables {
   font-style: normal;
   font-weight: normal;

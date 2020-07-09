@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { SMS } from '@ionic-native/sms';
+import { NavController, Platform } from 'ionic-angular';
+import { AndroidPermissions } from '@ionic-native/android-permissions'
+declare var SMS: any;
 
 @Component({
   selector: 'page-home',
@@ -15,8 +16,11 @@ export class HomePage {
   occupentId: Array<{id: number, pNumber: number}>;
   holdTime:boolean;
   test:boolean;
+  public platform: Platform;
+  messages:any;
+  
 
-  constructor(public navCtrl: NavController, private sms: SMS) {
+  constructor(public navCtrl: NavController, public androidPermissions: AndroidPermissions) {
     this.percent = 45;
     this.belowNumber = 45;
     this.holdTime = false;
@@ -37,6 +41,7 @@ export class HomePage {
   }
   
   ionViewDidLoad() {
+    this.androidPermissions.requestPermissions([this.androidPermissions.PERMISSION.READ_SMS]);
     this.skipCustomer();
   }
 
@@ -80,15 +85,80 @@ export class HomePage {
     }    
   }
 
-  testSms(){    
+  testSms(){
     if(this.test==false){
       clearInterval(this.timer);
       this.test = true;
     } else {
       this.skipCustomer();
       this.test = false;
-    }   
-    console.log('sms working', this.test);
-    this.sms.send('+94714142387', 'Hello world!'); 
+    }
+    this.checkPermission()
   }
+
+  checkPermission() {
+    this.androidPermissions.checkPermission
+    (this.androidPermissions.PERMISSION.READ_SMS).then(
+    success => {
+      console.log(success,"success1")
+      //if permission granted
+      if(success.hasPermission == false){
+        console.log(success.hasPermission,"1111111")
+        this.androidPermissions.requestPermission
+        (this.androidPermissions.PERMISSION.READ_SMS).
+        then(success => {
+          console.log(success,"success2")
+          this.ReadSMSList();
+        },
+        err => {
+          console.log(err,"error2")
+          alert("cancelled")
+        });
+      } else {
+        this.ReadSMSList();
+      }
+      
+    },
+    err => {
+      console.log(err,"error1")
+      this.androidPermissions.requestPermission
+      (this.androidPermissions.PERMISSION.READ_SMS).
+      then(success => {
+        console.log(success,"success3")
+      this.ReadSMSList();
+      },
+      err => {
+        console.log(err,"error3")
+      alert("cancelled")
+      });
+    });
+    
+    this.androidPermissions.requestPermissions
+    ([this.androidPermissions.PERMISSION.READ_SMS]);
+    
+    }
+    
+    ReadSMSList() {
+      console.log("ReadSMSList")
+      this.platform.ready().then((readySource) => {
+      console.log(readySource,"readySource")
+      let filter = {
+        box: 'inbox', // 'inbox' (default), 'sent', 'draft'
+        indexFrom: 0, // start from index 0
+        maxCount: 20, // count of SMS to return each time
+      };
+      
+      
+      if (SMS) SMS.listSMS(filter, (ListSms) => {
+        this.messages = ListSms
+        console.log("if1");
+      },
+      
+      Error => {
+        console.log(Error,"Error");
+        alert(JSON.stringify(Error))
+        });
+        
+      });
+    }
 }
