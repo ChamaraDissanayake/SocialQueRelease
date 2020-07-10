@@ -8,7 +8,6 @@ declare var SMS: any;
   templateUrl: 'home.html'
 })
 export class HomePage {
-  public platform: Platform;
   timer: any;
   percent: number;
   // upperNumber:number;
@@ -16,15 +15,13 @@ export class HomePage {
   setPresentage: number;
   occupentId: Array<{ id: number, pNumber: number }>;
   holdTime: boolean;
-  test: boolean;
-  messages: any;
+  messages: any[];
 
 
-  constructor(public navCtrl: NavController, public androidPermissions: AndroidPermissions) {
+  constructor(public navCtrl: NavController, public platform: Platform, public androidPermissions: AndroidPermissions) {
     this.percent = 45;
     this.belowNumber = 45;
     this.holdTime = false;
-    this.test = false;
 
     this.occupentId = [
       { id: 0, pNumber: +94714444440 },
@@ -41,9 +38,6 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
-    this.androidPermissions.requestPermissions([this.androidPermissions.PERMISSION.READ_SMS]).then(
-      success => { console.log(success, '1111111') },
-      err => { console.log(err, '2222222') });
     this.skipCustomer();
   }
 
@@ -87,40 +81,24 @@ export class HomePage {
     }
   }
 
-  testSms() {
-    if (this.test == false) {
-      clearInterval(this.timer);
-      this.test = true;
-    } else {
-      this.skipCustomer();
-      this.test = false;
-    }
-    this.checkPermission()
-  }
-
   checkPermission() {
     this.androidPermissions.checkPermission
       (this.androidPermissions.PERMISSION.READ_SMS).then(
         success => {
-          console.log(success, "success1")
           if (success.hasPermission == false) {
-            alert("Sorry no permission")
           } else {
-            this.ReadSMSList();
+            this.readSMSList();
           }
         },
         err => {
-          console.log(err, "error1");
           this.androidPermissions.requestPermission
             (this.androidPermissions.PERMISSION.READ_SMS).
             then(success => {
-              console.log(success, "success2")
-              this.ReadSMSList();
+              this.readSMSList();
             },
-              err => {
-                console.log(err, "error2")
-                alert("cancelled")
-              });
+            err => {
+              alert("cancelled")
+            });
         });
 
     this.androidPermissions.requestPermissions
@@ -128,27 +106,41 @@ export class HomePage {
 
   }
 
-  ReadSMSList() {
-    console.log("ReadSMSList")
+  readSMSList() {
     this.platform.ready().then((readySource) => {
-      console.log(readySource, "readySource")
       let filter = {
         box: 'inbox', // 'inbox' (default), 'sent', 'draft'
         indexFrom: 0, // start from index 0
         maxCount: 20, // count of SMS to return each time
       };
 
-
+      // SMS.listSMS(filter, (ListSms) => {
       if (SMS) SMS.listSMS(filter, (ListSms) => {
         this.messages = ListSms
-        console.log("if1");
       },
 
         Error => {
-          console.log(Error, "Error");
           alert(JSON.stringify(Error))
         });
 
+    });
+  }
+
+  sendSMStoCustomer(){
+    this.androidPermissions.requestPermission
+    (this.androidPermissions.PERMISSION.SEND_SMS).
+    then(success => {
+      if(success.hasPermission==true){
+        this.platform.ready().then((readySource) => {
+          if(SMS) SMS.sendSMS("+94714142387", "Hello Chamara", function(){}, function(){});
+          // SMS.sendSMS("+94714142387", "Hello Chamara", function(){}, function(){});
+        });
+      } else {
+        console.log(success)        
+      }
+    },
+    err => {
+      alert("cancelled")
     });
   }
 }

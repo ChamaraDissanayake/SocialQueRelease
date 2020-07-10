@@ -31,9 +31,23 @@
         <td><label class="numberset" (click)="clickNext()"><span style="padding: 4px;" *ngFor="let ocptId of occupentId"> {{ocptId.id}} </span></label></td>
       </tr>
     </table>
-    <div><label color= 'primary'>{{test}}</label></div>
+
     <div style="margin-top: 30%;">
-      <button ion-button danger round class="redbutton" (click)="testSms()">Out</button>
+      <button ion-button danger round class="redbutton">Out</button>
       <button ion-button danger round class="purplebutton" (click)="clickNext()">Next</button>
     </div>
+
+    <div style="margin-top: 20px;">
+      <button ion-button round (click)="sendSMStoCustomer()">Send Message</button>
+      <button ion-button round (click)="checkPermission()">Read Messages</button>
+    </div>
+
+    <div>     
+        <label *ngFor="let x of messages">
+        <button ion-button color="danger" round>{{x.address}}</button>
+        <h2>{{x.address}}</h2>
+        <p>{{x.body}}</p>
+        </label>
+    </div>
+
 </ion-content>

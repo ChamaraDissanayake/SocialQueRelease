@@ -72,11 +72,11 @@ webpackEmptyAsyncContext.id = 160;
 
 var map = {
 	"../pages/login/login.module": [
-		682,
+		681,
 		1
 	],
 	"../pages/otp/otp.module": [
-		681,
+		682,
 		0
 	]
 };
@@ -117,13 +117,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var HomePage = /** @class */ (function () {
-    function HomePage(navCtrl, androidPermissions) {
+    function HomePage(navCtrl, platform, androidPermissions) {
         this.navCtrl = navCtrl;
+        this.platform = platform;
         this.androidPermissions = androidPermissions;
         this.percent = 45;
         this.belowNumber = 45;
         this.holdTime = false;
-        this.test = false;
         this.occupentId = [
             { id: 0, pNumber: +94714444440 },
             { id: 1, pNumber: +94714444441 },
@@ -138,7 +138,6 @@ var HomePage = /** @class */ (function () {
         ];
     }
     HomePage.prototype.ionViewDidLoad = function () {
-        this.androidPermissions.requestPermissions([this.androidPermissions.PERMISSION.READ_SMS]).then(function (success) { console.log(success, '1111111'); }, function (err) { console.log(err, '2222222'); });
         this.skipCustomer();
     };
     HomePage.prototype.clickNext = function () {
@@ -178,68 +177,67 @@ var HomePage = /** @class */ (function () {
             this.holdTime = false;
         }
     };
-    HomePage.prototype.testSms = function () {
-        if (this.test == false) {
-            clearInterval(this.timer);
-            this.test = true;
-        }
-        else {
-            this.skipCustomer();
-            this.test = false;
-        }
-        this.checkPermission();
-    };
     HomePage.prototype.checkPermission = function () {
         var _this = this;
         this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.READ_SMS).then(function (success) {
-            console.log(success, "success1");
             if (success.hasPermission == false) {
-                alert("Sorry no permission");
             }
             else {
-                _this.ReadSMSList();
+                _this.readSMSList();
             }
         }, function (err) {
-            console.log(err, "error1");
             _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.READ_SMS).
                 then(function (success) {
-                console.log(success, "success2");
-                _this.ReadSMSList();
+                _this.readSMSList();
             }, function (err) {
-                console.log(err, "error2");
                 alert("cancelled");
             });
         });
         this.androidPermissions.requestPermissions([this.androidPermissions.PERMISSION.READ_SMS]);
     };
-    HomePage.prototype.ReadSMSList = function () {
+    HomePage.prototype.readSMSList = function () {
         var _this = this;
-        console.log("ReadSMSList");
         this.platform.ready().then(function (readySource) {
-            console.log(readySource, "readySource");
             var filter = {
                 box: 'inbox',
                 indexFrom: 0,
                 maxCount: 20,
             };
+            // SMS.listSMS(filter, (ListSms) => {
             if (SMS)
                 SMS.listSMS(filter, function (ListSms) {
                     _this.messages = ListSms;
-                    console.log("if1");
                 }, function (Error) {
-                    console.log(Error, "Error");
                     alert(JSON.stringify(Error));
                 });
         });
     };
+    HomePage.prototype.sendSMStoCustomer = function () {
+        var _this = this;
+        this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.SEND_SMS).
+            then(function (success) {
+            if (success.hasPermission == true) {
+                _this.platform.ready().then(function (readySource) {
+                    if (SMS)
+                        SMS.sendSMS("+94714142387", "Hello Chamara", function () { }, function () { });
+                    // SMS.sendSMS("+94714142387", "Hello Chamara", function(){}, function(){});
+                });
+            }
+            else {
+                console.log(success);
+            }
+        }, function (err) {
+            alert("cancelled");
+        });
+    };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>\n    <label style="padding-left: 40px; font-size: 36px;">85</label>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td><label class="numberset" (click)="clickNext()"><span style="padding: 4px;" *ngFor="let ocptId of occupentId"> {{ocptId.id}} </span></label></td>\n      </tr>\n    </table>\n    <div><label color= \'primary\'>{{test}}</label></div>\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton" (click)="testSms()">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="clickNext()">Next</button>\n    </div>\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
+            selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>\n    <label style="padding-left: 40px; font-size: 36px;">85</label>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td><label class="numberset" (click)="clickNext()"><span style="padding: 4px;" *ngFor="let ocptId of occupentId"> {{ocptId.id}} </span></label></td>\n      </tr>\n    </table>\n\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="clickNext()">Next</button>\n    </div>\n\n    <div style="margin-top: 20px;">\n      <button ion-button round (click)="sendSMStoCustomer()">Send Message</button>\n      <button ion-button round (click)="checkPermission()">Read Messages</button>\n    </div>\n\n    <div>     \n        <label *ngFor="let x of messages">\n        <button ion-button color="danger" round>{{x.address}}</button>\n        <h2>{{x.address}}</h2>\n        <p>{{x.body}}</p>\n        </label>\n    </div>\n\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */]) === "function" && _b || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */]) === "function" && _c || Object])
     ], HomePage);
     return HomePage;
-    var _a, _b;
+    var _a, _b, _c;
 }());
 
 //# sourceMappingURL=home.js.map
@@ -577,8 +575,8 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
                 __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["c" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* SocialQue */], {}, {
                     links: [
-                        { loadChildren: '../pages/otp/otp.module#OtpPageModule', name: 'OtpPage', segment: 'otp', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] }
+                        { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/otp/otp.module#OtpPageModule', name: 'OtpPage', segment: 'otp', priority: 'low', defaultHistory: [] }
                     ]
                 }),
                 __WEBPACK_IMPORTED_MODULE_15_ng_circle_progress__["a" /* NgCircleProgressModule */].forRoot({
@@ -686,15 +684,14 @@ var SocialQue = /** @class */ (function () {
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_9" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* Nav */]),
-        __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* Nav */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* Nav */]) === "function" && _a || Object)
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* Nav */])
     ], SocialQue.prototype, "nav", void 0);
     SocialQue = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/app/app.html"*/'<ion-menu [content]="content" type="overlay">\n  <!-- <ion-header>\n    <ion-toolbar>\n      <ion-title>Menu</ion-title>\n    </ion-toolbar>\n  </ion-header> -->\n\n  <ion-content>\n    <ion-list>\n      <button class="custommenubutton" menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n        {{p.title}}\n      </button>\n    </ion-list>\n  </ion-content>\n\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/app/app.html"*/
         }),
-        __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */]) === "function" && _d || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */]])
     ], SocialQue);
     return SocialQue;
-    var _a, _b, _c, _d;
 }());
 
 //# sourceMappingURL=app.component.js.map

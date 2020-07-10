@@ -1,14 +1,6 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
   module.exports = [
     {
-      "id": "cordova-sms-plugin.Sms",
-      "file": "plugins/cordova-sms-plugin/www/sms.js",
-      "pluginId": "cordova-sms-plugin",
-      "clobbers": [
-        "window.sms"
-      ]
-    },
-    {
       "id": "cordova-plugin-statusbar.statusbar",
       "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
       "pluginId": "cordova-plugin-statusbar",
@@ -55,16 +47,33 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "clobbers": [
         "cordova.plugins.permissions"
       ]
+    },
+    {
+      "id": "cordova-plugin-sms.SMS",
+      "file": "plugins/cordova-plugin-sms/www/SMS.js",
+      "pluginId": "cordova-plugin-sms",
+      "clobbers": [
+        "window.SMS"
+      ]
+    },
+    {
+      "id": "cordova-sms-plugin.Sms",
+      "file": "plugins/cordova-sms-plugin/www/sms.js",
+      "pluginId": "cordova-sms-plugin",
+      "clobbers": [
+        "window.sms"
+      ]
     }
   ];
   module.exports.metadata = {
-    "cordova-sms-plugin": "1.0.0",
     "cordova-plugin-whitelist": "1.3.3",
     "cordova-plugin-statusbar": "2.4.2",
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-splashscreen": "5.0.2",
     "cordova-plugin-ionic-webview": "4.2.1",
     "cordova-plugin-ionic-keyboard": "2.2.0",
-    "cordova-plugin-android-permissions": "1.0.2"
+    "cordova-plugin-android-permissions": "1.0.2",
+    "cordova-plugin-sms": "1.0.5",
+    "cordova-sms-plugin": "1.0.0"
   };
 });

@@ -117,13 +117,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var HomePage = /** @class */ (function () {
-    function HomePage(navCtrl, androidPermissions) {
+    function HomePage(navCtrl, platform, androidPermissions) {
         this.navCtrl = navCtrl;
+        this.platform = platform;
         this.androidPermissions = androidPermissions;
         this.percent = 45;
         this.belowNumber = 45;
         this.holdTime = false;
-        this.test = false;
         this.occupentId = [
             { id: 0, pNumber: +94714444440 },
             { id: 1, pNumber: +94714444441 },
@@ -138,7 +138,10 @@ var HomePage = /** @class */ (function () {
         ];
     }
     HomePage.prototype.ionViewDidLoad = function () {
-        this.androidPermissions.requestPermissions([this.androidPermissions.PERMISSION.READ_SMS]);
+        // this.androidPermissions.requestPermissions([this.androidPermissions.PERMISSION.READ_SMS]).then(
+        //   success => { console.log(success, '1111111') },
+        //   err => { console.log(err, '2222222') });
+        // console.log(this.androidPermissions.requestPermissions(["READ_SMS"]))
         this.skipCustomer();
     };
     HomePage.prototype.clickNext = function () {
@@ -178,90 +181,74 @@ var HomePage = /** @class */ (function () {
             this.holdTime = false;
         }
     };
-    HomePage.prototype.testSms = function () {
-        if (this.test == false) {
-            clearInterval(this.timer);
-            this.test = true;
-        }
-        else {
-            this.skipCustomer();
-            this.test = false;
-        }
-        this.checkPermission();
-    };
     HomePage.prototype.checkPermission = function () {
-        // this.androidPermissions.checkPermission
-        // (this.androidPermissions.PERMISSION.READ_SMS).then(
-        // success => {
-        //   console.log(success,"success1")
-        //   //if permission granted
-        //   if(success.hasPermission == false){
-        //     console.log(success.hasPermission,"1111111")
-        //     this.androidPermissions.requestPermission
-        //     (this.androidPermissions.PERMISSION.READ_SMS).
-        //     then(success => {
-        //       console.log(success,"success2")
-        //       this.ReadSMSList();
-        //     },
-        //     err => {
-        //       console.log(err,"error2")
-        //       alert("cancelled")
-        //     });
-        //   } else {
-        //     this.ReadSMSList();
-        //   }
-        // },
-        // err => {
-        //   console.log(err,"error1")
-        //   this.androidPermissions.requestPermission
-        //   (this.androidPermissions.PERMISSION.READ_SMS).
-        //   then(success => {
-        //     console.log(success,"success3")
-        //   this.ReadSMSList();
-        //   },
-        //   err => {
-        //     console.log(err,"error3")
-        //   alert("cancelled")
-        //   });
-        // });
-        // this.androidPermissions.requestPermissions
-        // ([this.androidPermissions.PERMISSION.READ_SMS]);
-        // }
-        // ReadSMSList() {
-        //   console.log("ReadSMSList")
-        //   this.platform.ready().then((readySource) => {
-        //   console.log(readySource,"readySource")
-        //   let filter = {
-        //     box: 'inbox', // 'inbox' (default), 'sent', 'draft'
-        //     indexFrom: 0, // start from index 0
-        //     maxCount: 20, // count of SMS to return each time
-        //   };
-        //   if (SMS) SMS.listSMS(filter, (ListSms) => {
-        //     this.messages = ListSms
-        //     console.log("if1");
-        //   },
-        //   Error => {
-        //     console.log(Error,"Error");
-        //     alert(JSON.stringify(Error))
-        //     });
-        //   });
-        this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ReadSMSList);
-        function error() {
-            console.warn('SMS permission is not turned on');
-        }
-        function success(status) {
-            console.log(status);
-            if (!status.hasPermission)
-                error();
-            else
-                console.log(status.hasPermission);
-        }
+        var _this = this;
+        this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.READ_SMS).then(function (success) {
+            // console.log(success, "success1")
+            if (success.hasPermission == false) {
+                // alert("Sorry no permission")
+            }
+            else {
+                _this.readSMSList();
+            }
+        }, function (err) {
+            // console.log(err, "error1");
+            _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.READ_SMS).
+                then(function (success) {
+                // console.log(success, "success2")
+                _this.readSMSList();
+            }, function (err) {
+                // console.log(err, "error2")
+                alert("cancelled");
+            });
+        });
+        this.androidPermissions.requestPermissions([this.androidPermissions.PERMISSION.READ_SMS]);
+    };
+    HomePage.prototype.readSMSList = function () {
+        var _this = this;
+        // console.log("readSMSList", this.platform)
+        this.platform.ready().then(function (readySource) {
+            // console.log(readySource, "readySource")
+            var filter = {
+                box: 'inbox',
+                indexFrom: 0,
+                maxCount: 20,
+            };
+            if (SMS)
+                SMS.listSMS(filter, function (ListSms) {
+                    _this.messages = ListSms;
+                    // console.log("if1");
+                }, function (Error) {
+                    // console.log(Error, "Error");
+                    alert(JSON.stringify(Error));
+                });
+        });
+    };
+    HomePage.prototype.sendSMStoCustomer = function () {
+        var _this = this;
+        this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.SEND_SMS).
+            then(function (success) {
+            if (success.hasPermission == false) {
+                console.log(success);
+            }
+            else {
+                console.log(success);
+                _this.platform.ready().then(function (readySource) {
+                    console.log("Ready to send");
+                    if (SMS)
+                        SMS.sendSMS("+94714142387", "Hello Chamara", function () { }, function () { });
+                });
+            }
+        }, function (err) {
+            console.log(err, "SEND_SMS permission required");
+            alert("cancelled");
+        });
     };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>\n    <label style="padding-left: 40px; font-size: 36px;">85</label>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td><label class="numberset" (click)="clickNext()"><span style="padding: 4px;" *ngFor="let ocptId of occupentId"> {{ocptId.id}} </span></label></td>\n      </tr>\n    </table>\n    <div><label color= \'primary\'>{{test}}</label></div>\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton" (click)="testSms()">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="clickNext()">Next</button>\n    </div>\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
+            selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>\n    <label style="padding-left: 40px; font-size: 36px;">85</label>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td><label class="numberset" (click)="clickNext()"><span style="padding: 4px;" *ngFor="let ocptId of occupentId"> {{ocptId.id}} </span></label></td>\n      </tr>\n    </table>\n\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="clickNext()">Next</button>\n    </div>\n\n    <div>     \n        <label *ngFor="let x of messages">\n        <button ion-button color="danger" round>{{x.address}}</button>\n        <h2>{{x.address}}</h2>\n        <p>{{x.body}}</p>\n        </label>\n    </div>\n    <div>\n      <button ion-button color="danger" round (click)="sendSMStoCustomer()">Send Message</button>\n      <button ion-button color="danger" round (click)="checkPermission()">Read Messages</button>\n    </div>\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */]])
     ], HomePage);
     return HomePage;
 }());
@@ -586,7 +573,7 @@ var AppModule = /** @class */ (function () {
     AppModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["J" /* NgModule */])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* MyApp */],
+                __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* SocialQue */],
                 __WEBPACK_IMPORTED_MODULE_4__pages_home_home__["a" /* HomePage */],
                 __WEBPACK_IMPORTED_MODULE_7__pages_list_list__["a" /* ListPage */],
                 __WEBPACK_IMPORTED_MODULE_8__pages_login_login__["a" /* LoginPage */],
@@ -599,7 +586,7 @@ var AppModule = /** @class */ (function () {
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-                __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["c" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* MyApp */], {}, {
+                __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["c" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* SocialQue */], {}, {
                     links: [
                         { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/otp/otp.module#OtpPageModule', name: 'OtpPage', segment: 'otp', priority: 'low', defaultHistory: [] }
@@ -621,7 +608,7 @@ var AppModule = /** @class */ (function () {
             ],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* IonicApp */]],
             entryComponents: [
-                __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* MyApp */],
+                __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* SocialQue */],
                 __WEBPACK_IMPORTED_MODULE_4__pages_home_home__["a" /* HomePage */],
                 __WEBPACK_IMPORTED_MODULE_7__pages_list_list__["a" /* ListPage */],
                 __WEBPACK_IMPORTED_MODULE_8__pages_login_login__["a" /* LoginPage */],
@@ -652,7 +639,7 @@ var AppModule = /** @class */ (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SocialQue; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(252);
@@ -681,8 +668,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 // import { LoginPage } from '../pages/login/login';
 // import { HomePage } from '../pages/home/home';
 // import { HomePage } from '../pages/home/home';
-var MyApp = /** @class */ (function () {
-    function MyApp(platform, statusBar, splashScreen) {
+var SocialQue = /** @class */ (function () {
+    function SocialQue(platform, statusBar, splashScreen) {
         this.platform = platform;
         this.statusBar = statusBar;
         this.splashScreen = splashScreen;
@@ -694,7 +681,7 @@ var MyApp = /** @class */ (function () {
             { title: 'About', component: __WEBPACK_IMPORTED_MODULE_6__pages_about_about__["a" /* AboutPage */] }
         ];
     }
-    MyApp.prototype.initializeApp = function () {
+    SocialQue.prototype.initializeApp = function () {
         var _this = this;
         this.platform.ready().then(function () {
             // Okay, so the platform is ready and our plugins are available.
@@ -703,7 +690,7 @@ var MyApp = /** @class */ (function () {
             _this.splashScreen.hide();
         });
     };
-    MyApp.prototype.openPage = function (page) {
+    SocialQue.prototype.openPage = function (page) {
         // Reset the content nav to have just this page
         // we wouldn't want the back button to show in this scenario
         this.nav.setRoot(page.component);
@@ -711,13 +698,13 @@ var MyApp = /** @class */ (function () {
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_9" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* Nav */]),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* Nav */])
-    ], MyApp.prototype, "nav", void 0);
-    MyApp = __decorate([
+    ], SocialQue.prototype, "nav", void 0);
+    SocialQue = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/app/app.html"*/'<ion-menu [content]="content" type="overlay">\n  <!-- <ion-header>\n    <ion-toolbar>\n      <ion-title>Menu</ion-title>\n    </ion-toolbar>\n  </ion-header> -->\n\n  <ion-content>\n    <ion-list>\n      <button class="custommenubutton" menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n        {{p.title}}\n      </button>\n    </ion-list>\n  </ion-content>\n\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/app/app.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */]])
-    ], MyApp);
-    return MyApp;
+    ], SocialQue);
+    return SocialQue;
 }());
 
 //# sourceMappingURL=app.component.js.map
