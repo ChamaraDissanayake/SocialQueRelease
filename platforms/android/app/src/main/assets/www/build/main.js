@@ -190,56 +190,72 @@ var HomePage = /** @class */ (function () {
         this.checkPermission();
     };
     HomePage.prototype.checkPermission = function () {
-        var _this = this;
-        this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.READ_SMS).then(function (success) {
-            console.log(success, "success1");
-            //if permission granted
-            if (success.hasPermission == false) {
-                console.log(success.hasPermission, "1111111");
-                _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.READ_SMS).
-                    then(function (success) {
-                    console.log(success, "success2");
-                    _this.ReadSMSList();
-                }, function (err) {
-                    console.log(err, "error2");
-                    alert("cancelled");
-                });
-            }
-            else {
-                _this.ReadSMSList();
-            }
-        }, function (err) {
-            console.log(err, "error1");
-            _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.READ_SMS).
-                then(function (success) {
-                console.log(success, "success3");
-                _this.ReadSMSList();
-            }, function (err) {
-                console.log(err, "error3");
-                alert("cancelled");
-            });
-        });
-        this.androidPermissions.requestPermissions([this.androidPermissions.PERMISSION.READ_SMS]);
-    };
-    HomePage.prototype.ReadSMSList = function () {
-        var _this = this;
-        console.log("ReadSMSList");
-        this.platform.ready().then(function (readySource) {
-            console.log(readySource, "readySource");
-            var filter = {
-                box: 'inbox',
-                indexFrom: 0,
-                maxCount: 20,
-            };
-            if (SMS)
-                SMS.listSMS(filter, function (ListSms) {
-                    _this.messages = ListSms;
-                    console.log("if1");
-                }, function (Error) {
-                    console.log(Error, "Error");
-                    alert(JSON.stringify(Error));
-                });
-        });
+        // this.androidPermissions.checkPermission
+        // (this.androidPermissions.PERMISSION.READ_SMS).then(
+        // success => {
+        //   console.log(success,"success1")
+        //   //if permission granted
+        //   if(success.hasPermission == false){
+        //     console.log(success.hasPermission,"1111111")
+        //     this.androidPermissions.requestPermission
+        //     (this.androidPermissions.PERMISSION.READ_SMS).
+        //     then(success => {
+        //       console.log(success,"success2")
+        //       this.ReadSMSList();
+        //     },
+        //     err => {
+        //       console.log(err,"error2")
+        //       alert("cancelled")
+        //     });
+        //   } else {
+        //     this.ReadSMSList();
+        //   }
+        // },
+        // err => {
+        //   console.log(err,"error1")
+        //   this.androidPermissions.requestPermission
+        //   (this.androidPermissions.PERMISSION.READ_SMS).
+        //   then(success => {
+        //     console.log(success,"success3")
+        //   this.ReadSMSList();
+        //   },
+        //   err => {
+        //     console.log(err,"error3")
+        //   alert("cancelled")
+        //   });
+        // });
+        // this.androidPermissions.requestPermissions
+        // ([this.androidPermissions.PERMISSION.READ_SMS]);
+        // }
+        // ReadSMSList() {
+        //   console.log("ReadSMSList")
+        //   this.platform.ready().then((readySource) => {
+        //   console.log(readySource,"readySource")
+        //   let filter = {
+        //     box: 'inbox', // 'inbox' (default), 'sent', 'draft'
+        //     indexFrom: 0, // start from index 0
+        //     maxCount: 20, // count of SMS to return each time
+        //   };
+        //   if (SMS) SMS.listSMS(filter, (ListSms) => {
+        //     this.messages = ListSms
+        //     console.log("if1");
+        //   },
+        //   Error => {
+        //     console.log(Error,"Error");
+        //     alert(JSON.stringify(Error))
+        //     });
+        //   });
+        this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ReadSMSList);
+        function error() {
+            console.warn('SMS permission is not turned on');
+        }
+        function success(status) {
+            console.log(status);
+            if (!status.hasPermission)
+                error();
+            else
+                console.log(status.hasPermission);
+        }
     };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
