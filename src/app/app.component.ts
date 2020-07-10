@@ -15,7 +15,7 @@ import { AboutPage } from '../pages/about/about';
 @Component({
   templateUrl: 'app.html'
 })
-export class MyApp {
+export class SocialQue {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = TabsPage;

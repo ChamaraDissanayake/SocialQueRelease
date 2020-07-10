@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
-import { MyApp } from './app.component';
+import { SocialQue } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { WaitinglistPage } from '../pages/waitinglist/waitinglist';
 import { SkippedPage } from '../pages/skipped/skipped';
@@ -21,7 +21,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 @NgModule({
   declarations: [
-    MyApp,
+    SocialQue,
     HomePage,
     ListPage,
     LoginPage,
@@ -34,7 +34,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(SocialQue),
     NgCircleProgressModule.forRoot({
       // set defaults here
       radius: 50,
@@ -51,7 +51,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
+    SocialQue,
     HomePage,
     ListPage,
     LoginPage,
