@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { ExchangeDataProvider } from '../../providers/exchange-data/exchange-data'
 
 /**
  * Generated class for the SkippedPage page.
@@ -13,12 +14,17 @@ import { NavController, NavParams } from 'ionic-angular';
   templateUrl: 'skipped.html',
 })
 export class SkippedPage {
+  skipped: any[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private exchangeData: ExchangeDataProvider) {
+    this.skipped = [];
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SkippedPage');
+  ionViewDidEnter() {
+    this.skiplist();
   }
 
+  skiplist(){
+    this.skipped = this.exchangeData.skippedList;
+  }
 }

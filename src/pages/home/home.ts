@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, Platform } from 'ionic-angular';
 import { AndroidPermissions } from '@ionic-native/android-permissions'
+import { ExchangeDataProvider } from '../../providers/exchange-data/exchange-data'
+
 declare var SMS: any;
 
 @Component({
@@ -17,9 +19,14 @@ export class HomePage {
   holdTime: boolean;
   messages: any[];
   tempList: any[];
+  generateNumber: number= 100000;
 
-
-  constructor(public navCtrl: NavController, public platform: Platform, public androidPermissions: AndroidPermissions) {
+  constructor(
+    public navCtrl: NavController,
+    public platform: Platform,
+    public androidPermissions: AndroidPermissions,
+    private exchangeData: ExchangeDataProvider) {
+    
     this.percent = 45;
     this.belowNumber = 45;
     this.holdTime = false;
@@ -43,6 +50,8 @@ export class HomePage {
   }
 
   clickNext() {
+    // console.log(this.occupentId[0],'11111')
+    this.exchangeData.createSkippedList(this.occupentId[0])
     this.occupentId.splice(0, 1);
     this.setPresentage = 100;
     this.percent = 45;
@@ -107,7 +116,7 @@ export class HomePage {
 
   }
 
-  readSMSList() {
+  readSMSList() {    
     this.tempList = [];
     this.platform.ready().then((readySource) => {
       let filter = {
@@ -143,8 +152,8 @@ export class HomePage {
       if(success.hasPermission==true){
         this.platform.ready().then((readySource) => {
           this.messages.forEach(element => {
-            console.log(element,'1111111')
-            if(SMS) SMS.sendSMS(element, "Test SMS send from SocialQue app", function(){}, function(){});
+            this.generateNumber++
+            if(SMS) SMS.sendSMS(element, 'Your number is ' + this.generateNumber, function(){}, function(){});
           });
 
         });

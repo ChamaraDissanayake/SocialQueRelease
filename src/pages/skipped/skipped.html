@@ -11,5 +11,7 @@
 </ion-header>
 
 <ion-content padding>
-  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius, unde maxime fuga repellendus sint illo culpa nemo et hic, esse facilis quae? Quod corrupti distinctio a consequatur fugiat molestiae provident.</p>
+  <label *ngFor="let skip of skipped">
+    <p>{{skip[0].id}}</p>
+  </label>
 </ion-content>

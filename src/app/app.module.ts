@@ -18,6 +18,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { ExchangeDataProvider } from '../providers/exchange-data/exchange-data';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
 
 @NgModule({
   declarations: [
@@ -33,6 +36,8 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
     AboutPage
   ],
   imports: [
+    HttpClientModule,
+    HttpModule,
     BrowserModule,
     IonicModule.forRoot(SocialQue),
     NgCircleProgressModule.forRoot({
@@ -66,7 +71,8 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
     AndroidPermissions,
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    ExchangeDataProvider
   ],
   schemas:      [ CUSTOM_ELEMENTS_SCHEMA ]
 })
