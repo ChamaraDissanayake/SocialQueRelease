@@ -143,7 +143,7 @@ export class HomePage {
         this.platform.ready().then((readySource) => {
           this.messages.forEach(element => {
             this.generateNumber++
-            //if(SMS) SMS.sendSMS(element, 'Your number is ' + this.generateNumber, function(){}, function(){});
+            if(SMS) SMS.sendSMS(element, 'Your number is ' + this.generateNumber, function(){}, function(){});
             this.occupentId.push({id:this.generateNumber, pNumber:element})
           });
 
