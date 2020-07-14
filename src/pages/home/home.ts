@@ -16,6 +16,7 @@ export class HomePage {
   occupentId: Array<{ id: number, pNumber: number }>;
   holdTime: boolean;
   messages: any[];
+  tempList: any[];
 
 
   constructor(public navCtrl: NavController, public platform: Platform, public androidPermissions: AndroidPermissions) {
@@ -107,21 +108,30 @@ export class HomePage {
   }
 
   readSMSList() {
+    this.tempList = [];
     this.platform.ready().then((readySource) => {
       let filter = {
         box: 'inbox', // 'inbox' (default), 'sent', 'draft'
         indexFrom: 0, // start from index 0
-        maxCount: 20, // count of SMS to return each time
+        maxCount: 500, // count of SMS to return each time
       };
 
-      // SMS.listSMS(filter, (ListSms) => {
       if (SMS) SMS.listSMS(filter, (ListSms) => {
-        this.messages = ListSms
+        ListSms.forEach(element => {
+          let check1 = element.body.includes("covid19");
+          let check2 = element.body.includes("Covid19");
+          let check3 = element.body.includes("COVID19");
+          if(check1==true || check2==true || check3==true){
+            this.tempList.push([element.address]);
+          }
+        });
+        this.messages = this.tempList;
+        this.sendSMStoCustomer();
       },
 
-        Error => {
-          alert(JSON.stringify(Error))
-        });
+      Error => {
+        alert(JSON.stringify(Error))
+      });
 
     });
   }
@@ -132,8 +142,11 @@ export class HomePage {
     then(success => {
       if(success.hasPermission==true){
         this.platform.ready().then((readySource) => {
-          if(SMS) SMS.sendSMS("+94714142387", "Hello Chamara", function(){}, function(){});
-          // SMS.sendSMS("+94714142387", "Hello Chamara", function(){}, function(){});
+          this.messages.forEach(element => {
+            console.log(element,'1111111')
+            if(SMS) SMS.sendSMS(element, "Test SMS send from SocialQue app", function(){}, function(){});
+          });
+
         });
       } else {
         console.log(success)        

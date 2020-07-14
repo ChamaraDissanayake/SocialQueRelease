@@ -43,11 +43,9 @@
     </div>
 
     <div>     
-        <label *ngFor="let x of messages">
-        <button ion-button color="danger" round>{{x.address}}</button>
-        <h2>{{x.address}}</h2>
-        <p>{{x.body}}</p>
-        </label>
+      <label *ngFor="let x of messages">
+        <h2>{{x}}</h2>
+      </label>
     </div>
 
 </ion-content>

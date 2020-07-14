@@ -138,10 +138,6 @@ var HomePage = /** @class */ (function () {
         ];
     }
     HomePage.prototype.ionViewDidLoad = function () {
-        // this.androidPermissions.requestPermissions([this.androidPermissions.PERMISSION.READ_SMS]).then(
-        //   success => { console.log(success, '1111111') },
-        //   err => { console.log(err, '2222222') });
-        // console.log(this.androidPermissions.requestPermissions(["READ_SMS"]))
         this.skipCustomer();
     };
     HomePage.prototype.clickNext = function () {
@@ -184,21 +180,16 @@ var HomePage = /** @class */ (function () {
     HomePage.prototype.checkPermission = function () {
         var _this = this;
         this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.READ_SMS).then(function (success) {
-            // console.log(success, "success1")
             if (success.hasPermission == false) {
-                // alert("Sorry no permission")
             }
             else {
                 _this.readSMSList();
             }
         }, function (err) {
-            // console.log(err, "error1");
             _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.READ_SMS).
                 then(function (success) {
-                // console.log(success, "success2")
                 _this.readSMSList();
             }, function (err) {
-                // console.log(err, "error2")
                 alert("cancelled");
             });
         });
@@ -206,20 +197,26 @@ var HomePage = /** @class */ (function () {
     };
     HomePage.prototype.readSMSList = function () {
         var _this = this;
-        // console.log("readSMSList", this.platform)
+        this.tempList = [];
         this.platform.ready().then(function (readySource) {
-            // console.log(readySource, "readySource")
             var filter = {
                 box: 'inbox',
                 indexFrom: 0,
-                maxCount: 20,
+                maxCount: 500,
             };
             if (SMS)
                 SMS.listSMS(filter, function (ListSms) {
-                    _this.messages = ListSms;
-                    // console.log("if1");
+                    ListSms.forEach(function (element) {
+                        var check1 = element.body.includes("covid19");
+                        var check2 = element.body.includes("Covid19");
+                        var check3 = element.body.includes("COVID19");
+                        if (check1 == true || check2 == true || check3 == true) {
+                            _this.tempList.push([element.address]);
+                        }
+                    });
+                    _this.messages = _this.tempList;
+                    _this.sendSMStoCustomer();
                 }, function (Error) {
-                    // console.log(Error, "Error");
                     alert(JSON.stringify(Error));
                 });
         });
@@ -228,25 +225,24 @@ var HomePage = /** @class */ (function () {
         var _this = this;
         this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.SEND_SMS).
             then(function (success) {
-            if (success.hasPermission == false) {
-                console.log(success);
+            if (success.hasPermission == true) {
+                _this.platform.ready().then(function (readySource) {
+                    _this.messages.forEach(function (element) {
+                        console.log(element, '1111111');
+                        // if(SMS) SMS.sendSMS(element, "Test SMS send from SocialQue app", function(){}, function(){});
+                    });
+                });
             }
             else {
                 console.log(success);
-                _this.platform.ready().then(function (readySource) {
-                    console.log("Ready to send");
-                    if (SMS)
-                        SMS.sendSMS("+94714142387", "Hello Chamara", function () { }, function () { });
-                });
             }
         }, function (err) {
-            console.log(err, "SEND_SMS permission required");
             alert("cancelled");
         });
     };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>\n    <label style="padding-left: 40px; font-size: 36px;">85</label>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td><label class="numberset" (click)="clickNext()"><span style="padding: 4px;" *ngFor="let ocptId of occupentId"> {{ocptId.id}} </span></label></td>\n      </tr>\n    </table>\n\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="clickNext()">Next</button>\n    </div>\n\n    <div>     \n        <label *ngFor="let x of messages">\n        <button ion-button color="danger" round>{{x.address}}</button>\n        <h2>{{x.address}}</h2>\n        <p>{{x.body}}</p>\n        </label>\n    </div>\n    <div>\n      <button ion-button color="danger" round (click)="sendSMStoCustomer()">Send Message</button>\n      <button ion-button color="danger" round (click)="checkPermission()">Read Messages</button>\n    </div>\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
+            selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>\n    <label style="padding-left: 40px; font-size: 36px;">85</label>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td><label class="numberset" (click)="clickNext()"><span style="padding: 4px;" *ngFor="let ocptId of occupentId"> {{ocptId.id}} </span></label></td>\n      </tr>\n    </table>\n\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="clickNext()">Next</button>\n    </div>\n\n    <div style="margin-top: 20px;">\n      <button ion-button round (click)="sendSMStoCustomer()">Send Message</button>\n      <button ion-button round (click)="checkPermission()">Read Messages</button>\n    </div>\n\n    <div>     \n        <label *ngFor="let x of messages">\n        <!-- <button ion-button color="danger" round>{{x.address}}</button> -->\n        <h2>{{x}}</h2>\n        <!-- <p>{{x.body}}</p> -->\n        </label>\n\n        <!-- <label>\n          <button ion-button color="danger" round>{{messages}}</button>\n          </label> -->\n    </div>\n\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */]])
     ], HomePage);
