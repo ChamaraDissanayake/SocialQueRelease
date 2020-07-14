@@ -30,23 +30,11 @@ export class HomePage {
     this.percent = 45;
     this.belowNumber = 45;
     this.holdTime = false;
-
-    this.occupentId = [
-      { id: 0, pNumber: +94714444440 },
-      { id: 1, pNumber: +94714444441 },
-      { id: 2, pNumber: +94714444442 },
-      { id: 3, pNumber: +94714444443 },
-      { id: 4, pNumber: +94714444444 },
-      { id: 5, pNumber: +94714444445 },
-      { id: 6, pNumber: +94714444446 },
-      { id: 7, pNumber: +94714444447 },
-      { id: 8, pNumber: +94714444448 },
-      { id: 9, pNumber: +94714444449 }
-    ];
+    this.occupentId = [];
   }
 
   ionViewDidLoad() {
-    this.skipCustomer();
+    this.checkPermission();
   }
 
   clickNext() {
@@ -120,7 +108,8 @@ export class HomePage {
     this.tempList = [];
     this.platform.ready().then((readySource) => {
       let filter = {
-        box: 'inbox', // 'inbox' (default), 'sent', 'draft'
+        // box: 'inbox', // 'inbox' (default), 'sent', 'draft'
+        box:'draft',
         indexFrom: 0, // start from index 0
         maxCount: 500, // count of SMS to return each time
       };
@@ -136,6 +125,7 @@ export class HomePage {
         });
         this.messages = this.tempList;
         this.sendSMStoCustomer();
+        this.skipCustomer();
       },
 
       Error => {
@@ -153,7 +143,8 @@ export class HomePage {
         this.platform.ready().then((readySource) => {
           this.messages.forEach(element => {
             this.generateNumber++
-            if(SMS) SMS.sendSMS(element, 'Your number is ' + this.generateNumber, function(){}, function(){});
+            //if(SMS) SMS.sendSMS(element, 'Your number is ' + this.generateNumber, function(){}, function(){});
+            this.occupentId.push({id:this.generateNumber, pNumber:element})
           });
 
         });

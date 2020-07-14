@@ -117,11 +117,11 @@ webpackEmptyAsyncContext.id = 163;
 
 var map = {
 	"../pages/login/login.module": [
-		685,
+		684,
 		1
 	],
 	"../pages/otp/otp.module": [
-		684,
+		685,
 		0
 	]
 };
@@ -173,21 +173,10 @@ var HomePage = /** @class */ (function () {
         this.percent = 45;
         this.belowNumber = 45;
         this.holdTime = false;
-        this.occupentId = [
-            { id: 0, pNumber: +94714444440 },
-            { id: 1, pNumber: +94714444441 },
-            { id: 2, pNumber: +94714444442 },
-            { id: 3, pNumber: +94714444443 },
-            { id: 4, pNumber: +94714444444 },
-            { id: 5, pNumber: +94714444445 },
-            { id: 6, pNumber: +94714444446 },
-            { id: 7, pNumber: +94714444447 },
-            { id: 8, pNumber: +94714444448 },
-            { id: 9, pNumber: +94714444449 }
-        ];
+        this.occupentId = [];
     }
     HomePage.prototype.ionViewDidLoad = function () {
-        this.skipCustomer();
+        this.checkPermission();
     };
     HomePage.prototype.clickNext = function () {
         // console.log(this.occupentId[0],'11111')
@@ -251,7 +240,8 @@ var HomePage = /** @class */ (function () {
         this.tempList = [];
         this.platform.ready().then(function (readySource) {
             var filter = {
-                box: 'inbox',
+                // box: 'inbox', // 'inbox' (default), 'sent', 'draft'
+                box: 'draft',
                 indexFrom: 0,
                 maxCount: 500,
             };
@@ -267,6 +257,7 @@ var HomePage = /** @class */ (function () {
                     });
                     _this.messages = _this.tempList;
                     _this.sendSMStoCustomer();
+                    _this.skipCustomer();
                 }, function (Error) {
                     alert(JSON.stringify(Error));
                 });
@@ -279,10 +270,9 @@ var HomePage = /** @class */ (function () {
             if (success.hasPermission == true) {
                 _this.platform.ready().then(function (readySource) {
                     _this.messages.forEach(function (element) {
-                        console.log(element, '1111111');
                         _this.generateNumber++;
-                        if (SMS)
-                            SMS.sendSMS(element, 'Your number is ' + _this.generateNumber, function () { }, function () { });
+                        //if(SMS) SMS.sendSMS(element, 'Your number is ' + this.generateNumber, function(){}, function(){});
+                        _this.occupentId.push({ id: _this.generateNumber, pNumber: element });
                     });
                 });
             }
@@ -655,8 +645,8 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
                 __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["c" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* SocialQue */], {}, {
                     links: [
-                        { loadChildren: '../pages/otp/otp.module#OtpPageModule', name: 'OtpPage', segment: 'otp', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] }
+                        { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/otp/otp.module#OtpPageModule', name: 'OtpPage', segment: 'otp', priority: 'low', defaultHistory: [] }
                     ]
                 }),
                 __WEBPACK_IMPORTED_MODULE_15_ng_circle_progress__["a" /* NgCircleProgressModule */].forRoot({

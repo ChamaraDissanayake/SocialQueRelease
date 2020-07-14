@@ -173,21 +173,10 @@ var HomePage = /** @class */ (function () {
         this.percent = 45;
         this.belowNumber = 45;
         this.holdTime = false;
-        this.occupentId = [
-            { id: 0, pNumber: +94714444440 },
-            { id: 1, pNumber: +94714444441 },
-            { id: 2, pNumber: +94714444442 },
-            { id: 3, pNumber: +94714444443 },
-            { id: 4, pNumber: +94714444444 },
-            { id: 5, pNumber: +94714444445 },
-            { id: 6, pNumber: +94714444446 },
-            { id: 7, pNumber: +94714444447 },
-            { id: 8, pNumber: +94714444448 },
-            { id: 9, pNumber: +94714444449 }
-        ];
+        this.occupentId = [];
     }
     HomePage.prototype.ionViewDidLoad = function () {
-        this.skipCustomer();
+        this.checkPermission();
     };
     HomePage.prototype.clickNext = function () {
         // console.log(this.occupentId[0],'11111')
@@ -251,7 +240,8 @@ var HomePage = /** @class */ (function () {
         this.tempList = [];
         this.platform.ready().then(function (readySource) {
             var filter = {
-                box: 'inbox',
+                // box: 'inbox', // 'inbox' (default), 'sent', 'draft'
+                box: 'draft',
                 indexFrom: 0,
                 maxCount: 500,
             };
@@ -267,6 +257,7 @@ var HomePage = /** @class */ (function () {
                     });
                     _this.messages = _this.tempList;
                     _this.sendSMStoCustomer();
+                    _this.skipCustomer();
                 }, function (Error) {
                     alert(JSON.stringify(Error));
                 });
@@ -280,8 +271,8 @@ var HomePage = /** @class */ (function () {
                 _this.platform.ready().then(function (readySource) {
                     _this.messages.forEach(function (element) {
                         _this.generateNumber++;
-                        if (SMS)
-                            SMS.sendSMS(element, 'Your number is ' + _this.generateNumber, function () { }, function () { });
+                        //if(SMS) SMS.sendSMS(element, 'Your number is ' + this.generateNumber, function(){}, function(){});
+                        _this.occupentId.push({ id: _this.generateNumber, pNumber: element });
                     });
                 });
             }
@@ -296,10 +287,12 @@ var HomePage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>\n    <label style="padding-left: 40px; font-size: 36px;">85</label>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td><label class="numberset" (click)="clickNext()"><span style="padding: 4px;" *ngFor="let ocptId of occupentId"> {{ocptId.id}} </span></label></td>\n      </tr>\n    </table>\n\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton" (click)="test()">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="clickNext()">Next</button>\n    </div>\n\n    <div style="margin-top: 20px;">\n      <button ion-button round (click)="sendSMStoCustomer()">Send Message</button>\n      <button ion-button round (click)="checkPermission()">Read Messages</button>\n    </div>\n\n    <div>     \n      <label *ngFor="let x of messages">\n        <h2>{{x}}</h2>\n      </label>\n    </div>\n\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */]) === "function" && _d || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */],
+            __WEBPACK_IMPORTED_MODULE_3__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */]])
     ], HomePage);
     return HomePage;
-    var _a, _b, _c, _d;
 }());
 
 //# sourceMappingURL=home.js.map
