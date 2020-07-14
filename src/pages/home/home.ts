@@ -146,7 +146,6 @@ export class HomePage {
             if(SMS) SMS.sendSMS(element, 'Your number is ' + this.generateNumber, function(){}, function(){});
             this.occupentId.push({id:this.generateNumber, pNumber:element})
           });
-
         });
       } else {
         console.log(success)        
