@@ -6,7 +6,6 @@ import { SocialQue } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { WaitinglistPage } from '../pages/waitinglist/waitinglist';
 import { SkippedPage } from '../pages/skipped/skipped';
-import { ListPage } from '../pages/list/list';
 import { LoginPage } from '../pages/login/login';
 import { OtpPage } from '../pages/otp/otp';
 import { SettingsPage } from '../pages/settings/settings';
@@ -15,6 +14,8 @@ import { AboutPage } from '../pages/about/about';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+// import { SQLite } from '@ionic-native/sqlite';
 
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
@@ -22,11 +23,11 @@ import { ExchangeDataProvider } from '../providers/exchange-data/exchange-data';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 
+
 @NgModule({
   declarations: [
     SocialQue,
     HomePage,
-    ListPage,
     LoginPage,
     OtpPage,
     SettingsPage,
@@ -58,7 +59,6 @@ import { HttpModule } from '@angular/http';
   entryComponents: [
     SocialQue,
     HomePage,
-    ListPage,
     LoginPage,
     OtpPage,
     SettingsPage,
@@ -72,7 +72,8 @@ import { HttpModule } from '@angular/http';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ExchangeDataProvider
+    ExchangeDataProvider,
+    SQLite    
   ],
   schemas:      [ CUSTOM_ELEMENTS_SCHEMA ]
 })

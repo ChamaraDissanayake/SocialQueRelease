@@ -8,7 +8,7 @@
 
   <section style="font-weight: bold;">
     <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>
-    <label style="padding-left: 40px; font-size: 36px;">85</label>
+    <label style="padding-left: 40px; font-size: 36px;">{{insideCount}}</label>
   </section>
 
 
@@ -28,18 +28,21 @@
             (click)="holdClock()">
           </circle-progress>
         </td>
-        <td><label class="numberset" (click)="clickNext()"><span style="padding: 4px;" *ngFor="let ocptId of occupentId"> {{ocptId.id}} </span></label></td>
+        <td>
+          <label class="numberset">
+            <span *ngFor="let cstmrDetails of exchangeData.customerList">
+              <span ion-button class="btngetin" *ngIf="cstmrDetails.status =='pending'" (click)="countGetIn(cstmrDetails)">
+                {{cstmrDetails.id}}
+              </span>
+            </span>
+          </label>
+        </td>
       </tr>
     </table>
 
     <div style="margin-top: 30%;">
-      <button ion-button danger round class="redbutton" (click)="test()">Out</button>
-      <button ion-button danger round class="purplebutton" (click)="clickNext()">Next</button>
-    </div>
-
-    <div style="margin-top: 20px;">
-      <button ion-button round (click)="sendSMStoCustomer()">Send Message</button>
-      <button ion-button round (click)="checkPermission()">Read Messages</button>
+      <button ion-button danger round class="redbutton" (click)="goOut()">Out</button>
+      <button ion-button danger round class="purplebutton" (click)="skipCustomer()">Next</button>
     </div>
 
     <div>     
@@ -47,5 +50,9 @@
         <h2>{{x}}</h2>
       </label>
     </div>
+
+    <div ion-button (click)= "add()"> Add Customers</div>
+    <!-- <div ion-button (click)= "sqlcon()"> Connect</div> -->
+    
 
 </ion-content>

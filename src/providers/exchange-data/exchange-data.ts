@@ -1,23 +1,40 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-// import { SkippedPage } from '../../pages/skipped/skipped';
+import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { Platform } from 'ionic-angular';
 
-/*
-  Generated class for the ExchangeDataProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class ExchangeDataProvider {
-
-  skippedList: any[];
   
-  constructor(public http: HttpClient) {
-    console.log('Hello ExchangeDataProvider Provider');
-    this.skippedList=[];
+  customerList: any [];
+  completedList: any[];
+  absentList: any [];
+  
+  constructor(
+    public http: HttpClient,
+    private sqlite: SQLite,
+    public platform: Platform,
+    ) {
+      this.customerList = [];
+      this.completedList = []
+      this.absentList = [];
+      this.setupDB();
   }
-  createSkippedList(occupent){
-    this.skippedList.push([occupent]);
+  
+  setupDB(){
+    this.platform.ready().then((readySource) => {
+      console.log(this.sqlite,'testing db')
+      this.sqlite.create({
+        name: 'social_que.db',
+        location: 'default'
+      })
+        .then((db: SQLiteObject) => {
+          console.log('11111')
+          db.executeSql('create table customerDetails(name VARCHAR(32))', [])
+            .then(() => console.log('Executed SQL'))
+            .catch(e => console.log(e, 'Fail to execute'));
+        })
+        .catch(e => console.log(e));    
+    })
   }
 }

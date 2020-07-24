@@ -1,9 +1,3 @@
-<!--
-  Generated template for the WaitinglistPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
   <ion-navbar>
     <ion-title>waitinglist</ion-title>
@@ -11,5 +5,8 @@
 </ion-header>
 
 <ion-content padding>
-  <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deserunt libero accusamus vitae magnam amet repellat, qui molestias possimus officiis fugit et nostrum, iusto, expedita maiores praesentium. Itaque praesentium accusantium dolor.</p>
+  <label *ngFor="let waiting of exchangeData.customerList">
+    <p *ngIf="waiting.status=='waiting'">{{waiting.id}}</p>
+  </label>
+
 </ion-content>

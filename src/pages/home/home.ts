@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, Platform } from 'ionic-angular';
-import { AndroidPermissions } from '@ionic-native/android-permissions'
-import { ExchangeDataProvider } from '../../providers/exchange-data/exchange-data'
+import { NavController, Platform, LoadingController } from 'ionic-angular';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { ExchangeDataProvider } from '../../providers/exchange-data/exchange-data';
+import { NgZone } from '@angular/core';
 
 declare var SMS: any;
 
@@ -12,147 +13,276 @@ declare var SMS: any;
 export class HomePage {
   timer: any;
   percent: number;
-  // upperNumber:number;
   belowNumber: number;
   setPresentage: number;
-  occupentId: Array<{ id: number, pNumber: number }>;
   holdTime: boolean;
   messages: any[];
   tempList: any[];
-  generateNumber: number= 100000;
+  generateNumber: number = 100000;
+  // activeCustomers: number = 0;
+  maxCustomers: number = 5;
+  insideCount : number = 0;
+  pendingCount : number;
+  loading : any;
 
   constructor(
     public navCtrl: NavController,
     public platform: Platform,
     public androidPermissions: AndroidPermissions,
-    private exchangeData: ExchangeDataProvider) {
-    
+    private zone: NgZone,
+    private exchangeData: ExchangeDataProvider,
+    public loadingCtrl: LoadingController) {    
     this.percent = 45;
     this.belowNumber = 45;
     this.holdTime = false;
-    this.occupentId = [];
   }
 
   ionViewDidLoad() {
     this.checkPermission();
+    this.resetClock();
+    // this.onSMSArrive(); //Uncomment this before launch in real device
   }
 
-  clickNext() {
-    // console.log(this.occupentId[0],'11111')
-    this.exchangeData.createSkippedList(this.occupentId[0])
-    this.occupentId.splice(0, 1);
-    this.setPresentage = 100;
-    this.percent = 45;
-    this.skipCustomer();
+  pageLoader(){
+    this.loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
   }
 
-  // nextOccupent(ocptId){
-  //   let index = this.occupentId.indexOf(ocptId);
-  //   console.log(index,'1111');
-
-  //   if(index > -1){
-  //     this.occupentId.splice(index, 1);
-  //   }
-  // }
-
-  skipCustomer() {
+  startClock() {
+    // this.holdTime = false;
     clearInterval(this.timer);
-    if (this.occupentId[0] != undefined) {
+    this.countPendingCustomers();
+    if (this.exchangeData.customerList[0] != undefined && this.pendingCount>0) {
       this.timer = setInterval(() => {
         this.percent--;
-        if (this.percent == 0) {
+        if (this.percent <= 0) {
           clearInterval(this.timer);
-          this.clickNext();
+          this.skipCustomer();
         }
         this.setPresentage = ((this.percent / this.belowNumber) * 100);
-      }, 1000);
+      }, 100);
     }
   }
 
   holdClock() {
-    if (this.holdTime == false) {
+    if (this.holdTime == true || this.insideCount == this.maxCustomers) {
       clearInterval(this.timer);
-      this.holdTime = true;
-    } else {
-      this.skipCustomer();
       this.holdTime = false;
+    } else {
+      this.startClock();
+      this.holdTime = true;
     }
   }
 
-  checkPermission() {
-    this.androidPermissions.checkPermission
-      (this.androidPermissions.PERMISSION.READ_SMS).then(
-        success => {
-          if (success.hasPermission == false) {
-          } else {
-            this.readSMSList();
-          }
-        },
-        err => {
-          this.androidPermissions.requestPermission
-            (this.androidPermissions.PERMISSION.READ_SMS).
-            then(success => {
-              this.readSMSList();
-            },
-            err => {
-              alert("cancelled")
-            });
-        });
-
-    this.androidPermissions.requestPermissions
-      ([this.androidPermissions.PERMISSION.READ_SMS]);
-
+  resetClock(){
+    this.setPresentage = 100;
+    this.percent = 45;
   }
 
-  readSMSList() {    
-    this.tempList = [];
+  onSMSArrive(){
     this.platform.ready().then((readySource) => {
-      let filter = {
-        // box: 'inbox', // 'inbox' (default), 'sent', 'draft'
-        box:'draft',
-        indexFrom: 0, // start from index 0
-        maxCount: 500, // count of SMS to return each time
-      };
-
-      if (SMS) SMS.listSMS(filter, (ListSms) => {
-        ListSms.forEach(element => {
-          let check1 = element.body.includes("covid19");
-          let check2 = element.body.includes("Covid19");
-          let check3 = element.body.includes("COVID19");
-          if(check1==true || check2==true || check3==true){
-            this.tempList.push([element.address]);
-          }
-        });
-        this.messages = this.tempList;
-        this.sendSMStoCustomer();
-        this.skipCustomer();
-      },
-
-      Error => {
-        alert(JSON.stringify(Error))
+      if(SMS) SMS.startWatch(function(){
+            console.log('watching started');
+           }, function(){
+          console.log('failed to start watching');
       });
-
-    });
+      document.addEventListener('onSMSArrive', function(e){
+        this.checkPermission();  
+        this.replyCustomer(e.data);
+        }.bind(this)
+      );
+    })
   }
 
-  sendSMStoCustomer(){
-    this.androidPermissions.requestPermission
-    (this.androidPermissions.PERMISSION.SEND_SMS).
-    then(success => {
-      if(success.hasPermission==true){
-        this.platform.ready().then((readySource) => {
-          this.messages.forEach(element => {
-            this.generateNumber++
-            if(SMS) SMS.sendSMS(element, 'Your number is ' + this.generateNumber, function(){}, function(){});
-            this.occupentId.push({id:this.generateNumber, pNumber:element})
-          });
-        });
-      } else {
-        console.log(success)        
+  replyCustomer(sms){
+    this.platform.ready().then((readySource) => {
+      let key1 = sms.body.includes("covid19");
+      let key2 = sms.body.includes("Covid19");
+      let key3 = sms.body.includes("COVID19"); 
+      if(key1 || key2 || key3){
+        this.generateNumber++
+        if(SMS) SMS.sendSMS(sms.address, 'Your number is ' + this.generateNumber, function(){}, function(){});
+        this.countPendingCustomers();
+
+        if(this.pendingCount<5){
+          this.exchangeData.customerList.push({id:this.generateNumber, pNumber:sms.address, status:"pending", time:Date.now()});  
+        } else {
+          this.exchangeData.customerList.push({id:this.generateNumber, pNumber:sms.address, status:"waiting", time:Date.now()});          
+        }
+        this.refresh();
       }
     },
-    err => {
-      alert("cancelled")
+    Error => {
+      alert(JSON.stringify(Error))
     });
   }
+
+  countGetIn(customer){
+    this.insideCount = 0;
+    let i = 0;
+    this.exchangeData.customerList.forEach(element => {
+      if(element.status=="inside"){
+        this.insideCount++
+      }
+      i++
+      if(i==this.exchangeData.customerList.length){
+        this.getInside(customer);
+      }
+    });        
+  }
+  
+  getInside(ocptId){
+    this.pageLoader();
+    this.loading.present();
+    if(this.insideCount<this.maxCustomers){
+      this.insideCount++      
+      let index = this.exchangeData.customerList.indexOf(ocptId);
+      this.exchangeData.customerList[index].status = "inside"
+      if(this.insideCount < this.maxCustomers && this.pendingCount>0){
+        this.startClock();
+      } else {
+        console.log('calling to hold clock')
+        this.holdClock();
+      }
+      this.getFromWaiting();
+      this.loading.dismiss();
+    } else {
+      alert("Max customer limit reached!")
+      this.loading.dismiss();
+    }
+    this.resetClock();
+  }
+
+  goOut(){
+    this.pageLoader();
+    this.loading.present();
+
+    if(this.insideCount>0){
+      this.insideCount--
+      // this.countPendingCustomers();
+      
+      // if(this.holdTime==false && this.pendingCount>0){
+      //   console.log(this.pendingCount,'111111')
+      this.startClock();
+      // }
+
+      this.exchangeData.customerList[0].status = "completed"
+      this.exchangeData.completedList.push(this.exchangeData.customerList[0])
+      this.exchangeData.customerList.splice(0,1);
+      this.loading.dismiss();
+    } else {
+      this.loading.dismiss();
+    }
+
+
+  }
+
+  skipCustomer(){
+    this.pageLoader();
+    this.loading.present();
+    if (this.insideCount < this.maxCustomers) {
+      let found = false;
+      let i = 0;
+      this.exchangeData.customerList.forEach(element => {
+        if(element.status == 'pending' && found == false){
+          let index = this.exchangeData.customerList.indexOf(element);
+          this.exchangeData.customerList[index].status = "skipped";
+          this.exchangeData.customerList[index].time = Date.now();
+
+          found = true;
+        }
+        if(element.status == 'pending'){
+          i++
+        }
+
+      });
+      this.resetClock();      
+      this.getFromWaiting();
+      if(i>0){
+        this.startClock();
+      }
+      this.loading.dismiss();
+    } else {
+      this.loading.dismiss();
+    }
+  }
+
+  getFromWaiting(){
+    let found = false;
+    this.exchangeData.customerList.forEach(element => {
+      if(element.status=="waiting" && found == false){
+        this.exchangeData.customerList[this.exchangeData.customerList.indexOf(element)].status = "pending";
+        found = true;
+      }
+    });
+  }
+
+  checkPermission() {
+
+    this.platform.ready().then((readySource) => {
+      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.READ_SMS).then(
+        success => {
+          console.log('Has permission to read sms')
+        },
+        err => {
+          this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_SMS).
+          then(success => {
+            console.log('Successfully granted read sms permission')
+          },
+          err => {
+            console.log('No permission to read sms permission')
+          });
+        }
+      );
+  
+      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.SEND_SMS).then(
+        success => {
+          console.log('Has permission to send sms')
+        },
+          err => {
+          this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.SEND_SMS).
+          then(success => {
+            console.log('Successfully granted send sms permission')
+          },
+          err => {
+            console.log('No permission to send sms permission')
+          });
+        }
+      );
+    },
+    Error => {
+      alert(JSON.stringify(Error))
+    });
+  }
+
+  refresh() {
+    this.zone.run(() => {
+      console.log('force update the screen');
+    });
+  }
+
+  add(){
+    this.countPendingCustomers();   
+
+    if(this.pendingCount<5){
+      this.exchangeData.customerList.push({id:this.generateNumber, pNumber:+94714142387, status:"pending", time:Date.now()});  
+    } else {
+      this.exchangeData.customerList.push({id:this.generateNumber, pNumber:+94714142387, status:"waiting", time:Date.now()});          
+    }
+    this.generateNumber++
+  }
+
+  countPendingCustomers(){
+    this.pendingCount = 0;
+    this.exchangeData.customerList.forEach(element => {
+      if(element.status=="pending"){
+        this.pendingCount++
+      }
+    });
+  }
+
+  // connect(){
+  //   this.exchangeData.setupDB();
+  // }
 }

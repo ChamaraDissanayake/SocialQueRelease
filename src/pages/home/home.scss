@@ -32,10 +32,9 @@ page-home {
         text-align: right;
     }
     .numberset{
-        width: 100px;
-        height: 161px;
+        height: 230px;
         padding-top: 10px;
-        float: right;
+        float: left;
         font-weight: bold;
         font-size: 18px;
         line-height: 21px;
@@ -44,5 +43,13 @@ page-home {
 
     .scroll-content {
         margin-bottom: 0px !important;
+    }
+    
+    .btngetin{
+        border-radius: 10px;
+        width: 75%;
+        margin-left: 10%;
+        font-size: larger;
+        background-color: green;
     }
 }

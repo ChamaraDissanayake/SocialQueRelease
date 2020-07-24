@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the WaitinglistPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { ExchangeDataProvider } from '../../providers/exchange-data/exchange-data';
 
 @Component({
   selector: 'page-waitinglist',
@@ -14,11 +8,14 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class WaitinglistPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private exchangeData: ExchangeDataProvider
+  ) {}
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad WaitinglistPage');
+  ionViewDidEnter() {
+    console.log('waiting list');
   }
 
 }
