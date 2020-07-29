@@ -6,7 +6,7 @@ webpackJsonp([2],{
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return OtpPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabs_tabs__ = __webpack_require__(55);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -66,11 +66,11 @@ webpackEmptyAsyncContext.id = 163;
 
 var map = {
 	"../pages/login/login.module": [
-		685,
+		684,
 		1
 	],
 	"../pages/otp/otp.module": [
-		684,
+		685,
 		0
 	]
 };
@@ -96,7 +96,7 @@ module.exports = webpackAsyncContext;
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__ = __webpack_require__(209);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_exchange_data_exchange_data__ = __webpack_require__(75);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -108,7 +108,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
 
 
 
@@ -130,12 +129,9 @@ var HomePage = /** @class */ (function () {
         this.holdTime = false;
     }
     HomePage.prototype.ionViewDidLoad = function () {
-        var _this = this;
-        setTimeout(function () {
-            _this.checkPermission();
-        }, 5000);
+        this.checkPermission();
         this.resetClock();
-        // this.onSMSArrive(); //Uncomment this before launch in real device
+        this.onSMSArrive(); //Uncomment this before launch in real device
     };
     HomePage.prototype.pageLoader = function () {
         this.loading = this.loadingCtrl.create({
@@ -182,33 +178,74 @@ var HomePage = /** @class */ (function () {
                     console.log('failed to start watching');
                 });
             document.addEventListener('onSMSArrive', function (e) {
-                this.checkPermission();
-                this.replyCustomer(e.data);
+                console.log('sms arrived');
+                // this.checkPermission();  
+                this.checkSMS(e.data);
             }.bind(_this));
         });
     };
-    HomePage.prototype.replyCustomer = function (sms) {
+    HomePage.prototype.checkSMS = function (sms) {
         var _this = this;
         this.platform.ready().then(function (readySource) {
             var key1 = sms.body.includes("covid19");
             var key2 = sms.body.includes("Covid19");
             var key3 = sms.body.includes("COVID19");
+            var existingNumber = false;
             if (key1 || key2 || key3) {
-                _this.generateNumber++;
-                if (SMS)
-                    SMS.sendSMS(sms.address, 'Your number is ' + _this.generateNumber, function () { }, function () { });
-                _this.countPendingCustomers();
-                if (_this.pendingCount < 5) {
-                    _this.exchangeData.customerList.push({ id: _this.generateNumber, pNumber: sms.address, status: "pending", time: Date.now() });
+                console.log(_this.exchangeData.customerList.length, '00000');
+                if (_this.exchangeData.customerList.length) {
+                    // existingNumber = false;
+                    _this.exchangeData.customerList.forEach(function (element) {
+                        console.log(sms.address, '111111', element.pNumber);
+                        if (sms.address == element.pNumber) {
+                            existingNumber = true;
+                            console.log('222222');
+                            if (element.status == 'skipped') {
+                                _this.countPendingCustomers();
+                                _this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].time = Date.now();
+                                if (_this.pendingCount < 5) {
+                                    _this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].status = "pending";
+                                }
+                                else {
+                                    _this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].status = "waiting";
+                                }
+                                _this.refresh();
+                            }
+                        }
+                    });
+                    // Promise.all(this.exchangeData.customerList).then(() => 
+                    //   console.log('for loop ended')
+                    // );
+                    if (existingNumber) {
+                        console.log(existingNumber, 'customer already in queue');
+                    }
+                    else {
+                        _this.replyCustomer(sms);
+                        console.log(existingNumber, 'New number added to list');
+                    }
                 }
                 else {
-                    _this.exchangeData.customerList.push({ id: _this.generateNumber, pNumber: sms.address, status: "waiting", time: Date.now() });
+                    _this.replyCustomer(sms);
+                    console.log('New list is started');
                 }
-                _this.refresh();
             }
-        }, function (Error) {
-            alert(JSON.stringify(Error));
+            else {
+                console.log('Not a valid sms');
+            }
         });
+    };
+    HomePage.prototype.replyCustomer = function (sms) {
+        this.generateNumber++;
+        if (SMS)
+            SMS.sendSMS(sms.address, 'Your number is ' + this.generateNumber, function () { }, function () { });
+        this.countPendingCustomers();
+        if (this.pendingCount < 5) {
+            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: sms.address, status: "pending", time: Date.now() });
+        }
+        else {
+            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: sms.address, status: "waiting", time: Date.now() });
+        }
+        this.refresh();
     };
     HomePage.prototype.countGetIn = function (customer) {
         var _this = this;
@@ -278,6 +315,9 @@ var HomePage = /** @class */ (function () {
                     var index = _this.exchangeData.customerList.indexOf(element);
                     _this.exchangeData.customerList[index].status = "skipped";
                     _this.exchangeData.customerList[index].time = Date.now();
+                    console.log('Inform to ', _this.exchangeData.customerList[index].pNumber);
+                    if (SMS)
+                        SMS.sendSMS(_this.exchangeData.customerList[index].pNumber, 'Your have been skipped because of absent in time. Please resend previous sms before 20 minutes to re-enter with old number', function () { }, function () { });
                     found_1 = true;
                 }
                 if (element.status == 'pending') {
@@ -307,25 +347,29 @@ var HomePage = /** @class */ (function () {
     };
     HomePage.prototype.checkPermission = function () {
         var _this = this;
-        this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.READ_SMS).then(function (success) {
-            console.log('Has permission to read sms');
-        }, function (err) {
-            _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.READ_SMS).
-                then(function (success) {
-                console.log('Successfully granted read sms permission');
+        this.platform.ready().then(function (readySource) {
+            _this.androidPermissions.checkPermission(_this.androidPermissions.PERMISSION.READ_SMS).then(function (success) {
+                console.log('Has permission to read sms');
             }, function (err) {
-                console.log('No permission to read sms permission');
+                _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.READ_SMS).
+                    then(function (success) {
+                    console.log('Successfully granted read sms permission');
+                }, function (err) {
+                    console.log('No permission to read sms permission');
+                });
             });
-        });
-        this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.SEND_SMS).then(function (success) {
-            console.log('Has permission to send sms');
-        }, function (err) {
-            _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.SEND_SMS).
-                then(function (success) {
-                console.log('Successfully granted send sms permission');
+            _this.androidPermissions.checkPermission(_this.androidPermissions.PERMISSION.SEND_SMS).then(function (success) {
+                console.log('Has permission to send sms');
             }, function (err) {
-                console.log('No permission to send sms permission');
+                _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.SEND_SMS).
+                    then(function (success) {
+                    console.log('Successfully granted send sms permission');
+                }, function (err) {
+                    console.log('No permission to send sms permission');
+                });
             });
+        }, function (Error) {
+            alert(JSON.stringify(Error));
         });
     };
     HomePage.prototype.refresh = function () {
@@ -336,10 +380,10 @@ var HomePage = /** @class */ (function () {
     HomePage.prototype.add = function () {
         this.countPendingCustomers();
         if (this.pendingCount < 5) {
-            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: +94714142387, status: "pending", time: Date.now() });
+            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: +94782992725, status: "pending", time: Date.now() });
         }
         else {
-            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: +94714142387, status: "waiting", time: Date.now() });
+            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: +94782992725, status: "waiting", time: Date.now() });
         }
         this.generateNumber++;
     };
@@ -354,7 +398,7 @@ var HomePage = /** @class */ (function () {
     };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>\n    <label style="padding-left: 40px; font-size: 36px;">{{insideCount}}</label>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td>\n          <label class="numberset">\n            <span *ngFor="let cstmrDetails of exchangeData.customerList">\n              <span ion-button class="btngetin" *ngIf="cstmrDetails.status ==\'pending\'" (click)="countGetIn(cstmrDetails)">\n                {{cstmrDetails.id}}\n              </span>\n            </span>\n          </label>\n        </td>\n      </tr>\n    </table>\n\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton" (click)="goOut()">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="skipCustomer()">Next</button>\n    </div>\n\n    <div>     \n      <label *ngFor="let x of messages">\n        <h2>{{x}}</h2>\n      </label>\n    </div>\n\n    <div ion-button (click)= "add()"> Add Customers</div>\n    <!-- <div ion-button (click)= "sqlcon()"> Connect</div> -->\n    \n\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
+            selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>\n    <label style="padding-left: 40px; font-size: 36px;">{{insideCount}}</label>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td>\n          <label class="numberset">\n            <span *ngFor="let cstmrDetails of exchangeData.customerList">\n              <span ion-button class="btngetin" *ngIf="cstmrDetails.status ==\'pending\'" (click)="countGetIn(cstmrDetails)">\n                {{cstmrDetails.id}}\n              </span>\n            </span>\n          </label>\n        </td>\n      </tr>\n    </table>\n\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton" (click)="goOut()">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="skipCustomer()">Next</button>\n    </div>\n\n    <div>     \n      <label *ngFor="let x of messages">\n        <h2>{{x}}</h2>\n      </label>\n    </div>\n\n    <div ion-button (click)= "add()"> Add Customers</div>\n    <div ion-button (click)= "exchangeData.insertData()"> Insert</div>\n    <div ion-button (click)= "exchangeData.getData()"> Retrieve</div>\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */],
@@ -376,7 +420,7 @@ var HomePage = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return WaitinglistPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_exchange_data_exchange_data__ = __webpack_require__(75);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -420,7 +464,7 @@ var WaitinglistPage = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SkippedPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_exchange_data_exchange_data__ = __webpack_require__(75);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -434,11 +478,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-// import { populateNodeData } from 'ionic-angular/umd/components/virtual-scroll/virtual-util';
 var SkippedPage = /** @class */ (function () {
-    function SkippedPage(navCtrl, navParams, exchangeData) {
+    function SkippedPage(navCtrl, navParams, platform, exchangeData) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
+        this.platform = platform;
         this.exchangeData = exchangeData;
     }
     SkippedPage.prototype.ionViewDidLoad = function () {
@@ -446,16 +490,15 @@ var SkippedPage = /** @class */ (function () {
         setInterval(function () {
             _this.exchangeData.customerList.forEach(function (element) {
                 if (element.status == 'skipped') {
-                    // console.log(element)
                     var timeElapsed = Date.now() - element.time;
                     // if(timeElapsed>=1200000){
                     if (timeElapsed >= 10000) {
                         var index = _this.exchangeData.customerList.indexOf(element);
                         _this.exchangeData.customerList[index].status = 'absent';
                         _this.exchangeData.absentList.push(_this.exchangeData.customerList[index]);
+                        if (SMS)
+                            SMS.sendSMS(_this.exchangeData.customerList[index].pNumber, 'Your have been abandoned because of absent', function () { }, function () { });
                         _this.exchangeData.customerList.splice(index, 1);
-                        console.log(_this.exchangeData.absentList, '11111');
-                        console.log(_this.exchangeData.customerList, '22222');
                     }
                 }
             });
@@ -467,6 +510,7 @@ var SkippedPage = /** @class */ (function () {
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */],
             __WEBPACK_IMPORTED_MODULE_2__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */]])
     ], SkippedPage);
     return SkippedPage;
@@ -482,7 +526,7 @@ var SkippedPage = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SettingsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabs_tabs__ = __webpack_require__(55);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -529,7 +573,7 @@ var SettingsPage = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AboutPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabs_tabs__ = __webpack_require__(55);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -573,7 +617,7 @@ var AboutPage = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__otp_otp__ = __webpack_require__(152);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -640,7 +684,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_component__ = __webpack_require__(401);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_home_home__ = __webpack_require__(208);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_waitinglist_waitinglist__ = __webpack_require__(217);
@@ -678,8 +722,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+// import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
-// import { SQLite } from '@ionic-native/sqlite';
 
 
 
@@ -707,8 +751,8 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
                 __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["c" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* SocialQue */], {}, {
                     links: [
-                        { loadChildren: '../pages/otp/otp.module#OtpPageModule', name: 'OtpPage', segment: 'otp', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] }
+                        { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/otp/otp.module#OtpPageModule', name: 'OtpPage', segment: 'otp', priority: 'low', defaultHistory: [] }
                     ]
                 }),
                 __WEBPACK_IMPORTED_MODULE_15_ng_circle_progress__["a" /* NgCircleProgressModule */].forRoot({
@@ -761,7 +805,7 @@ var AppModule = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SocialQue; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(258);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(259);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_settings_settings__ = __webpack_require__(260);
@@ -828,7 +872,7 @@ var SocialQue = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home__ = __webpack_require__(208);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__waitinglist_waitinglist__ = __webpack_require__(217);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__skipped_skipped__ = __webpack_require__(218);
@@ -884,6 +928,7 @@ var TabsPage = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(213);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_sqlite__ = __webpack_require__(216);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(22);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -896,36 +941,93 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ExchangeDataProvider = /** @class */ (function () {
-    function ExchangeDataProvider(http, sqlite) {
-        var _this = this;
+    function ExchangeDataProvider(http, sqlite, platform) {
         this.http = http;
         this.sqlite = sqlite;
+        this.platform = platform;
         this.customerList = [];
         this.completedList = [];
         this.absentList = [];
-        setTimeout(function () {
-            _this.setupDB();
-        }, 5000);
+        this.setupDB();
     }
     ExchangeDataProvider.prototype.setupDB = function () {
-        console.log(this.sqlite, 'testing db');
-        this.sqlite.create({
-            name: 'social_que.db',
-            location: 'default'
-        })
-            .then(function (db) {
-            console.log('11111');
-            db.executeSql('create table customerDetails(name VARCHAR(32))', [])
-                .then(function () { return console.log('Executed SQL'); })
+        var _this = this;
+        this.platform.ready().then(function (readySource) {
+            _this.sqlite.create({
+                name: 'social_que.db',
+                location: 'default'
+            })
+                .then(function (db) {
+                // db.executeSql('create table customerDetails(name VARCHAR(32))', [])
+                db.executeSql("CREATE TABLE IF NOT EXISTS sellerDetails" +
+                    "(SellerId INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "MSISDN TEXT," +
+                    "OTP INTEGER," +
+                    "BusinessName TEXT," +
+                    "Categories TEXT," +
+                    "OccupentCount INTEGER," +
+                    "City TEXT," +
+                    "Language TEXT," +
+                    "GPS TEXT," +
+                    "CreatedTime DATETIME," +
+                    "UpdatedTime DATETIME," +
+                    "Type TEXT)", [])
+                    .then(function () { return console.log('Executed SQL 1'); })
+                    .catch(function (e) { return console.log(e, 'Fail to execute 1'); });
+                db.executeSql("CREATE TABLE IF NOT EXISTS CustomerDetails" +
+                    "(CustomerId INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "SellerId INTEGER," +
+                    "MSISDN TEXT," +
+                    "QueNo INTEGER," +
+                    "CreatedTime DATETIME," +
+                    "UpdatedTime DATETIME," +
+                    "CheckInTime DATETIME," +
+                    "Status TEXT)", [])
+                    .then(function () { return console.log('Executed SQL 2'); })
+                    .catch(function (e) { return console.log(e, 'Fail to execute 2'); });
+            })
                 .catch(function (e) { return console.log(e); });
-        })
-            .catch(function (e) { return console.log(e); });
+        });
+    };
+    ExchangeDataProvider.prototype.insertData = function () {
+        var _this = this;
+        this.platform.ready().then(function (readySource) {
+            _this.sqlite.create({
+                name: 'social_que.db',
+                location: 'default'
+            })
+                .then(function (db) {
+                db.executeSql("INSERT INTO CustomerDetails (SellerId, MSISDN, QueNo, Status) VALUES ('1', '+94714142387', 100001, 'pending')", [])
+                    .then(function (data) { return console.log("INSERTED SUCCESSFULLY", data); })
+                    .catch(function (e) { return console.log("FAIL TO INSERT", e); });
+            })
+                .catch(function (e) { return console.log(e); });
+        });
+    };
+    ExchangeDataProvider.prototype.getData = function () {
+        var _this = this;
+        this.platform.ready().then(function (readySource) {
+            _this.sqlite.create({
+                name: 'social_que.db',
+                location: 'default'
+            })
+                .then(function (db) {
+                db.executeSql("SELECT * FROM CustomerDetails", [])
+                    .then(function (result) {
+                    console.log("RETRIEVED SUCCESSFULLY", result.rows);
+                })
+                    .catch(function (e) { return console.log("FAIL TO RETRIEVE", e); });
+            })
+                .catch(function (e) { return console.log(e); });
+        });
     };
     ExchangeDataProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["B" /* Injectable */])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */],
-            __WEBPACK_IMPORTED_MODULE_2__ionic_native_sqlite__["a" /* SQLite */]])
+            __WEBPACK_IMPORTED_MODULE_2__ionic_native_sqlite__["a" /* SQLite */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["i" /* Platform */]])
     ], ExchangeDataProvider);
     return ExchangeDataProvider;
 }());

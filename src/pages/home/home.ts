@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { NavController, Platform, LoadingController } from 'ionic-angular';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { ExchangeDataProvider } from '../../providers/exchange-data/exchange-data';
-import { NgZone } from '@angular/core';
 
 declare var SMS: any;
 
@@ -40,7 +39,7 @@ export class HomePage {
   ionViewDidLoad() {
     this.checkPermission();
     this.resetClock();
-    // this.onSMSArrive(); //Uncomment this before launch in real device
+    this.onSMSArrive(); //Uncomment this before launch in real device
   }
 
   pageLoader(){
@@ -88,34 +87,72 @@ export class HomePage {
           console.log('failed to start watching');
       });
       document.addEventListener('onSMSArrive', function(e){
-        this.checkPermission();  
-        this.replyCustomer(e.data);
+        console.log('sms arrived')
+        // this.checkPermission();  
+        this.checkSMS(e.data);
         }.bind(this)
       );
     })
   }
 
-  replyCustomer(sms){
+  checkSMS(sms){
     this.platform.ready().then((readySource) => {
       let key1 = sms.body.includes("covid19");
       let key2 = sms.body.includes("Covid19");
-      let key3 = sms.body.includes("COVID19"); 
-      if(key1 || key2 || key3){
-        this.generateNumber++
-        if(SMS) SMS.sendSMS(sms.address, 'Your number is ' + this.generateNumber, function(){}, function(){});
-        this.countPendingCustomers();
+      let key3 = sms.body.includes("COVID19");
+      let existingNumber = false;
 
-        if(this.pendingCount<5){
-          this.exchangeData.customerList.push({id:this.generateNumber, pNumber:sms.address, status:"pending", time:Date.now()});  
+      if(key1 || key2 || key3){
+        console.log(this.exchangeData.customerList.length,'00000')
+        if(this.exchangeData.customerList.length){
+          // existingNumber = false;
+          this.exchangeData.customerList.forEach(element => {
+            console.log(sms.address,'111111',element.pNumber)
+            if(sms.address==element.pNumber){
+              existingNumber = true;
+              console.log('222222')
+              if(element.status=='skipped'){                
+                this.countPendingCustomers();
+                this.exchangeData.customerList[this.exchangeData.customerList.indexOf(element)].time = Date.now();
+                if(this.pendingCount<5){
+                  this.exchangeData.customerList[this.exchangeData.customerList.indexOf(element)].status = "pending";                  
+                } else {
+                  this.exchangeData.customerList[this.exchangeData.customerList.indexOf(element)].status = "waiting";                  
+                }
+                this.refresh();
+              }
+            }
+          });
+          // Promise.all(this.exchangeData.customerList).then(() => 
+          //   console.log('for loop ended')
+          // );
+
+          if(existingNumber){
+            console.log(existingNumber,'customer already in queue')
+          } else {
+            this.replyCustomer(sms);
+            console.log(existingNumber,'New number added to list')
+          }
         } else {
-          this.exchangeData.customerList.push({id:this.generateNumber, pNumber:sms.address, status:"waiting", time:Date.now()});          
+          this.replyCustomer(sms);
+          console.log('New list is started')
         }
-        this.refresh();
+      } else{
+        console.log('Not a valid sms')
       }
-    },
-    Error => {
-      alert(JSON.stringify(Error))
-    });
+    })
+  }
+
+  replyCustomer(sms){
+    this.generateNumber++
+    if(SMS) SMS.sendSMS(sms.address, 'Your number is ' + this.generateNumber, function(){}, function(){});
+    this.countPendingCustomers();
+    if(this.pendingCount<5){
+      this.exchangeData.customerList.push({id:this.generateNumber, pNumber:sms.address, status:"pending", time:Date.now()});  
+    } else {
+      this.exchangeData.customerList.push({id:this.generateNumber, pNumber:sms.address, status:"waiting", time:Date.now()});          
+    }
+    this.refresh();
   }
 
   countGetIn(customer){
@@ -189,7 +226,8 @@ export class HomePage {
           let index = this.exchangeData.customerList.indexOf(element);
           this.exchangeData.customerList[index].status = "skipped";
           this.exchangeData.customerList[index].time = Date.now();
-
+          console.log('Inform to ',this.exchangeData.customerList[index].pNumber)
+          if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Your have been skipped because of absent in time. Please resend previous sms before 20 minutes to re-enter with old number', function(){}, function(){});
           found = true;
         }
         if(element.status == 'pending'){
@@ -266,9 +304,9 @@ export class HomePage {
     this.countPendingCustomers();   
 
     if(this.pendingCount<5){
-      this.exchangeData.customerList.push({id:this.generateNumber, pNumber:+94714142387, status:"pending", time:Date.now()});  
+      this.exchangeData.customerList.push({id:this.generateNumber, pNumber:+94782992725, status:"pending", time:Date.now()});  
     } else {
-      this.exchangeData.customerList.push({id:this.generateNumber, pNumber:+94714142387, status:"waiting", time:Date.now()});          
+      this.exchangeData.customerList.push({id:this.generateNumber, pNumber:+94782992725, status:"waiting", time:Date.now()});          
     }
     this.generateNumber++
   }
@@ -281,8 +319,4 @@ export class HomePage {
       }
     });
   }
-
-  // connect(){
-  //   this.exchangeData.setupDB();
-  // }
 }
