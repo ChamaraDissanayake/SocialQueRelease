@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+// import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { SQLite } from '@ionic-native/sqlite';
 import { Platform } from 'ionic-angular';
 
 @Injectable()
@@ -9,7 +10,7 @@ export class ExchangeDataProvider {
   customerList: any [];
   completedList: any[];
   absentList: any [];
-  private db: SQLiteObject;
+  // private db: SQLiteObject;
   
   constructor(
     public http: HttpClient,
@@ -59,19 +60,18 @@ export class ExchangeDataProvider {
               .catch(e => console.log(e, 'Fail to execute 2'));
         })
 
-
         .catch(e => console.log(e));
     })
   }
 
-  insertData() {    
+  insertData(generateNumber, pNumber, status, time) {
     this.platform.ready().then((readySource) => {
       this.sqlite.create({
         name: 'social_que.db',
         location: 'default'
       })
         .then((db) => {
-          db.executeSql("INSERT INTO CustomerDetails (SellerId, MSISDN, QueNo, Status) VALUES ('1', '+94714142387', 100001, 'pending')", [])
+          db.executeSql("INSERT INTO CustomerDetails (SellerId, MSISDN, QueNo, CreatedTime, Status) VALUES (1, '"+pNumber+"', '"+generateNumber+"', '"+time+"', '"+status+"')", [])
           .then((data) => console.log("INSERTED SUCCESSFULLY", data))
           .catch(e => console.log("FAIL TO INSERT", e));
         })
@@ -95,4 +95,39 @@ export class ExchangeDataProvider {
         .catch(e => console.log(e));
     })
   }
+
+  removeDB(){
+    this.platform.ready().then((readySource) => {
+      this.sqlite.create({
+        name: 'social_que.db',
+        location: 'default'
+      })
+        .then((db) => {
+          db.executeSql("DROP TABLE IF EXISTS CustomerDetails", [])
+              .then(() => console.log('Executed Delete 1'))
+              .catch(e => console.log(e, 'Fail to Delete 1'));
+        })
+        .catch(e => console.log(e));
+    })
+  }
+
+  // updateStatus(){
+  //   this.platform.ready().then((readySource) => {
+  //     this.sqlite.create({
+  //       name: 'social_que.db',
+  //       location: 'default'
+  //     })
+  //       .then((db) => {
+  //         db.executeSql("UPDATE CustomerDetails (SellerId, MSISDN, QueNo, CreatedTime, Status) VALUES (1, '"+pNumber+"', '"+generateNumber+"', '"+time+"', '"+status+"')", [])
+
+ 
+  //         SET column1 = value1, column2 = value2, ...
+  //         WHERE condition;
+
+  //         .then((data) => console.log("INSERTED SUCCESSFULLY", data))
+  //         .catch(e => console.log("FAIL TO INSERT", e));
+  //       })
+  //       .catch(e => console.log(e));
+  //   })
+  // }
 }

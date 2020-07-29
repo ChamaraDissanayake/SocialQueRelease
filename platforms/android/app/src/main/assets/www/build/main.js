@@ -121,7 +121,6 @@ var HomePage = /** @class */ (function () {
         this.exchangeData = exchangeData;
         this.loadingCtrl = loadingCtrl;
         this.generateNumber = 100000;
-        // activeCustomers: number = 0;
         this.maxCustomers = 5;
         this.insideCount = 0;
         this.percent = 45;
@@ -192,9 +191,8 @@ var HomePage = /** @class */ (function () {
             var key3 = sms.body.includes("COVID19");
             var existingNumber = false;
             if (key1 || key2 || key3) {
-                console.log(_this.exchangeData.customerList.length, '00000');
+                // console.log(this.exchangeData.customerList.length,'00000')
                 if (_this.exchangeData.customerList.length) {
-                    // existingNumber = false;
                     _this.exchangeData.customerList.forEach(function (element) {
                         console.log(sms.address, '111111', element.pNumber);
                         if (sms.address == element.pNumber) {
@@ -202,7 +200,7 @@ var HomePage = /** @class */ (function () {
                             console.log('222222');
                             if (element.status == 'skipped') {
                                 _this.countPendingCustomers();
-                                _this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].time = Date.now();
+                                _this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].time = _this.dateFix();
                                 if (_this.pendingCount < 5) {
                                     _this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].status = "pending";
                                 }
@@ -240,10 +238,12 @@ var HomePage = /** @class */ (function () {
             SMS.sendSMS(sms.address, 'Your number is ' + this.generateNumber, function () { }, function () { });
         this.countPendingCustomers();
         if (this.pendingCount < 5) {
-            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: sms.address, status: "pending", time: Date.now() });
+            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: sms.address, status: "pending", time: this.dateFix() });
+            this.exchangeData.insertData(this.generateNumber, sms.address, "pending", this.dateFix());
         }
         else {
-            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: sms.address, status: "waiting", time: Date.now() });
+            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: sms.address, status: "waiting", time: this.dateFix() });
+            this.exchangeData.insertData(this.generateNumber, sms.address, "waiting", this.dateFix());
         }
         this.refresh();
     };
@@ -314,7 +314,7 @@ var HomePage = /** @class */ (function () {
                 if (element.status == 'pending' && found_1 == false) {
                     var index = _this.exchangeData.customerList.indexOf(element);
                     _this.exchangeData.customerList[index].status = "skipped";
-                    _this.exchangeData.customerList[index].time = Date.now();
+                    _this.exchangeData.customerList[index].time = _this.dateFix();
                     console.log('Inform to ', _this.exchangeData.customerList[index].pNumber);
                     if (SMS)
                         SMS.sendSMS(_this.exchangeData.customerList[index].pNumber, 'Your have been skipped because of absent in time. Please resend previous sms before 20 minutes to re-enter with old number', function () { }, function () { });
@@ -380,10 +380,12 @@ var HomePage = /** @class */ (function () {
     HomePage.prototype.add = function () {
         this.countPendingCustomers();
         if (this.pendingCount < 5) {
-            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: +94782992725, status: "pending", time: Date.now() });
+            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: +94782992725, status: "pending", time: this.dateFix() });
+            this.exchangeData.insertData(this.generateNumber, +94782992725, "pending", this.dateFix());
         }
         else {
-            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: +94782992725, status: "waiting", time: Date.now() });
+            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: +94782992725, status: "waiting", time: this.dateFix() });
+            this.exchangeData.insertData(this.generateNumber, +94782992725, "waiting", this.dateFix());
         }
         this.generateNumber++;
     };
@@ -396,9 +398,13 @@ var HomePage = /** @class */ (function () {
             }
         });
     };
+    HomePage.prototype.dateFix = function () {
+        var dateNow = new Date();
+        return dateNow;
+    };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>\n    <label style="padding-left: 40px; font-size: 36px;">{{insideCount}}</label>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td>\n          <label class="numberset">\n            <span *ngFor="let cstmrDetails of exchangeData.customerList">\n              <span ion-button class="btngetin" *ngIf="cstmrDetails.status ==\'pending\'" (click)="countGetIn(cstmrDetails)">\n                {{cstmrDetails.id}}\n              </span>\n            </span>\n          </label>\n        </td>\n      </tr>\n    </table>\n\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton" (click)="goOut()">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="skipCustomer()">Next</button>\n    </div>\n\n    <div>     \n      <label *ngFor="let x of messages">\n        <h2>{{x}}</h2>\n      </label>\n    </div>\n\n    <div ion-button (click)= "add()"> Add Customers</div>\n    <div ion-button (click)= "exchangeData.insertData()"> Insert</div>\n    <div ion-button (click)= "exchangeData.getData()"> Retrieve</div>\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
+            selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>\n    <label style="padding-left: 40px; font-size: 36px;">{{insideCount}}</label>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td>\n          <label class="numberset">\n            <span *ngFor="let cstmrDetails of exchangeData.customerList">\n              <span ion-button class="btngetin" *ngIf="cstmrDetails.status ==\'pending\'" (click)="countGetIn(cstmrDetails)">\n                {{cstmrDetails.id}}\n              </span>\n            </span>\n          </label>\n        </td>\n      </tr>\n    </table>\n\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton" (click)="goOut()">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="skipCustomer()">Next</button>\n    </div>\n\n    <div>     \n      <label *ngFor="let x of messages">\n        <h2>{{x}}</h2>\n      </label>\n    </div>\n\n    <div ion-button (click)= "add()"> Add Customers</div>\n    <div ion-button (click)= "exchangeData.removeDB()"> RemoveDB</div>\n    <div ion-button (click)= "exchangeData.getData()"> Retrieve</div>\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */],
@@ -478,6 +484,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+// import { populateNodeData } from 'ionic-angular/umd/components/virtual-scroll/virtual-util';
+// import { LoadingController } from 'ionic-angular';
+// declare var SMS: any;
 var SkippedPage = /** @class */ (function () {
     function SkippedPage(navCtrl, navParams, platform, exchangeData) {
         this.navCtrl = navCtrl;
@@ -491,13 +500,13 @@ var SkippedPage = /** @class */ (function () {
             _this.exchangeData.customerList.forEach(function (element) {
                 if (element.status == 'skipped') {
                     var timeElapsed = Date.now() - element.time;
+                    console.log(timeElapsed);
                     // if(timeElapsed>=1200000){
                     if (timeElapsed >= 10000) {
                         var index = _this.exchangeData.customerList.indexOf(element);
                         _this.exchangeData.customerList[index].status = 'absent';
                         _this.exchangeData.absentList.push(_this.exchangeData.customerList[index]);
-                        if (SMS)
-                            SMS.sendSMS(_this.exchangeData.customerList[index].pNumber, 'Your have been abandoned because of absent', function () { }, function () { });
+                        // if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Your have been abandoned because of absent', function(){}, function(){});
                         _this.exchangeData.customerList.splice(index, 1);
                     }
                 }
@@ -940,9 +949,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+// import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
 
 var ExchangeDataProvider = /** @class */ (function () {
+    // private db: SQLiteObject;
     function ExchangeDataProvider(http, sqlite, platform) {
         this.http = http;
         this.sqlite = sqlite;
@@ -991,7 +1002,7 @@ var ExchangeDataProvider = /** @class */ (function () {
                 .catch(function (e) { return console.log(e); });
         });
     };
-    ExchangeDataProvider.prototype.insertData = function () {
+    ExchangeDataProvider.prototype.insertData = function (generateNumber, pNumber, status, time) {
         var _this = this;
         this.platform.ready().then(function (readySource) {
             _this.sqlite.create({
@@ -999,7 +1010,7 @@ var ExchangeDataProvider = /** @class */ (function () {
                 location: 'default'
             })
                 .then(function (db) {
-                db.executeSql("INSERT INTO CustomerDetails (SellerId, MSISDN, QueNo, Status) VALUES ('1', '+94714142387', 100001, 'pending')", [])
+                db.executeSql("INSERT INTO CustomerDetails (SellerId, MSISDN, QueNo, CreatedTime, Status) VALUES (1, '" + pNumber + "', '" + generateNumber + "', '" + time + "', '" + status + "')", [])
                     .then(function (data) { return console.log("INSERTED SUCCESSFULLY", data); })
                     .catch(function (e) { return console.log("FAIL TO INSERT", e); });
             })
@@ -1019,6 +1030,21 @@ var ExchangeDataProvider = /** @class */ (function () {
                     console.log("RETRIEVED SUCCESSFULLY", result.rows);
                 })
                     .catch(function (e) { return console.log("FAIL TO RETRIEVE", e); });
+            })
+                .catch(function (e) { return console.log(e); });
+        });
+    };
+    ExchangeDataProvider.prototype.removeDB = function () {
+        var _this = this;
+        this.platform.ready().then(function (readySource) {
+            _this.sqlite.create({
+                name: 'social_que.db',
+                location: 'default'
+            })
+                .then(function (db) {
+                db.executeSql("DROP TABLE IF EXISTS CustomerDetails", [])
+                    .then(function () { return console.log('Executed Delete 1'); })
+                    .catch(function (e) { return console.log(e, 'Fail to Delete 1'); });
             })
                 .catch(function (e) { return console.log(e); });
         });
