@@ -10,6 +10,8 @@ export class ExchangeDataProvider {
   customerList: any [];
   completedList: any[];
   absentList: any [];
+  insideCustomerCount: number;
+  lastCustomerNumber: number;
   // private db: SQLiteObject;
   
   constructor(
@@ -18,8 +20,10 @@ export class ExchangeDataProvider {
     public platform: Platform,
     ) {
       this.customerList = [];
-      this.completedList = []
+      this.completedList = [];
       this.absentList = [];
+      this.insideCustomerCount = 0;
+      this.lastCustomerNumber = 100000;
       this.setupDB();
   }
   
@@ -61,6 +65,7 @@ export class ExchangeDataProvider {
         })
 
         .catch(e => console.log(e));
+        this.getData();
     })
   }
 
@@ -86,9 +91,21 @@ export class ExchangeDataProvider {
         location: 'default'
       })
         .then((db) => {
-          db.executeSql("SELECT * FROM CustomerDetails", [])
+          // db.executeSql("SELECT * FROM CustomerDetails WHERE Status = 'pending' OR Status = 'waiting' OR Status = 'inside'", [])
+          db.executeSql("SELECT * FROM CustomerDetails WHERE Status like '%pending%' OR Status like '%waiting%' OR Status like '%inside%' OR Status like '%skipped%'", [])
           .then((result) => {
-            console.log("RETRIEVED SUCCESSFULLY", result.rows)
+            console.log("RETRIEVED SUCCESSFULLY", result.rows);
+            // let activityValues = [];
+            if (result.rows.length > 0) {
+              for(let i=0; i <result.rows.length; i++) {                
+                if(result.rows.item(i).Status == 'inside'){
+                  this.insideCustomerCount++
+                }
+                this.lastCustomerNumber = result.rows.item(i).QueNo;
+                this.customerList.push({id: result.rows.item(i).QueNo, pNumber: result.rows.item(i).MSISDN, status: result.rows.item(i).Status, time: result.rows.item(i).CreatedTime})
+              }
+            }
+            console.log(this.customerList, '11111');
           })
           .catch(e => console.log("FAIL TO RETRIEVE", e));
         })
@@ -96,7 +113,7 @@ export class ExchangeDataProvider {
     })
   }
 
-  removeDB(){
+  resetTable(){
     this.platform.ready().then((readySource) => {
       this.sqlite.create({
         name: 'social_que.db',
@@ -111,23 +128,33 @@ export class ExchangeDataProvider {
     })
   }
 
-  // updateStatus(){
-  //   this.platform.ready().then((readySource) => {
-  //     this.sqlite.create({
-  //       name: 'social_que.db',
-  //       location: 'default'
-  //     })
-  //       .then((db) => {
-  //         db.executeSql("UPDATE CustomerDetails (SellerId, MSISDN, QueNo, CreatedTime, Status) VALUES (1, '"+pNumber+"', '"+generateNumber+"', '"+time+"', '"+status+"')", [])
+  updateStatus(queNo, status, updatedTime){
+    this.platform.ready().then((readySource) => {
+      this.sqlite.create({
+        name: 'social_que.db',
+        location: 'default'
+      })
+        .then((db) => {
+          db.executeSql("UPDATE CustomerDetails SET Status = '"+status+"', UpdatedTime = '"+updatedTime+"' WHERE QueNo = '"+queNo+"' ", [])
+          .then((data) => console.log("UPDATED SUCCESSFULLY", data))
+          .catch(e => console.log("FAIL TO UPDATED", e));
+        })
+        .catch(e => console.log(e));
+    })
+  }
 
- 
-  //         SET column1 = value1, column2 = value2, ...
-  //         WHERE condition;
-
-  //         .then((data) => console.log("INSERTED SUCCESSFULLY", data))
-  //         .catch(e => console.log("FAIL TO INSERT", e));
-  //       })
-  //       .catch(e => console.log(e));
-  //   })
-  // }
+  updateCheckIn(queNo, status, updatedTime){
+    this.platform.ready().then((readySource) => {
+      this.sqlite.create({
+        name: 'social_que.db',
+        location: 'default'
+      })
+        .then((db) => {
+          db.executeSql("UPDATE CustomerDetails SET Status = '"+status+"', UpdatedTime = '"+updatedTime+"', CheckInTime = '"+updatedTime+"' WHERE QueNo = '"+queNo+"' ", [])
+          .then((data) => console.log("UPDATED SUCCESSFULLY", data))
+          .catch(e => console.log("FAIL TO UPDATED", e));
+        })
+        .catch(e => console.log(e));
+    })
+  }
 }
