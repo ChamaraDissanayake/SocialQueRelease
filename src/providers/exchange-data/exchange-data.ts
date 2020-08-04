@@ -14,6 +14,7 @@ export class ExchangeDataProvider {
   lastCustomerNumber: number;
   // private db: SQLiteObject;
   
+  
   constructor(
     public http: HttpClient,
     private sqlite: SQLite,
@@ -26,7 +27,7 @@ export class ExchangeDataProvider {
       this.lastCustomerNumber = 100000;
       this.setupDB();
   }
-  
+
   setupDB(){
     this.platform.ready().then((readySource) => {
       this.sqlite.create({
@@ -45,8 +46,8 @@ export class ExchangeDataProvider {
             "City TEXT," +
             "Language TEXT," +
             "GPS TEXT," +
-            "CreatedTime DATETIME," +
-            "UpdatedTime DATETIME," +
+            "CreatedTime INTEGER," +
+            "UpdatedTime INTEGER," +
             "Type TEXT)", [])
               .then(() => console.log('Executed SQL 1'))
               .catch(e => console.log(e, 'Fail to execute 1'));
@@ -56,9 +57,9 @@ export class ExchangeDataProvider {
             "SellerId INTEGER," +
             "MSISDN TEXT," +
             "QueNo INTEGER," +
-            "CreatedTime DATETIME," +
-            "UpdatedTime DATETIME," +
-            "CheckInTime DATETIME," +
+            "CreatedTime INTEGER," +
+            "UpdatedTime INTEGER," +
+            "CheckInTime INTEGER," +
             "Status TEXT)", [])
               .then(() => console.log('Executed SQL 2'))
               .catch(e => console.log(e, 'Fail to execute 2'));
@@ -69,14 +70,14 @@ export class ExchangeDataProvider {
     })
   }
 
-  insertData(generateNumber, pNumber, status, time) {
+  insertData(generateNumber, pNumber, status, createdTime) {
     this.platform.ready().then((readySource) => {
       this.sqlite.create({
         name: 'social_que.db',
         location: 'default'
       })
         .then((db) => {
-          db.executeSql("INSERT INTO CustomerDetails (SellerId, MSISDN, QueNo, CreatedTime, Status) VALUES (1, '"+pNumber+"', '"+generateNumber+"', '"+time+"', '"+status+"')", [])
+          db.executeSql("INSERT INTO CustomerDetails (SellerId, MSISDN, QueNo, CreatedTime, Status) VALUES (1, '"+pNumber+"', '"+generateNumber+"', strftime('%s','now'), '"+status+"')", [])
           .then((data) => console.log("INSERTED SUCCESSFULLY", data))
           .catch(e => console.log("FAIL TO INSERT", e));
         })
@@ -102,7 +103,7 @@ export class ExchangeDataProvider {
                   this.insideCustomerCount++
                 }
                 this.lastCustomerNumber = result.rows.item(i).QueNo;
-                this.customerList.push({id: result.rows.item(i).QueNo, pNumber: result.rows.item(i).MSISDN, status: result.rows.item(i).Status, time: result.rows.item(i).CreatedTime})
+                this.customerList.push({id: result.rows.item(i).QueNo, pNumber: result.rows.item(i).MSISDN, status: result.rows.item(i).Status, updatedTime: result.rows.item(i).UpdatedTime})
               }
             }
             console.log(this.customerList, '11111');
@@ -128,14 +129,15 @@ export class ExchangeDataProvider {
     })
   }
 
-  updateStatus(queNo, status, updatedTime){
+  updateStatus(queNo, status){
     this.platform.ready().then((readySource) => {
       this.sqlite.create({
         name: 'social_que.db',
         location: 'default'
       })
         .then((db) => {
-          db.executeSql("UPDATE CustomerDetails SET Status = '"+status+"', UpdatedTime = '"+updatedTime+"' WHERE QueNo = '"+queNo+"' ", [])
+          db.executeSql("UPDATE CustomerDetails SET Status = '"+status+"', UpdatedTime = strftime('%s','now') WHERE QueNo = '"+queNo+"' ", [])
+          // db.executeSql("UPDATE CustomerDetails SET Status = '"+status+"', UpdatedTime = '"+updatedTime+"' WHERE QueNo = '"+queNo+"' ", [])
           .then((data) => console.log("UPDATED SUCCESSFULLY", data))
           .catch(e => console.log("FAIL TO UPDATED", e));
         })
@@ -143,14 +145,14 @@ export class ExchangeDataProvider {
     })
   }
 
-  updateCheckIn(queNo, status, updatedTime){
+  updateCheckIn(queNo, status){
     this.platform.ready().then((readySource) => {
       this.sqlite.create({
         name: 'social_que.db',
         location: 'default'
       })
         .then((db) => {
-          db.executeSql("UPDATE CustomerDetails SET Status = '"+status+"', UpdatedTime = '"+updatedTime+"', CheckInTime = '"+updatedTime+"' WHERE QueNo = '"+queNo+"' ", [])
+          db.executeSql("UPDATE CustomerDetails SET Status = '"+status+"', UpdatedTime = strftime('%s','now'), CheckInTime = strftime('%s','now') WHERE QueNo = '"+queNo+"' ", [])
           .then((data) => console.log("UPDATED SUCCESSFULLY", data))
           .catch(e => console.log("FAIL TO UPDATED", e));
         })

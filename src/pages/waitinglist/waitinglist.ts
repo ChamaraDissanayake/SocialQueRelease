@@ -14,8 +14,6 @@ export class WaitinglistPage {
     private exchangeData: ExchangeDataProvider
   ) {}
 
-  ionViewDidEnter() {
-    console.log('waiting list');
-  }
+  ionViewDidEnter() {}
 
 }

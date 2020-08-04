@@ -8,7 +8,7 @@
 
   <section style="font-weight: bold;">
     <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>
-    <label style="padding-left: 40px; font-size: 36px;">{{insideCount}}</label>
+    <label style="padding-left: 40px; font-size: 36px;">{{exchangeData.insideCustomerCount}}</label>
   </section>
 
 
@@ -53,6 +53,6 @@
 
     <div ion-button (click)= "getNextTestNumber()"> Add Customers</div>
     <div ion-button (click)= "exchangeData.resetTable()"> Reset Table</div>
-    <div ion-button (click)= "exchangeData.getData()"> Retrieve</div>
-    <div ion-button (click)= "test()"> Test</div>
+    <div ion-button (click)= "checkPermission()"> Check Permission</div>
+    <!-- <div ion-button (click)= "exchangeData.getData()"> Retrieve</div> -->
 </ion-content>

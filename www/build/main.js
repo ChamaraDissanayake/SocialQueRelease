@@ -121,7 +121,6 @@ var HomePage = /** @class */ (function () {
         this.exchangeData = exchangeData;
         this.loadingCtrl = loadingCtrl;
         this.maxCustomers = 5;
-        this.insideCount = 0;
         this.percent = 45;
         this.belowNumber = 45;
         this.holdTime = false;
@@ -129,8 +128,8 @@ var HomePage = /** @class */ (function () {
     HomePage.prototype.ionViewDidLoad = function () {
         this.checkPermission();
         this.resetClock();
-        // this.onSMSArrive(); //Uncomment this before launch in real device
-        // this.test();
+        this.onSMSArrive(); //Uncomment this before launch in real device
+        this.abandonCustomer();
     };
     HomePage.prototype.pageLoader = function () {
         this.loading = this.loadingCtrl.create({
@@ -154,7 +153,7 @@ var HomePage = /** @class */ (function () {
         }
     };
     HomePage.prototype.holdClock = function () {
-        if (this.holdTime == true || this.insideCount == this.maxCustomers) {
+        if (this.holdTime == true || this.exchangeData.insideCustomerCount == this.maxCustomers) {
             clearInterval(this.timer);
             this.holdTime = false;
         }
@@ -198,16 +197,16 @@ var HomePage = /** @class */ (function () {
                             existingNumber = true;
                             if (element.status == 'skipped') {
                                 _this.countPendingCustomers();
-                                _this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].time = _this.dateFix();
+                                _this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].updatedTime = Date.now();
                                 if (_this.pendingCount < 5) {
                                     _this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].status = "pending";
                                     _this.exchangeData.updateStatus(_this.exchangeData.customerList[_this.exchangeData.customerList
-                                        .indexOf(element)].id, "pending", _this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].time);
+                                        .indexOf(element)].id, "pending");
                                 }
                                 else {
                                     _this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].status = "waiting";
                                     _this.exchangeData.updateStatus(_this.exchangeData.customerList[_this.exchangeData.customerList
-                                        .indexOf(element)].id, "waiting", _this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].time);
+                                        .indexOf(element)].id, "waiting");
                                 }
                                 _this.refresh();
                             }
@@ -249,23 +248,23 @@ var HomePage = /** @class */ (function () {
             SMS.sendSMS(sms.address, 'Your number is ' + this.generateNumber, function () { }, function () { });
         this.countPendingCustomers();
         if (this.pendingCount < 5) {
-            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: sms.address, status: "pending", time: this.dateFix() });
-            this.exchangeData.insertData(this.generateNumber, sms.address, "pending", this.dateFix());
+            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: sms.address, status: "pending", createdTime: Date.now() });
+            this.exchangeData.insertData(this.generateNumber, sms.address, "pending", Date.now());
         }
         else {
-            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: sms.address, status: "waiting", time: this.dateFix() });
-            this.exchangeData.insertData(this.generateNumber, sms.address, "waiting", this.dateFix());
+            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: sms.address, status: "waiting", createdTime: Date.now() });
+            this.exchangeData.insertData(this.generateNumber, sms.address, "waiting", Date.now());
         }
         this.refresh();
         console.log(this.exchangeData.customerList, '00000');
     };
     HomePage.prototype.countGetIn = function (customer) {
         var _this = this;
-        this.insideCount = 0;
+        this.exchangeData.insideCustomerCount = 0;
         var i = 0;
         this.exchangeData.customerList.forEach(function (element) {
             if (element.status == "inside") {
-                _this.insideCount++;
+                _this.exchangeData.insideCustomerCount++;
             }
             i++;
             if (i == _this.exchangeData.customerList.length) {
@@ -276,14 +275,14 @@ var HomePage = /** @class */ (function () {
     HomePage.prototype.getInside = function (ocptId) {
         this.pageLoader();
         this.loading.present();
-        if (this.insideCount < this.maxCustomers) {
-            this.insideCount++;
+        if (this.exchangeData.insideCustomerCount < this.maxCustomers) {
+            this.exchangeData.insideCustomerCount++;
             // let index = this.exchangeData.customerList.indexOf(ocptId);
             // this.exchangeData.customerList[index].status = "inside"
             this.exchangeData.customerList[this.exchangeData.customerList.indexOf(ocptId)].status = "inside";
             this.exchangeData.updateCheckIn(this.exchangeData.customerList[this.exchangeData.customerList
-                .indexOf(ocptId)].id, "inside", this.dateFix());
-            if (this.insideCount < this.maxCustomers && this.pendingCount > 0) {
+                .indexOf(ocptId)].id, "inside");
+            if (this.exchangeData.insideCustomerCount < this.maxCustomers && this.pendingCount > 0) {
                 this.startClock();
             }
             else {
@@ -302,15 +301,15 @@ var HomePage = /** @class */ (function () {
     HomePage.prototype.goOut = function () {
         this.pageLoader();
         this.loading.present();
-        if (this.insideCount > 0) {
-            this.insideCount--;
+        if (this.exchangeData.insideCustomerCount > 0) {
+            this.exchangeData.insideCustomerCount--;
             // this.countPendingCustomers();
             // if(this.holdTime==false && this.pendingCount>0){
             //   console.log(this.pendingCount,'111111')
             this.startClock();
             // }
             this.exchangeData.customerList[0].status = "completed";
-            this.exchangeData.updateStatus(this.exchangeData.customerList[0].id, "completed", this.dateFix());
+            this.exchangeData.updateStatus(this.exchangeData.customerList[0].id, "completed");
             this.exchangeData.completedList.push(this.exchangeData.customerList[0]);
             this.exchangeData.customerList.splice(0, 1);
             this.loading.dismiss();
@@ -323,15 +322,16 @@ var HomePage = /** @class */ (function () {
         var _this = this;
         this.pageLoader();
         this.loading.present();
-        if (this.insideCount < this.maxCustomers) {
+        if (this.exchangeData.insideCustomerCount < this.maxCustomers) {
             var found_1 = false;
             var i_1 = 0;
             this.exchangeData.customerList.forEach(function (element) {
                 if (element.status == 'pending' && found_1 == false) {
                     var index = _this.exchangeData.customerList.indexOf(element);
                     _this.exchangeData.customerList[index].status = "skipped";
-                    _this.exchangeData.customerList[index].time = _this.dateFix();
-                    _this.exchangeData.updateStatus(_this.exchangeData.customerList[index].id, "skipped", _this.exchangeData.customerList[index].time);
+                    _this.exchangeData.customerList[index].updatedTime = Date.now();
+                    // this.exchangeData.customerList[index].updatedTime = Date.now();
+                    _this.exchangeData.updateStatus(_this.exchangeData.customerList[index].id, "skipped");
                     console.log('Inform to ', _this.exchangeData.customerList[index].pNumber);
                     if (SMS)
                         SMS.sendSMS(_this.exchangeData.customerList[index].pNumber, 'Your have been skipped because of absent in time. Please resend previous sms before 20 minutes to re-enter with old number', function () { }, function () { });
@@ -358,7 +358,7 @@ var HomePage = /** @class */ (function () {
         this.exchangeData.customerList.forEach(function (element) {
             if (element.status == "waiting" && found == false) {
                 _this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].status = "pending";
-                _this.exchangeData.updateStatus(_this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].id, "pending", _this.dateFix());
+                _this.exchangeData.updateStatus(_this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].id, "pending");
                 found = true;
             }
         });
@@ -366,6 +366,16 @@ var HomePage = /** @class */ (function () {
     HomePage.prototype.checkPermission = function () {
         var _this = this;
         this.platform.ready().then(function (readySource) {
+            _this.androidPermissions.checkPermission(_this.androidPermissions.PERMISSION.RECEIVE_SMS).then(function (success) {
+                console.log('Has permission to receive sms');
+            }, function (err) {
+                _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.RECEIVE_SMS).
+                    then(function (success) {
+                    console.log('Successfully granted receive sms permission');
+                }, function (err) {
+                    console.log('No permission to receive sms permission');
+                });
+            });
             _this.androidPermissions.checkPermission(_this.androidPermissions.PERMISSION.READ_SMS).then(function (success) {
                 console.log('Has permission to read sms');
             }, function (err) {
@@ -408,12 +418,12 @@ var HomePage = /** @class */ (function () {
     HomePage.prototype.add = function () {
         this.countPendingCustomers();
         if (this.pendingCount < 5) {
-            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: +94782992725, status: "pending", time: this.dateFix() });
-            this.exchangeData.insertData(this.generateNumber, +94782992725, "pending", this.dateFix());
+            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: +94714142387, status: "pending", createdTime: Date.now() });
+            this.exchangeData.insertData(this.generateNumber, +94714142387, "pending", Date.now());
         }
         else {
-            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: +94782992725, status: "waiting", time: this.dateFix() });
-            this.exchangeData.insertData(this.generateNumber, +94782992725, "waiting", this.dateFix());
+            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: +94714142387, status: "waiting", createdTime: Date.now() });
+            this.exchangeData.insertData(this.generateNumber, +94714142387, "waiting", Date.now());
         }
     };
     HomePage.prototype.countPendingCustomers = function () {
@@ -425,18 +435,50 @@ var HomePage = /** @class */ (function () {
             }
         });
     };
-    HomePage.prototype.dateFix = function () {
-        var dateNow = new Date();
-        return dateNow;
+    // dateFix(){
+    //   var dateNow = new Date();
+    //   return dateNow;
+    // }
+    // test(){
+    //   this.exchangeData.insideCustomerCount = this.exchangeData.insideCustomerCount;
+    //   this.generateNumber = this.exchangeData.lastCustomerNumber;
+    // }
+    HomePage.prototype.abandonCustomer = function () {
+        var _this = this;
+        this.platform.ready().then(function (readySource) {
+            setInterval(function () {
+                _this.exchangeData.customerList.forEach(function (element) {
+                    if (element.status == 'skipped') {
+                        // let skippedTime = Number(element.updatedTime)
+                        var timeElapsed = Date.now() - element.updatedTime;
+                        // if(timeElapsed>=1 200 000){
+                        if (timeElapsed >= 10000) {
+                            console.log('íf is working');
+                            var index = _this.exchangeData.customerList.indexOf(element);
+                            _this.exchangeData.customerList[index].status = 'absent';
+                            _this.exchangeData.updateStatus(_this.exchangeData.customerList[index].id, "absent");
+                            _this.exchangeData.absentList.push(_this.exchangeData.customerList[index]);
+                            if (SMS)
+                                SMS.sendSMS(_this.exchangeData.customerList[index].pNumber, 'Your have been abandoned because of absent', function () { }, function () { });
+                            _this.exchangeData.customerList.splice(index, 1);
+                        }
+                    }
+                });
+            }, 5000);
+        });
     };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>\n    <label style="padding-left: 40px; font-size: 36px;">{{insideCount}}</label>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td>\n          <label class="numberset">\n            <span *ngFor="let cstmrDetails of exchangeData.customerList">\n              <span ion-button class="btngetin" *ngIf="cstmrDetails.status ==\'pending\'" (click)="countGetIn(cstmrDetails)">\n                {{cstmrDetails.id}}\n              </span>\n            </span>\n          </label>\n        </td>\n      </tr>\n    </table>\n\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton" (click)="goOut()">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="skipCustomer()">Next</button>\n    </div>\n\n    <div>     \n      <label *ngFor="let x of messages">\n        <h2>{{x}}</h2>\n      </label>\n    </div>\n\n    <div ion-button (click)= "getNextTestNumber()"> Add Customers</div>\n    <div ion-button (click)= "exchangeData.resetTable()"> Reset Table</div>\n    <div ion-button (click)= "exchangeData.getData()"> Retrieve</div>\n    <div ion-button (click)= "test()"> Test</div>\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
+            selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>\n    <label style="padding-left: 40px; font-size: 36px;">{{exchangeData.insideCustomerCount}}</label>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td>\n          <label class="numberset">\n            <span *ngFor="let cstmrDetails of exchangeData.customerList">\n              <span ion-button class="btngetin" *ngIf="cstmrDetails.status ==\'pending\'" (click)="countGetIn(cstmrDetails)">\n                {{cstmrDetails.id}}\n              </span>\n            </span>\n          </label>\n        </td>\n      </tr>\n    </table>\n\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton" (click)="goOut()">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="skipCustomer()">Next</button>\n    </div>\n\n    <div>     \n      <label *ngFor="let x of messages">\n        <h2>{{x}}</h2>\n      </label>\n    </div>\n\n    <div ion-button (click)= "getNextTestNumber()"> Add Customers</div>\n    <div ion-button (click)= "exchangeData.resetTable()"> Reset Table</div>\n    <div ion-button (click)= "checkPermission()"> Check Permission</div>\n    <!-- <div ion-button (click)= "exchangeData.getData()"> Retrieve</div> -->\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["N" /* NgZone */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["N" /* NgZone */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* LoadingController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* LoadingController */]) === "function" && _f || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */],
+            __WEBPACK_IMPORTED_MODULE_0__angular_core__["N" /* NgZone */],
+            __WEBPACK_IMPORTED_MODULE_3__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* LoadingController */]])
     ], HomePage);
     return HomePage;
-    var _a, _b, _c, _d, _e, _f;
 }());
 
 //# sourceMappingURL=home.js.map
@@ -469,9 +511,7 @@ var WaitinglistPage = /** @class */ (function () {
         this.navParams = navParams;
         this.exchangeData = exchangeData;
     }
-    WaitinglistPage.prototype.ionViewDidEnter = function () {
-        console.log('waiting list');
-    };
+    WaitinglistPage.prototype.ionViewDidEnter = function () { };
     WaitinglistPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'page-waitinglist',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/waitinglist/waitinglist.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>waitinglist</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <label *ngFor="let waiting of exchangeData.customerList">\n    <p *ngIf="waiting.status==\'waiting\'">{{waiting.id}}</p>\n  </label>\n\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/waitinglist/waitinglist.html"*/,
@@ -507,6 +547,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+// import { populateNodeData } from 'ionic-angular/umd/components/virtual-scroll/virtual-util';
+// import { LoadingController } from 'ionic-angular';
+// declare var SMS: any;
 var SkippedPage = /** @class */ (function () {
     function SkippedPage(navCtrl, navParams, platform, exchangeData) {
         this.navCtrl = navCtrl;
@@ -514,31 +557,7 @@ var SkippedPage = /** @class */ (function () {
         this.platform = platform;
         this.exchangeData = exchangeData;
     }
-    SkippedPage.prototype.ionViewDidLoad = function () {
-        var _this = this;
-        setInterval(function () {
-            _this.exchangeData.customerList.forEach(function (element) {
-                if (element.status == 'skipped') {
-                    var timeElapsed = Date.now() - element.time;
-                    console.log(timeElapsed);
-                    // if(timeElapsed>=1 200 000){
-                    if (timeElapsed >= 10000) {
-                        var index = _this.exchangeData.customerList.indexOf(element);
-                        _this.exchangeData.customerList[index].status = 'absent';
-                        _this.exchangeData.updateStatus(_this.exchangeData.customerList[index].id, "absent", _this.dateFix());
-                        _this.exchangeData.absentList.push(_this.exchangeData.customerList[index]);
-                        if (SMS)
-                            SMS.sendSMS(_this.exchangeData.customerList[index].pNumber, 'Your have been abandoned because of absent', function () { }, function () { });
-                        _this.exchangeData.customerList.splice(index, 1);
-                    }
-                }
-            });
-        }, 5000);
-    };
-    SkippedPage.prototype.dateFix = function () {
-        var dateNow = new Date();
-        return dateNow;
-    };
+    SkippedPage.prototype.ionViewDidLoad = function () { };
     SkippedPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'page-skipped',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/skipped/skipped.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>skipped</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <label *ngFor="let skip of exchangeData.customerList" (click)="getBack(skip)">\n    <p *ngIf="skip.status==\'skipped\'">{{skip.id}}</p>\n  </label>\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/skipped/skipped.html"*/,
@@ -1010,8 +1029,8 @@ var ExchangeDataProvider = /** @class */ (function () {
                     "City TEXT," +
                     "Language TEXT," +
                     "GPS TEXT," +
-                    "CreatedTime DATETIME," +
-                    "UpdatedTime DATETIME," +
+                    "CreatedTime INTEGER," +
+                    "UpdatedTime INTEGER," +
                     "Type TEXT)", [])
                     .then(function () { return console.log('Executed SQL 1'); })
                     .catch(function (e) { return console.log(e, 'Fail to execute 1'); });
@@ -1020,9 +1039,9 @@ var ExchangeDataProvider = /** @class */ (function () {
                     "SellerId INTEGER," +
                     "MSISDN TEXT," +
                     "QueNo INTEGER," +
-                    "CreatedTime DATETIME," +
-                    "UpdatedTime DATETIME," +
-                    "CheckInTime DATETIME," +
+                    "CreatedTime INTEGER," +
+                    "UpdatedTime INTEGER," +
+                    "CheckInTime INTEGER," +
                     "Status TEXT)", [])
                     .then(function () { return console.log('Executed SQL 2'); })
                     .catch(function (e) { return console.log(e, 'Fail to execute 2'); });
@@ -1031,7 +1050,7 @@ var ExchangeDataProvider = /** @class */ (function () {
             _this.getData();
         });
     };
-    ExchangeDataProvider.prototype.insertData = function (generateNumber, pNumber, status, time) {
+    ExchangeDataProvider.prototype.insertData = function (generateNumber, pNumber, status, createdTime) {
         var _this = this;
         this.platform.ready().then(function (readySource) {
             _this.sqlite.create({
@@ -1039,7 +1058,7 @@ var ExchangeDataProvider = /** @class */ (function () {
                 location: 'default'
             })
                 .then(function (db) {
-                db.executeSql("INSERT INTO CustomerDetails (SellerId, MSISDN, QueNo, CreatedTime, Status) VALUES (1, '" + pNumber + "', '" + generateNumber + "', '" + time + "', '" + status + "')", [])
+                db.executeSql("INSERT INTO CustomerDetails (SellerId, MSISDN, QueNo, CreatedTime, Status) VALUES (1, '" + pNumber + "', '" + generateNumber + "', strftime('%s','now'), '" + status + "')", [])
                     .then(function (data) { return console.log("INSERTED SUCCESSFULLY", data); })
                     .catch(function (e) { return console.log("FAIL TO INSERT", e); });
             })
@@ -1065,7 +1084,7 @@ var ExchangeDataProvider = /** @class */ (function () {
                                 _this.insideCustomerCount++;
                             }
                             _this.lastCustomerNumber = result.rows.item(i).QueNo;
-                            _this.customerList.push({ id: result.rows.item(i).QueNo, pNumber: result.rows.item(i).MSISDN, status: result.rows.item(i).Status, time: result.rows.item(i).CreatedTime });
+                            _this.customerList.push({ id: result.rows.item(i).QueNo, pNumber: result.rows.item(i).MSISDN, status: result.rows.item(i).Status, updatedTime: result.rows.item(i).UpdatedTime });
                         }
                     }
                     console.log(_this.customerList, '11111');
@@ -1090,7 +1109,7 @@ var ExchangeDataProvider = /** @class */ (function () {
                 .catch(function (e) { return console.log(e); });
         });
     };
-    ExchangeDataProvider.prototype.updateStatus = function (queNo, status, updatedTime) {
+    ExchangeDataProvider.prototype.updateStatus = function (queNo, status) {
         var _this = this;
         this.platform.ready().then(function (readySource) {
             _this.sqlite.create({
@@ -1098,14 +1117,14 @@ var ExchangeDataProvider = /** @class */ (function () {
                 location: 'default'
             })
                 .then(function (db) {
-                db.executeSql("UPDATE CustomerDetails SET Status = '" + status + "', UpdatedTime = '" + updatedTime + "' WHERE QueNo = '" + queNo + "' ", [])
+                db.executeSql("UPDATE CustomerDetails SET Status = '" + status + "', UpdatedTime = strftime('%s','now') WHERE QueNo = '" + queNo + "' ", [])
                     .then(function (data) { return console.log("UPDATED SUCCESSFULLY", data); })
                     .catch(function (e) { return console.log("FAIL TO UPDATED", e); });
             })
                 .catch(function (e) { return console.log(e); });
         });
     };
-    ExchangeDataProvider.prototype.updateCheckIn = function (queNo, status, updatedTime) {
+    ExchangeDataProvider.prototype.updateCheckIn = function (queNo, status) {
         var _this = this;
         this.platform.ready().then(function (readySource) {
             _this.sqlite.create({
@@ -1113,7 +1132,7 @@ var ExchangeDataProvider = /** @class */ (function () {
                 location: 'default'
             })
                 .then(function (db) {
-                db.executeSql("UPDATE CustomerDetails SET Status = '" + status + "', UpdatedTime = '" + updatedTime + "', CheckInTime = '" + updatedTime + "' WHERE QueNo = '" + queNo + "' ", [])
+                db.executeSql("UPDATE CustomerDetails SET Status = '" + status + "', UpdatedTime = strftime('%s','now'), CheckInTime = strftime('%s','now') WHERE QueNo = '" + queNo + "' ", [])
                     .then(function (data) { return console.log("UPDATED SUCCESSFULLY", data); })
                     .catch(function (e) { return console.log("FAIL TO UPDATED", e); });
             })
