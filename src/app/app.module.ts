@@ -22,6 +22,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { ExchangeDataProvider } from '../providers/exchange-data/exchange-data';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
+import { Network } from '@ionic-native/network';
 
 
 @NgModule({
@@ -53,7 +54,7 @@ import { HttpModule } from '@angular/http';
       showUnits: false,
       showSubtitle: false,
       titleFontSize: "36"      
-    })
+    }),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -68,6 +69,7 @@ import { HttpModule } from '@angular/http';
     AboutPage
   ],
   providers: [
+    Network,
     AndroidPermissions,
     StatusBar,
     SplashScreen,

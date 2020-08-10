@@ -2,6 +2,7 @@ import { Component, NgZone } from '@angular/core';
 import { NavController, Platform, LoadingController } from 'ionic-angular';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { ExchangeDataProvider } from '../../providers/exchange-data/exchange-data';
+import { Network } from '@ionic-native/network';
 
 declare var SMS: any;
 
@@ -24,6 +25,7 @@ export class HomePage {
   loading : any;
 
   constructor(
+    private network: Network,
     public navCtrl: NavController,
     public platform: Platform,
     public androidPermissions: AndroidPermissions,
@@ -36,10 +38,12 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
+    this.exchangeData.requestSMSPermission()
     this.checkPermission();
     this.resetClock();
     this.onSMSArrive(); //Uncomment this before launch in real device
     this.abandonCustomer();
+    this.onConnected();
   }
 
   pageLoader(){
@@ -80,7 +84,7 @@ export class HomePage {
   }
 
   onSMSArrive(){
-    this.platform.ready().then((readySource) => {
+    this.platform.ready().then(() => {
       if(SMS) SMS.startWatch(function(){
             console.log('watching started');
            }, function(){
@@ -96,7 +100,7 @@ export class HomePage {
   }
 
   checkSMS(sms){
-    this.platform.ready().then((readySource) => {
+    this.platform.ready().then(() => {
       let key1 = sms.body.includes("covid19");
       let key2 = sms.body.includes("Covid19");
       let key3 = sms.body.includes("COVID19");
@@ -159,10 +163,10 @@ export class HomePage {
     this.countPendingCustomers();
     if(this.pendingCount<5){
       this.exchangeData.customerList.push({id:this.generateNumber, pNumber:sms.address, status:"pending", createdTime: Date.now()});
-      this.exchangeData.insertData(this.generateNumber, sms.address, "pending", Date.now());
+      this.exchangeData.insertData(this.generateNumber, sms.address, "pending");
     } else {
       this.exchangeData.customerList.push({id:this.generateNumber, pNumber:sms.address, status:"waiting", createdTime: Date.now()});
-      this.exchangeData.insertData(this.generateNumber, sms.address, "waiting", Date.now());
+      this.exchangeData.insertData(this.generateNumber, sms.address, "waiting");
     }
     this.refresh();
     console.log(this.exchangeData.customerList,'00000')
@@ -278,21 +282,14 @@ export class HomePage {
   }
 
   checkPermission() {
-    
-    this.platform.ready().then((readySource) => {
+    this.platform.ready().then(() => {
 
       this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.RECEIVE_SMS).then(
         success => {
-          console.log('Has permission to receive sms')
+          console.log('Has permission to receive sms',success)
         },
         err => {
-          this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.RECEIVE_SMS).
-          then(success => {
-            console.log('Successfully granted receive sms permission')
-          },
-          err => {
-            console.log('No permission to receive sms permission')
-          });
+          this.exchangeData.requestSMSPermission();
         }
       );
 
@@ -301,13 +298,7 @@ export class HomePage {
           console.log('Has permission to read sms')
         },
         err => {
-          this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_SMS).
-          then(success => {
-            console.log('Successfully granted read sms permission')
-          },
-          err => {
-            console.log('No permission to read sms permission')
-          });
+          this.exchangeData.requestSMSPermission();
         }
       );
   
@@ -315,14 +306,8 @@ export class HomePage {
         success => {
           console.log('Has permission to send sms')
         },
-          err => {
-          this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.SEND_SMS).
-          then(success => {
-            console.log('Successfully granted send sms permission')
-          },
-          err => {
-            console.log('No permission to send sms permission')
-          });
+        err => {
+          this.exchangeData.requestSMSPermission();
         }
       );
     },
@@ -330,6 +315,37 @@ export class HomePage {
       alert(JSON.stringify(Error))
     });
   }
+
+  // requestSMSPermission(){
+  //   this.platform.ready().then(() => {
+  //     this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_SMS).
+  //     then(success => {
+  //       console.log('Successfully granted send sms permission')
+  //     },
+  //     err => {
+  //       console.log('No permission to send sms permission')
+  //     });
+      
+  //     this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.RECEIVE_SMS).
+  //     then(success => {
+  //       console.log('Successfully granted send sms permission')
+  //     },
+  //     err => {
+  //       console.log('No permission to send sms permission')
+  //     });
+
+  //     this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.SEND_SMS).
+  //     then(success => {
+  //       console.log('Successfully granted send sms permission')
+  //     },
+  //     err => {
+  //       console.log('No permission to send sms permission')
+  //     }); 
+  //   },
+  //   Error => {
+  //     alert(JSON.stringify(Error))
+  //   });
+  // }
 
   refresh() {
     this.zone.run(() => {
@@ -351,10 +367,10 @@ export class HomePage {
     this.countPendingCustomers();
     if(this.pendingCount<5){
       this.exchangeData.customerList.push({id:this.generateNumber, pNumber:+94714142387, status:"pending", createdTime: Date.now()});  
-      this.exchangeData.insertData(this.generateNumber, +94714142387, "pending", Date.now());
+      this.exchangeData.insertData(this.generateNumber, +94714142387, "pending");
     } else {
       this.exchangeData.customerList.push({id:this.generateNumber, pNumber:+94714142387, status:"waiting", createdTime: Date.now()});          
-      this.exchangeData.insertData(this.generateNumber, +94714142387, "waiting", Date.now());
+      this.exchangeData.insertData(this.generateNumber, +94714142387, "waiting");
     }
   }
 
@@ -379,7 +395,7 @@ export class HomePage {
 
 
   abandonCustomer(){
-    this.platform.ready().then((readySource) => {
+    this.platform.ready().then(() => {
       setInterval(() => {
         this.exchangeData.customerList.forEach(element => {
           if(element.status == 'skipped'){
@@ -398,6 +414,25 @@ export class HomePage {
           }          
         });
       }, 5000);
+    })
+  }
+
+  onConnected(){
+    this.platform.ready().then(() => {
+      // let connectSubscription = 
+      this.network.onConnect().subscribe(() => {
+        console.log('network connected!');
+        // We just got a connection but we need to wait briefly
+        // before we determine the connection type. Might need to wait.
+        // prior to doing any api requests as well.
+        setTimeout(() => {
+          if (this.network.type === 'wifi') {
+            console.log('we got a wifi connection, woohoo!');
+          }
+          console.log('we got a ' ,this.network.type, ' connection!');
+          this.exchangeData.syncData();
+        }, 3000);
+      });
     })
   }
 }

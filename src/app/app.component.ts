@@ -4,8 +4,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { SettingsPage } from '../pages/settings/settings'
-import { TabsPage } from '../pages/tabs/tabs';
-// import { LoginPage } from '../pages/login/login';
+// import { TabsPage } from '../pages/tabs/tabs';
+import { LoginPage } from '../pages/login/login';
 import { AboutPage } from '../pages/about/about';
 
 @Component({
@@ -14,8 +14,8 @@ import { AboutPage } from '../pages/about/about';
 export class SocialQue {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = TabsPage;
-  // rootPage: any = LoginPage;
+  // rootPage: any = TabsPage;
+  rootPage: any = LoginPage;
 
   pages: Array<{title: string, component: any}>;
 

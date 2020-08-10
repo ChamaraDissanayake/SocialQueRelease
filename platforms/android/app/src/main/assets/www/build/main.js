@@ -1,13 +1,74 @@
 webpackJsonp([2],{
 
-/***/ 152:
+/***/ 154:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(116);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__otp_otp__ = __webpack_require__(155);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var LoginPage = /** @class */ (function () {
+    function LoginPage(navCtrl, navParams, http) {
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.http = http;
+        this.baseURL = 'http://social.evokemusic.net/api/app/social-que/a-v1/putSellerDetail';
+    }
+    LoginPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad LoginPage');
+    };
+    LoginPage.prototype.submitLoginDetails = function () {
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_3__otp_otp__["a" /* OtpPage */]);
+    };
+    LoginPage.prototype.createEntry = function () {
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]({ 'Content-Type': 'application/json' }), options = { "MSISDN": "+94714142387", "Categories": "1", "Language": "1", "BusinessName": "Evoke",
+            "City": "Colombo", "Type": "Super center", "GPS": "331231,3123", "OTP": 567, "OccupentCount": 5 }, url = this.baseURL;
+        this.http.post(url, JSON.stringify(options), headers)
+            .subscribe(function (data) {
+            console.log("Congratulations data was successfully added", data);
+        }, function (error) {
+            console.log('Something went wrong!', error);
+        });
+        this.submitLoginDetails();
+    };
+    LoginPage = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+            selector: 'page-login',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/login/login.html"*/'<ion-content padding class="mainbody">\n    <section  style="margin-top: 50px;">\n      <ion-list>\n        <ion-label class="loginlables">Select your Business Category</ion-label>\n        <ion-item class="inputboxdecoration">        \n          <ion-select  class="inputtext" >\n            <ion-option value="Pharmacy" selected>Pharmacy</ion-option>\n            <ion-option value="Stores">Stores</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </section>\n\n    <section  style="margin-top: 30px;">\n      <ion-label class="loginlables">Shop Name</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" placeholder="Enter your shop name here"></ion-input>\n      </ion-item>\n    </section>\n\n    <section  style="margin-top: 30px;">\n      <ion-label class="loginlables">City</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" placeholder="Enter your nearest city"></ion-input>\n      </ion-item>\n    </section>\n\n    <section  style="margin-top: 30px;">\n      <ion-list>\n        <ion-label class="loginlables">Language</ion-label>\n        <ion-item class="inputboxdecoration">        \n          <ion-select class="inputtext">\n            <ion-option value="1" selected>English</ion-option>\n            <ion-option value="2">Sinhala</ion-option>\n            <ion-option value="3">Tamil</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </section>\n\n    <section  style="margin-top: 30px;">\n      <ion-label class="loginlables">Enter Your Mobile Number</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" type="tel" placeholder="07X XX XX XXX"></ion-input>\n      </ion-item>\n    </section>\n\n    <section  style="margin-top: 50px; text-align: center;">\n      <button class="submitbutton" ion-button round outline (click)="createEntry()">Sign Up</button>\n    </section>\n    \n\n</ion-content>\n\n\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/login/login.html"*/,
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["g" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]])
+    ], LoginPage);
+    return LoginPage;
+}());
+
+//# sourceMappingURL=login.js.map
+
+/***/ }),
+
+/***/ 155:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return OtpPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabs_tabs__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabs_tabs__ = __webpack_require__(74);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -44,7 +105,7 @@ var OtpPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 163:
+/***/ 166:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -57,20 +118,20 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 163;
+webpackEmptyAsyncContext.id = 166;
 
 /***/ }),
 
-/***/ 207:
+/***/ 210:
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
 	"../pages/login/login.module": [
-		684,
+		685,
 		1
 	],
 	"../pages/otp/otp.module": [
-		685,
+		686,
 		0
 	]
 };
@@ -85,20 +146,21 @@ function webpackAsyncContext(req) {
 webpackAsyncContext.keys = function webpackAsyncContextKeys() {
 	return Object.keys(map);
 };
-webpackAsyncContext.id = 207;
+webpackAsyncContext.id = 210;
 module.exports = webpackAsyncContext;
 
 /***/ }),
 
-/***/ 208:
+/***/ 213:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__ = __webpack_require__(209);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__ = __webpack_require__(120);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_exchange_data_exchange_data__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_network__ = __webpack_require__(218);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -112,8 +174,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var HomePage = /** @class */ (function () {
-    function HomePage(navCtrl, platform, androidPermissions, zone, exchangeData, loadingCtrl) {
+    function HomePage(network, navCtrl, platform, androidPermissions, zone, exchangeData, loadingCtrl) {
+        this.network = network;
         this.navCtrl = navCtrl;
         this.platform = platform;
         this.androidPermissions = androidPermissions;
@@ -126,10 +190,12 @@ var HomePage = /** @class */ (function () {
         this.holdTime = false;
     }
     HomePage.prototype.ionViewDidLoad = function () {
+        this.exchangeData.requestSMSPermission();
         this.checkPermission();
         this.resetClock();
         this.onSMSArrive(); //Uncomment this before launch in real device
         this.abandonCustomer();
+        this.onConnected();
     };
     HomePage.prototype.pageLoader = function () {
         this.loading = this.loadingCtrl.create({
@@ -168,7 +234,7 @@ var HomePage = /** @class */ (function () {
     };
     HomePage.prototype.onSMSArrive = function () {
         var _this = this;
-        this.platform.ready().then(function (readySource) {
+        this.platform.ready().then(function () {
             if (SMS)
                 SMS.startWatch(function () {
                     console.log('watching started');
@@ -184,7 +250,7 @@ var HomePage = /** @class */ (function () {
     };
     HomePage.prototype.checkSMS = function (sms) {
         var _this = this;
-        this.platform.ready().then(function (readySource) {
+        this.platform.ready().then(function () {
             var key1 = sms.body.includes("covid19");
             var key2 = sms.body.includes("Covid19");
             var key3 = sms.body.includes("COVID19");
@@ -249,11 +315,11 @@ var HomePage = /** @class */ (function () {
         this.countPendingCustomers();
         if (this.pendingCount < 5) {
             this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: sms.address, status: "pending", createdTime: Date.now() });
-            this.exchangeData.insertData(this.generateNumber, sms.address, "pending", Date.now());
+            this.exchangeData.insertData(this.generateNumber, sms.address, "pending");
         }
         else {
             this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: sms.address, status: "waiting", createdTime: Date.now() });
-            this.exchangeData.insertData(this.generateNumber, sms.address, "waiting", Date.now());
+            this.exchangeData.insertData(this.generateNumber, sms.address, "waiting");
         }
         this.refresh();
         console.log(this.exchangeData.customerList, '00000');
@@ -365,41 +431,54 @@ var HomePage = /** @class */ (function () {
     };
     HomePage.prototype.checkPermission = function () {
         var _this = this;
-        this.platform.ready().then(function (readySource) {
+        this.platform.ready().then(function () {
             _this.androidPermissions.checkPermission(_this.androidPermissions.PERMISSION.RECEIVE_SMS).then(function (success) {
-                console.log('Has permission to receive sms');
+                console.log('Has permission to receive sms', success);
             }, function (err) {
-                _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.RECEIVE_SMS).
-                    then(function (success) {
-                    console.log('Successfully granted receive sms permission');
-                }, function (err) {
-                    console.log('No permission to receive sms permission');
-                });
+                _this.exchangeData.requestSMSPermission();
             });
             _this.androidPermissions.checkPermission(_this.androidPermissions.PERMISSION.READ_SMS).then(function (success) {
                 console.log('Has permission to read sms');
             }, function (err) {
-                _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.READ_SMS).
-                    then(function (success) {
-                    console.log('Successfully granted read sms permission');
-                }, function (err) {
-                    console.log('No permission to read sms permission');
-                });
+                _this.exchangeData.requestSMSPermission();
             });
             _this.androidPermissions.checkPermission(_this.androidPermissions.PERMISSION.SEND_SMS).then(function (success) {
                 console.log('Has permission to send sms');
             }, function (err) {
-                _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.SEND_SMS).
-                    then(function (success) {
-                    console.log('Successfully granted send sms permission');
-                }, function (err) {
-                    console.log('No permission to send sms permission');
-                });
+                _this.exchangeData.requestSMSPermission();
             });
         }, function (Error) {
             alert(JSON.stringify(Error));
         });
     };
+    // requestSMSPermission(){
+    //   this.platform.ready().then(() => {
+    //     this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_SMS).
+    //     then(success => {
+    //       console.log('Successfully granted send sms permission')
+    //     },
+    //     err => {
+    //       console.log('No permission to send sms permission')
+    //     });
+    //     this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.RECEIVE_SMS).
+    //     then(success => {
+    //       console.log('Successfully granted send sms permission')
+    //     },
+    //     err => {
+    //       console.log('No permission to send sms permission')
+    //     });
+    //     this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.SEND_SMS).
+    //     then(success => {
+    //       console.log('Successfully granted send sms permission')
+    //     },
+    //     err => {
+    //       console.log('No permission to send sms permission')
+    //     }); 
+    //   },
+    //   Error => {
+    //     alert(JSON.stringify(Error))
+    //   });
+    // }
     HomePage.prototype.refresh = function () {
         this.zone.run(function () {
             console.log('force update the screen');
@@ -419,11 +498,11 @@ var HomePage = /** @class */ (function () {
         this.countPendingCustomers();
         if (this.pendingCount < 5) {
             this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: +94714142387, status: "pending", createdTime: Date.now() });
-            this.exchangeData.insertData(this.generateNumber, +94714142387, "pending", Date.now());
+            this.exchangeData.insertData(this.generateNumber, +94714142387, "pending");
         }
         else {
             this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: +94714142387, status: "waiting", createdTime: Date.now() });
-            this.exchangeData.insertData(this.generateNumber, +94714142387, "waiting", Date.now());
+            this.exchangeData.insertData(this.generateNumber, +94714142387, "waiting");
         }
     };
     HomePage.prototype.countPendingCustomers = function () {
@@ -445,7 +524,7 @@ var HomePage = /** @class */ (function () {
     // }
     HomePage.prototype.abandonCustomer = function () {
         var _this = this;
-        this.platform.ready().then(function (readySource) {
+        this.platform.ready().then(function () {
             setInterval(function () {
                 _this.exchangeData.customerList.forEach(function (element) {
                     if (element.status == 'skipped') {
@@ -467,11 +546,31 @@ var HomePage = /** @class */ (function () {
             }, 5000);
         });
     };
+    HomePage.prototype.onConnected = function () {
+        var _this = this;
+        this.platform.ready().then(function () {
+            // let connectSubscription = 
+            _this.network.onConnect().subscribe(function () {
+                console.log('network connected!');
+                // We just got a connection but we need to wait briefly
+                // before we determine the connection type. Might need to wait.
+                // prior to doing any api requests as well.
+                setTimeout(function () {
+                    if (_this.network.type === 'wifi') {
+                        console.log('we got a wifi connection, woohoo!');
+                    }
+                    console.log('we got a ', _this.network.type, ' connection!');
+                    _this.exchangeData.syncData();
+                }, 3000);
+            });
+        });
+    };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>\n    <label style="padding-left: 40px; font-size: 36px;">{{exchangeData.insideCustomerCount}}</label>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td>\n          <label class="numberset">\n            <span *ngFor="let cstmrDetails of exchangeData.customerList">\n              <span ion-button class="btngetin" *ngIf="cstmrDetails.status ==\'pending\'" (click)="countGetIn(cstmrDetails)">\n                {{cstmrDetails.id}}\n              </span>\n            </span>\n          </label>\n        </td>\n      </tr>\n    </table>\n\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton" (click)="goOut()">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="skipCustomer()">Next</button>\n    </div>\n\n    <div>     \n      <label *ngFor="let x of messages">\n        <h2>{{x}}</h2>\n      </label>\n    </div>\n\n    <div ion-button (click)= "getNextTestNumber()"> Add Customers</div>\n    <div ion-button (click)= "exchangeData.resetTable()"> Reset Table</div>\n    <div ion-button (click)= "checkPermission()"> Check Permission</div>\n    <!-- <div ion-button (click)= "exchangeData.getData()"> Retrieve</div> -->\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
+            selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>\n    <label style="padding-left: 40px; font-size: 36px;">{{exchangeData.insideCustomerCount}}</label>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td>\n          <label class="numberset">\n            <span *ngFor="let cstmrDetails of exchangeData.customerList">\n              <span ion-button class="btngetin" *ngIf="cstmrDetails.status ==\'pending\'" (click)="countGetIn(cstmrDetails)">\n                {{cstmrDetails.id}}\n              </span>\n            </span>\n          </label>\n        </td>\n      </tr>\n    </table>\n\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton" (click)="goOut()">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="skipCustomer()">Next</button>\n    </div>\n\n    <div>     \n      <label *ngFor="let x of messages">\n        <h2>{{x}}</h2>\n      </label>\n    </div>\n\n    <div ion-button (click)= "getNextTestNumber()"> Add Customers</div>\n    <div ion-button (click)= "exchangeData.resetTable()"> Reset Table</div>\n    <div ion-button (click)= "requestSMSPermission()"> Check Permission</div>\n    <!-- <div ion-button (click)= "requestSMSPermissions()"> Check Permissions</div> -->\n    <div ion-button (click)= "exchangeData.syncData()"> Sync Data</div>\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__ionic_native_network__["a" /* Network */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */],
             __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */],
             __WEBPACK_IMPORTED_MODULE_0__angular_core__["N" /* NgZone */],
@@ -485,7 +584,7 @@ var HomePage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 217:
+/***/ 219:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -527,7 +626,7 @@ var WaitinglistPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 218:
+/***/ 220:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -574,14 +673,14 @@ var SkippedPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 260:
+/***/ 262:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SettingsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabs_tabs__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabs_tabs__ = __webpack_require__(74);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -621,14 +720,14 @@ var SettingsPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 261:
+/***/ 263:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AboutPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabs_tabs__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabs_tabs__ = __webpack_require__(74);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -665,57 +764,13 @@ var AboutPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 353:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__otp_otp__ = __webpack_require__(152);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-var LoginPage = /** @class */ (function () {
-    function LoginPage(navCtrl, navParams) {
-        this.navCtrl = navCtrl;
-        this.navParams = navParams;
-    }
-    LoginPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad LoginPage');
-    };
-    LoginPage.prototype.submitLoginDetails = function () {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__otp_otp__["a" /* OtpPage */]);
-    };
-    LoginPage = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-login',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/login/login.html"*/'<ion-content padding class="mainbody">\n    <section  style="margin-top: 50px;">\n      <ion-list>\n        <ion-label class="loginlables">Select your Business Category</ion-label>\n        <ion-item class="inputboxdecoration">        \n          <ion-select  class="inputtext" >\n            <ion-option value="Pharmacy" selected>Pharmacy</ion-option>\n            <ion-option value="Stores">Stores</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </section>\n\n    <section  style="margin-top: 30px;">\n      <ion-label class="loginlables">Shop Name</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" placeholder="Enter your shop name here"></ion-input>\n      </ion-item>\n    </section>\n\n    <section  style="margin-top: 30px;">\n      <ion-label class="loginlables">City</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" placeholder="Enter your nearest city"></ion-input>\n      </ion-item>\n    </section>\n\n    <section  style="margin-top: 30px;">\n      <ion-list>\n        <ion-label class="loginlables">Language</ion-label>\n        <ion-item class="inputboxdecoration">        \n          <ion-select class="inputtext">\n            <ion-option value="English" selected>English</ion-option>\n            <ion-option value="Sinhala">Sinhala</ion-option>\n            <ion-option value="Tamil">Tamil</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </section>\n\n    <section  style="margin-top: 30px;">\n      <ion-label class="loginlables">Enter Your Mobile Number</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" type="tel" placeholder="07X XX XX XXX"></ion-input>\n      </ion-item>\n    </section>\n\n    <section  style="margin-top: 50px; text-align: center;">\n      <button class="submitbutton" ion-button round outline (click)="submitLoginDetails()">Sign Up</button>\n    </section>\n    \n\n</ion-content>\n\n\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/login/login.html"*/,
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]])
-    ], LoginPage);
-    return LoginPage;
-}());
-
-//# sourceMappingURL=login.js.map
-
-/***/ }),
-
-/***/ 354:
+/***/ 355:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(355);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(359);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(360);
 
 
 //platformBrowserDynamic().bootstrapModule(AppModule);
@@ -731,7 +786,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 /***/ }),
 
-/***/ 359:
+/***/ 360:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -739,23 +794,24 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_component__ = __webpack_require__(401);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_home_home__ = __webpack_require__(208);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_waitinglist_waitinglist__ = __webpack_require__(217);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_skipped_skipped__ = __webpack_require__(218);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_login_login__ = __webpack_require__(353);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_otp_otp__ = __webpack_require__(152);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_settings_settings__ = __webpack_require__(260);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_tabs_tabs__ = __webpack_require__(55);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_about_about__ = __webpack_require__(261);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_native_status_bar__ = __webpack_require__(258);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_native_splash_screen__ = __webpack_require__(259);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__ionic_native_sqlite__ = __webpack_require__(216);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_ng_circle_progress__ = __webpack_require__(402);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__ionic_native_android_permissions__ = __webpack_require__(209);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_component__ = __webpack_require__(402);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_home_home__ = __webpack_require__(213);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_waitinglist_waitinglist__ = __webpack_require__(219);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_skipped_skipped__ = __webpack_require__(220);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_login_login__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_otp_otp__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_settings_settings__ = __webpack_require__(262);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_tabs_tabs__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_about_about__ = __webpack_require__(263);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_native_status_bar__ = __webpack_require__(260);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_native_splash_screen__ = __webpack_require__(261);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__ionic_native_sqlite__ = __webpack_require__(217);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_ng_circle_progress__ = __webpack_require__(403);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__ionic_native_android_permissions__ = __webpack_require__(120);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__providers_exchange_data_exchange_data__ = __webpack_require__(75);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__angular_common_http__ = __webpack_require__(213);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__angular_http__ = __webpack_require__(683);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__angular_common_http__ = __webpack_require__(116);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__angular_http__ = __webpack_require__(684);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__ionic_native_network__ = __webpack_require__(218);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -777,6 +833,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 // import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+
 
 
 
@@ -821,7 +878,7 @@ var AppModule = /** @class */ (function () {
                     showUnits: false,
                     showSubtitle: false,
                     titleFontSize: "36"
-                })
+                }),
             ],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* IonicApp */]],
             entryComponents: [
@@ -836,6 +893,7 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_11__pages_about_about__["a" /* AboutPage */]
             ],
             providers: [
+                __WEBPACK_IMPORTED_MODULE_20__ionic_native_network__["a" /* Network */],
                 __WEBPACK_IMPORTED_MODULE_16__ionic_native_android_permissions__["a" /* AndroidPermissions */],
                 __WEBPACK_IMPORTED_MODULE_12__ionic_native_status_bar__["a" /* StatusBar */],
                 __WEBPACK_IMPORTED_MODULE_13__ionic_native_splash_screen__["a" /* SplashScreen */],
@@ -853,18 +911,18 @@ var AppModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 401:
+/***/ 402:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SocialQue; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(258);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(259);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_settings_settings__ = __webpack_require__(260);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_tabs_tabs__ = __webpack_require__(55);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_about_about__ = __webpack_require__(261);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(260);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(261);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_settings_settings__ = __webpack_require__(262);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_login_login__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_about_about__ = __webpack_require__(263);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -879,15 +937,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+// import { TabsPage } from '../pages/tabs/tabs';
 
-// import { LoginPage } from '../pages/login/login';
 
 var SocialQue = /** @class */ (function () {
     function SocialQue(platform, statusBar, splashScreen) {
         this.platform = platform;
         this.statusBar = statusBar;
         this.splashScreen = splashScreen;
-        this.rootPage = __WEBPACK_IMPORTED_MODULE_5__pages_tabs_tabs__["a" /* TabsPage */];
+        // rootPage: any = TabsPage;
+        this.rootPage = __WEBPACK_IMPORTED_MODULE_5__pages_login_login__["a" /* LoginPage */];
         this.initializeApp();
         this.pages = [
             { title: 'Settings', component: __WEBPACK_IMPORTED_MODULE_4__pages_settings_settings__["a" /* SettingsPage */] },
@@ -920,16 +979,16 @@ var SocialQue = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 55:
+/***/ 74:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home__ = __webpack_require__(208);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__waitinglist_waitinglist__ = __webpack_require__(217);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__skipped_skipped__ = __webpack_require__(218);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home__ = __webpack_require__(213);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__waitinglist_waitinglist__ = __webpack_require__(219);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__skipped_skipped__ = __webpack_require__(220);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -979,10 +1038,11 @@ var TabsPage = /** @class */ (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ExchangeDataProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(213);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(116);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_sqlite__ = __webpack_require__(216);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_sqlite__ = __webpack_require__(217);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_android_permissions__ = __webpack_require__(120);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -997,9 +1057,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 // import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
 
+
 var ExchangeDataProvider = /** @class */ (function () {
     // private db: SQLiteObject;
-    function ExchangeDataProvider(http, sqlite, platform) {
+    function ExchangeDataProvider(androidPermissions, http, sqlite, platform) {
+        this.androidPermissions = androidPermissions;
         this.http = http;
         this.sqlite = sqlite;
         this.platform = platform;
@@ -1009,32 +1071,32 @@ var ExchangeDataProvider = /** @class */ (function () {
         this.insideCustomerCount = 0;
         this.lastCustomerNumber = 100000;
         this.setupDB();
+        this.baseURL = 'http://social.evokemusic.net/api/app/social-que/a-v1/putCustomerDetail';
     }
     ExchangeDataProvider.prototype.setupDB = function () {
         var _this = this;
-        this.platform.ready().then(function (readySource) {
+        this.platform.ready().then(function () {
             _this.sqlite.create({
                 name: 'social_que.db',
                 location: 'default'
             })
                 .then(function (db) {
-                // db.executeSql('create table customerDetails(name VARCHAR(32))', [])
-                db.executeSql("CREATE TABLE IF NOT EXISTS sellerDetails" +
-                    "(SellerId INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "MSISDN TEXT," +
-                    "OTP INTEGER," +
-                    "BusinessName TEXT," +
-                    "Categories TEXT," +
-                    "OccupentCount INTEGER," +
-                    "City TEXT," +
-                    "Language TEXT," +
-                    "GPS TEXT," +
-                    "CreatedTime INTEGER," +
-                    "UpdatedTime INTEGER," +
-                    "Type TEXT)", [])
-                    .then(function () { return console.log('Executed SQL 1'); })
-                    .catch(function (e) { return console.log(e, 'Fail to execute 1'); });
-                db.executeSql("CREATE TABLE IF NOT EXISTS CustomerDetails" +
+                // db.executeSql("CREATE TABLE IF NOT EXISTS seller_details" +
+                //   "(SellerId INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                //   "MSISDN TEXT," +
+                //   "OTP INTEGER," +
+                //   "BusinessName TEXT," +
+                //   "Categories TEXT," +
+                //   "OccupentCount INTEGER," +
+                //   "City TEXT," +
+                //   "Language TEXT," +
+                //   "GPS TEXT," +
+                //   "CreatedTime INTEGER," +
+                //   "UpdatedTime INTEGER," +
+                //   "Type TEXT)", [])
+                //     .then(() => console.log('Executed SQL 1'))
+                //     .catch(e => console.log(e, 'Fail to execute 1'));
+                db.executeSql("CREATE TABLE IF NOT EXISTS customer_details" +
                     "(CustomerId INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "SellerId INTEGER," +
                     "MSISDN TEXT," +
@@ -1050,15 +1112,15 @@ var ExchangeDataProvider = /** @class */ (function () {
             _this.getData();
         });
     };
-    ExchangeDataProvider.prototype.insertData = function (generateNumber, pNumber, status, createdTime) {
+    ExchangeDataProvider.prototype.insertData = function (generateNumber, pNumber, status) {
         var _this = this;
-        this.platform.ready().then(function (readySource) {
+        this.platform.ready().then(function () {
             _this.sqlite.create({
                 name: 'social_que.db',
                 location: 'default'
             })
                 .then(function (db) {
-                db.executeSql("INSERT INTO CustomerDetails (SellerId, MSISDN, QueNo, CreatedTime, Status) VALUES (1, '" + pNumber + "', '" + generateNumber + "', strftime('%s','now'), '" + status + "')", [])
+                db.executeSql("INSERT INTO customer_details (SellerId, MSISDN, QueNo, CreatedTime, Status) VALUES (1, '" + pNumber + "', '" + generateNumber + "', strftime('%s','now'), '" + status + "')", [])
                     .then(function (data) { return console.log("INSERTED SUCCESSFULLY", data); })
                     .catch(function (e) { return console.log("FAIL TO INSERT", e); });
             })
@@ -1067,14 +1129,14 @@ var ExchangeDataProvider = /** @class */ (function () {
     };
     ExchangeDataProvider.prototype.getData = function () {
         var _this = this;
-        this.platform.ready().then(function (readySource) {
+        this.platform.ready().then(function () {
             _this.sqlite.create({
                 name: 'social_que.db',
                 location: 'default'
             })
                 .then(function (db) {
-                // db.executeSql("SELECT * FROM CustomerDetails WHERE Status = 'pending' OR Status = 'waiting' OR Status = 'inside'", [])
-                db.executeSql("SELECT * FROM CustomerDetails WHERE Status like '%pending%' OR Status like '%waiting%' OR Status like '%inside%' OR Status like '%skipped%'", [])
+                // db.executeSql("SELECT * FROM customer_details WHERE Status = 'pending' OR Status = 'waiting' OR Status = 'inside'", [])
+                db.executeSql("SELECT * FROM customer_details WHERE Status like '%pending%' OR Status like '%waiting%' OR Status like '%inside%' OR Status like '%skipped%'", [])
                     .then(function (result) {
                     console.log("RETRIEVED SUCCESSFULLY", result.rows);
                     // let activityValues = [];
@@ -1087,22 +1149,54 @@ var ExchangeDataProvider = /** @class */ (function () {
                             _this.customerList.push({ id: result.rows.item(i).QueNo, pNumber: result.rows.item(i).MSISDN, status: result.rows.item(i).Status, updatedTime: result.rows.item(i).UpdatedTime });
                         }
                     }
-                    console.log(_this.customerList, '11111');
                 })
                     .catch(function (e) { return console.log("FAIL TO RETRIEVE", e); });
             })
                 .catch(function (e) { return console.log(e); });
         });
     };
-    ExchangeDataProvider.prototype.resetTable = function () {
+    ExchangeDataProvider.prototype.syncData = function () {
         var _this = this;
-        this.platform.ready().then(function (readySource) {
+        this.platform.ready().then(function () {
             _this.sqlite.create({
                 name: 'social_que.db',
                 location: 'default'
             })
                 .then(function (db) {
-                db.executeSql("DROP TABLE IF EXISTS CustomerDetails", [])
+                db.executeSql("SELECT * FROM customer_details", [])
+                    .then(function (result) {
+                    console.log("SUCCESS", result.rows);
+                    if (result.rows.length > 0) {
+                        for (var i = 0; i < result.rows.length; i++) {
+                            _this.createEntry(result.rows.item(i));
+                        }
+                    }
+                })
+                    .catch(function (e) { return console.log("FAIL", e); });
+            })
+                .catch(function (e) { return console.log(e); });
+        });
+    };
+    ExchangeDataProvider.prototype.createEntry = function (syncData) {
+        var headers = new __WEBPACK_IMPORTED_MODULE_0__angular_common_http__["c" /* HttpHeaders */]({ 'Content-Type': 'application/json' }), options = { "SellerId": syncData.SellerId, "MSISDN": syncData.MSISDN, "QueNo": syncData.QueNo, "Status": syncData.Status,
+            "CreatedTime": syncData.CreatedTime, "UpdatedTime": syncData.UpdatedTime, "CheckInTime": syncData.CheckInTime }, url = this.baseURL;
+        console.log('1111', url, JSON.stringify(options), headers);
+        this.http.post(url, JSON.stringify(options), headers)
+            .subscribe(function (data) {
+            console.log("Congratulations data was successfully added", data);
+        }, function (error) {
+            console.log('Something went wrong!', error);
+        });
+    };
+    ExchangeDataProvider.prototype.resetTable = function () {
+        var _this = this;
+        this.platform.ready().then(function () {
+            _this.sqlite.create({
+                name: 'social_que.db',
+                location: 'default'
+            })
+                .then(function (db) {
+                db.executeSql("DROP TABLE IF EXISTS customer_details", [])
                     .then(function () { return console.log('Executed Delete 1'); })
                     .catch(function (e) { return console.log(e, 'Fail to Delete 1'); });
             })
@@ -1111,13 +1205,13 @@ var ExchangeDataProvider = /** @class */ (function () {
     };
     ExchangeDataProvider.prototype.updateStatus = function (queNo, status) {
         var _this = this;
-        this.platform.ready().then(function (readySource) {
+        this.platform.ready().then(function () {
             _this.sqlite.create({
                 name: 'social_que.db',
                 location: 'default'
             })
                 .then(function (db) {
-                db.executeSql("UPDATE CustomerDetails SET Status = '" + status + "', UpdatedTime = strftime('%s','now') WHERE QueNo = '" + queNo + "' ", [])
+                db.executeSql("UPDATE customer_details SET Status = '" + status + "', UpdatedTime = strftime('%s', 'now') WHERE QueNo = '" + queNo + "' ", [])
                     .then(function (data) { return console.log("UPDATED SUCCESSFULLY", data); })
                     .catch(function (e) { return console.log("FAIL TO UPDATED", e); });
             })
@@ -1126,22 +1220,48 @@ var ExchangeDataProvider = /** @class */ (function () {
     };
     ExchangeDataProvider.prototype.updateCheckIn = function (queNo, status) {
         var _this = this;
-        this.platform.ready().then(function (readySource) {
+        this.platform.ready().then(function () {
             _this.sqlite.create({
                 name: 'social_que.db',
                 location: 'default'
             })
                 .then(function (db) {
-                db.executeSql("UPDATE CustomerDetails SET Status = '" + status + "', UpdatedTime = strftime('%s','now'), CheckInTime = strftime('%s','now') WHERE QueNo = '" + queNo + "' ", [])
+                db.executeSql("UPDATE customer_details SET Status = '" + status + "', UpdatedTime = strftime('%s', 'now'), CheckInTime = strftime('%s', 'now') WHERE QueNo = '" + queNo + "' ", [])
                     .then(function (data) { return console.log("UPDATED SUCCESSFULLY", data); })
                     .catch(function (e) { return console.log("FAIL TO UPDATED", e); });
             })
                 .catch(function (e) { return console.log(e); });
         });
     };
+    ExchangeDataProvider.prototype.requestSMSPermission = function () {
+        var _this = this;
+        this.platform.ready().then(function () {
+            _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.READ_SMS).
+                then(function (success) {
+                console.log('Successfully granted send sms permission');
+            }, function (err) {
+                console.log('No permission to send sms permission');
+            });
+            _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.RECEIVE_SMS).
+                then(function (success) {
+                console.log('Successfully granted send sms permission');
+            }, function (err) {
+                console.log('No permission to send sms permission');
+            });
+            _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.SEND_SMS).
+                then(function (success) {
+                console.log('Successfully granted send sms permission');
+            }, function (err) {
+                console.log('No permission to send sms permission');
+            });
+        }, function (Error) {
+            alert(JSON.stringify(Error));
+        });
+    };
     ExchangeDataProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["B" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */],
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__ionic_native_android_permissions__["a" /* AndroidPermissions */],
+            __WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */],
             __WEBPACK_IMPORTED_MODULE_2__ionic_native_sqlite__["a" /* SQLite */],
             __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["i" /* Platform */]])
     ], ExchangeDataProvider);
@@ -1152,5 +1272,5 @@ var ExchangeDataProvider = /** @class */ (function () {
 
 /***/ })
 
-},[354]);
+},[355]);
 //# sourceMappingURL=main.js.map
