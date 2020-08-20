@@ -7,8 +7,16 @@
 <ion-content padding>
 
   <section style="font-weight: bold;">
-    <label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label>
-    <label style="padding-left: 40px; font-size: 36px;">{{exchangeData.insideCustomerCount}}</label>
+    <table style="min-width: -webkit-fill-available;">
+      <tr>
+        <td><label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label></td>
+        <td><label style="font-size: 36px; float: right; margin-right:50%;">{{exchangeData.insideCustomerCount}}</label></td>
+      </tr>
+      <tr>
+        <td><label style="font-size:24px; vertical-align: text-bottom;">Available Occupents</label></td>
+        <td><label style="font-size: 36px; float: right; margin-right:50%;">{{this.exchangeData.maxCustomers-exchangeData.insideCustomerCount}}</label></td>
+      </tr>
+    </table>
   </section>
 
 
@@ -28,7 +36,7 @@
             (click)="holdClock()">
           </circle-progress>
         </td>
-        <td>
+        <td style="display: flow-root;">
           <label class="numberset">
             <span *ngFor="let cstmrDetails of exchangeData.customerList">
               <span ion-button class="btngetin" *ngIf="cstmrDetails.status =='pending'" (click)="countGetIn(cstmrDetails)">
@@ -52,8 +60,7 @@
     </div>
 
     <div ion-button (click)= "getNextTestNumber()"> Add Customers</div>
-    <div ion-button (click)= "exchangeData.resetTable()"> Reset Table</div>
+    <!--<div ion-button (click)= "exchangeData.resetTable()"> Reset Table</div>
     <div ion-button (click)= "requestSMSPermission()"> Check Permission</div>
-    <!-- <div ion-button (click)= "requestSMSPermissions()"> Check Permissions</div> -->
-    <div ion-button (click)= "exchangeData.syncData()"> Sync Data</div>
+    <div ion-button (click)= "exchangeData.syncData()"> Sync Data</div> -->
 </ion-content>

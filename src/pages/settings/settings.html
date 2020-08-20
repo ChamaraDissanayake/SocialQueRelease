@@ -8,60 +8,66 @@
 </ion-header>
 
 <ion-content padding class="subbody">
-  <section  style="margin-top: 30px;">
-    <ion-list>
-      <ion-label class="loginlables">Select your Business Category</ion-label>
-      <ion-item class="inputboxdecoration">        
-        <ion-select  class="inputtext" >
-          <ion-option value="Pharmacy" selected>Pharmacy</ion-option>
-          <ion-option value="Stores">Stores</ion-option>
-        </ion-select>
+  <form [formGroup]="editsignup" (ngSubmit)="updateUserDetails()">
+    <div style="margin-top: 50px;">
+      <ion-list>
+        <ion-label class="signuplabels">Select your Business Category</ion-label>
+        <ion-item class="inputboxdecoration">
+          <ion-label class="signuplabels" style="color: #6A77ED">Category</ion-label>
+          <ion-select  class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="editsignup.category" formControlName="category" value="{{this.exchangeData.userDetails.Categories}}">
+            <ion-option value="Pharmacy">Pharmacy</ion-option>
+            <ion-option value="Stores">Stores</ion-option>
+            <ion-option value="Shop">Shop</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <div style="margin-top: 30px;">
+      <ion-label class="signuplabels">Shop Name</ion-label>
+      <ion-item class="inputboxdecoration">
+        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" placeholder="Enter your shop name here" type="text" [(ngModel)]="editsignup.shopName" formControlName="shopName" value="{{this.exchangeData.userDetails.BusinessName}}"></ion-input>
+      </ion-item>      
+    </div>
+  
+    <div style="margin-top: 30px;">
+      <ion-label class="signuplabels">City</ion-label>
+      <ion-item class="inputboxdecoration">
+        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" placeholder="Enter your nearest city" type="text" [(ngModel)]="editsignup.city" formControlName="city" value="{{this.exchangeData.userDetails.City}}"></ion-input>
       </ion-item>
-    </ion-list>
-  </section>
-
-  <section  style="margin-top: 30px;">
-    <ion-label class="loginlables">Shop Name</ion-label>
-    <ion-item class="inputboxdecoration">
-      <ion-input class="inputtext" placeholder="Enter your shop name here"></ion-input>
-    </ion-item>
-  </section>
-
-  <section  style="margin-top: 30px;">
-    <ion-label class="loginlables">City</ion-label>
-    <ion-item class="inputboxdecoration">
-      <ion-input class="inputtext" placeholder="Enter your nearest city"></ion-input>
-    </ion-item>
-  </section>
-
-  <section  style="margin-top: 30px;">
-    <ion-list>
-      <ion-label class="loginlables">Language</ion-label>
+    </div>
+  
+    <div style="margin-top: 30px;">
+      <ion-list>
+        <ion-label class="signuplabels">Language</ion-label>
+        <ion-item class="inputboxdecoration">   
+          <ion-label class="signuplabels" style="color: #6A77ED">Language</ion-label>     
+          <ion-select class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="editsignup.language" formControlName="language" value="{{this.exchangeData.userDetails.Language}}">
+            <ion-option value="English">English</ion-option>
+            <ion-option value="Sinhala">Sinhala</ion-option>
+            <ion-option value="Tamil">Tamil</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </div>
+  
+    <div style="margin-top: 30px;">
+      <ion-label class="signuplabels">Enter Your Mobile Number</ion-label>
       <ion-item class="inputboxdecoration">        
-        <ion-select class="inputtext">
-          <ion-option value="English" selected>English</ion-option>
-          <ion-option value="Sinhala">Sinhala</ion-option>
-          <ion-option value="Tamil">Tamil</ion-option>
-        </ion-select>
+        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" type="tel" maxlength="10" minlength="10" [(ngModel)]="editsignup.mobile" formControlName="mobile" value="{{this.exchangeData.userDetails.MSISDN}}"></ion-input>
       </ion-item>
-    </ion-list>
-  </section>
+    </div>
 
-  <section  style="margin-top: 30px;">
-    <ion-label class="loginlables">Enter Your Mobile Number</ion-label>
-    <ion-item class="inputboxdecoration">        
-      <ion-input class="inputtext" type="tel" placeholder="07X XX XX XXX"></ion-input>
-    </ion-item>
-  </section>
+    <div style="margin-top: 30px;">
+      <ion-label class="signuplabels">Occupant Count</ion-label>
+      <ion-item class="inputboxdecoration">        
+        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" type="tel" maxlength = "3" [(ngModel)]="editsignup.occupant" formControlName="occupant" value="{{this.exchangeData.userDetails.OccupantCount}}" onfocus="value=''"></ion-input>
+      </ion-item>
+    </div>
+  
+    <div style="margin-top: 50px; text-align: center;">
+      <button type="submit" [disabled]="!editsignup.valid" class="submitbutton" ion-button round outline >Update</button>
+    </div>
 
-  <section  style="margin-top: 30px;">
-    <ion-label class="loginlables">Occupant Count</ion-label>
-    <ion-item class="inputboxdecoration">        
-      <ion-input type="number" class="inputtext" value="5"></ion-input>
-    </ion-item>
-  </section>
-
-  <section  style="margin-top: 50px; text-align: center;">
-    <button class="submitbutton" ion-button round outline (click)="updateLoginDetails()">Update</button>
-  </section>
+  </form>
 </ion-content>

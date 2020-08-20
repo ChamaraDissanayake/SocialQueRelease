@@ -3,7 +3,6 @@ import { NavController, NavParams, Platform } from 'ionic-angular';
 import { ExchangeDataProvider } from '../../providers/exchange-data/exchange-data';
 // import { populateNodeData } from 'ionic-angular/umd/components/virtual-scroll/virtual-util';
 // import { LoadingController } from 'ionic-angular';
-// declare var SMS: any;
 
 @Component({
   selector: 'page-skipped',

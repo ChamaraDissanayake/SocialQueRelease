@@ -6,7 +6,7 @@
 
 <ion-content padding>
   <label *ngFor="let waiting of exchangeData.customerList">
-    <p *ngIf="waiting.status=='waiting'">{{waiting.id}}</p>
+    <p *ngIf="waiting.status=='waiting'" class="queText">{{waiting.id}}</p>
   </label>
 
 </ion-content>

@@ -30608,14 +30608,14 @@ ion-input input::placeholder {
 
 ion-menu[side=left] > .menu-inner {
   margin-top: 58px;
-  height: 90px;
+  height: 99px;
 }
 
 .custommenubutton {
   color: #FFFFFF;
   background-color: #0E0AD7;
   font-size: 18px;
-  line-height: 16px;
+  line-height: 20px;
   font-weight: 500;
 }
 
@@ -30633,6 +30633,12 @@ ion-menu[side=left] > .menu-inner {
   vertical-align: -webkit-baseline-middle;
 }
 
+.queText {
+  -webkit-text-decoration: underline double;
+  text-decoration: underline double;
+  font-size: x-large;
+}
+
 page-about .button-md {
   background-color: unset;
 }
@@ -30640,7 +30646,7 @@ page-about .button-md {
 page-home .redbutton {
   margin-top: 12.5px;
   position: inherit;
-  width: 62px;
+  width: 18%;
   height: 59px;
   left: 20px;
   top: 449px;
@@ -30655,7 +30661,7 @@ page-home .redbutton {
 page-home .purplebutton {
   float: right;
   position: inherit;
-  width: 78px;
+  width: 23%;
   height: 74px;
   left: 254px;
   top: 440px;
@@ -30672,16 +30678,14 @@ page-home .quelabel {
   font-size: 18px;
   float: right;
   text-align: right;
+  margin-bottom: 5%;
 }
 
 page-home .numberset {
-  height: 230px;
   padding-top: 10px;
-  float: left;
   font-weight: bold;
   font-size: 18px;
   line-height: 21px;
-  overflow: hidden;
 }
 
 page-home .scroll-content {
@@ -30696,28 +30700,17 @@ page-home .btngetin {
   background-color: green;
 }
 
-page-login .loginlables {
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 16px;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
-  align-items: center;
-  letter-spacing: 0.02em;
-}
-
-page-login .select-md .select-icon .select-icon-inner {
-  color: #FFFFFF;
-}
-
 page-otp .buttonSection {
-  margin-top: 100%;
+  margin-top: 10%;
   text-align: center;
 }
 
-page-settings .loginlables {
+page-otp .text-input-md {
+  letter-spacing: 80px;
+  cursor: none;
+}
+
+page-otp .otplabels {
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
@@ -30727,14 +30720,72 @@ page-settings .loginlables {
   -ms-flex-align: center;
   align-items: center;
   letter-spacing: 0.02em;
+}
+
+page-otp .clicklink {
+  color: aqua;
+  text-decoration: underline;
+}
+
+page-otp .clicklink:hover {
+  color: greenyellow;
+}
+
+page-otp .changeSide {
+  float: left;
+  overflow: hidden;
 }
 
 page-settings .button-md {
   background-color: unset;
 }
 
+page-settings .signuplabels {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 16px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  letter-spacing: 0.02em;
+}
+
 page-settings .select-md .select-icon .select-icon-inner {
   color: #FFFFFF;
+}
+
+page-settings .select-md .select-icon {
+  width: 12% !important;
+}
+
+page-signup .signuplabels {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 16px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  letter-spacing: 0.02em;
+}
+
+page-signup .select-md .select-icon .select-icon-inner {
+  color: #FFFFFF;
+}
+
+page-signup .select-md .select-icon {
+  width: 12% !important;
+}
+
+page-signup .inputtext {
+  min-width: -webkit-fill-available;
+}
+
+page-skipped .queText {
+  color: chocolate;
 }
 
 page-tabs .tabs-md-pagedefault .tabbar {
@@ -30745,4 +30796,8 @@ page-tabs .tabs-md .tab-button[aria-selected=true] {
   border-bottom: #FF005C;
   border-style: solid;
   border-width: 0px 0px 3px 0px;
+}
+
+page-waitinglist .queText {
+  color: darkblue;
 }

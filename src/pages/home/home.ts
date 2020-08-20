@@ -2,7 +2,7 @@ import { Component, NgZone } from '@angular/core';
 import { NavController, Platform, LoadingController } from 'ionic-angular';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { ExchangeDataProvider } from '../../providers/exchange-data/exchange-data';
-import { Network } from '@ionic-native/network';
+// import { Network } from '@ionic-native/network';
 
 declare var SMS: any;
 
@@ -19,31 +19,30 @@ export class HomePage {
   messages: any[];
   tempList: any[];
   generateNumber: number;
-  maxCustomers: number = 5;
-  // exchangeData.insideCustomerCount : number = 0;
   pendingCount : number;
   loading : any;
 
   constructor(
-    private network: Network,
+    // private network: Network,
     public navCtrl: NavController,
     public platform: Platform,
     public androidPermissions: AndroidPermissions,
     private zone: NgZone,
     private exchangeData: ExchangeDataProvider,
-    public loadingCtrl: LoadingController) {    
+    public loadingCtrl: LoadingController,
+    ) {    
     this.percent = 45;
     this.belowNumber = 45;
-    this.holdTime = false;
+    this.holdTime = false;    
   }
 
   ionViewDidLoad() {
     this.exchangeData.requestSMSPermission()
     this.checkPermission();
     this.resetClock();
-    this.onSMSArrive(); //Uncomment this before launch in real device
+    // this.onSMSArrive(); //Uncomment this before launch in real device
     this.abandonCustomer();
-    this.onConnected();
+    this.exchangeData.setupDB();
   }
 
   pageLoader(){
@@ -69,7 +68,7 @@ export class HomePage {
   }
 
   holdClock() {
-    if (this.holdTime == true || this.exchangeData.insideCustomerCount == this.maxCustomers) {
+    if (this.holdTime == true || this.exchangeData.insideCustomerCount == this.exchangeData.maxCustomers) {
       clearInterval(this.timer);
       this.holdTime = false;
     } else {
@@ -92,7 +91,6 @@ export class HomePage {
       });
       document.addEventListener('onSMSArrive', function(e){
         console.log('sms arrived')
-        // this.checkPermission();  
         this.checkSMS(e.data);
         }.bind(this)
       );
@@ -109,13 +107,12 @@ export class HomePage {
       if(key1 || key2 || key3){
         if(this.exchangeData.customerList.length){
           this.exchangeData.customerList.forEach(element => {
-            console.log(sms.address,'111111',element.pNumber)
             if(sms.address==element.pNumber){
               existingNumber = true;
               if(element.status=='skipped'){                
                 this.countPendingCustomers();
                 this.exchangeData.customerList[this.exchangeData.customerList.indexOf(element)].updatedTime = Date.now();
-                if(this.pendingCount<5){
+                if(this.pendingCount<this.exchangeData.maxCustomers){
                   this.exchangeData.customerList[this.exchangeData.customerList.indexOf(element)].status = "pending";
                   this.exchangeData.updateStatus(this.exchangeData.customerList[this.exchangeData.customerList
                     .indexOf(element)].id, "pending");
@@ -161,7 +158,7 @@ export class HomePage {
   replyCustomer(sms){    
     if(SMS) SMS.sendSMS(sms.address, 'Your number is ' + this.generateNumber, function(){}, function(){});
     this.countPendingCustomers();
-    if(this.pendingCount<5){
+    if(this.pendingCount<this.exchangeData.maxCustomers){
       this.exchangeData.customerList.push({id:this.generateNumber, pNumber:sms.address, status:"pending", createdTime: Date.now()});
       this.exchangeData.insertData(this.generateNumber, sms.address, "pending");
     } else {
@@ -169,7 +166,6 @@ export class HomePage {
       this.exchangeData.insertData(this.generateNumber, sms.address, "waiting");
     }
     this.refresh();
-    console.log(this.exchangeData.customerList,'00000')
   }
 
   countGetIn(customer){
@@ -189,14 +185,12 @@ export class HomePage {
   getInside(ocptId){
     this.pageLoader();
     this.loading.present();
-    if(this.exchangeData.insideCustomerCount<this.maxCustomers){
+    if(this.exchangeData.insideCustomerCount<this.exchangeData.maxCustomers){
       this.exchangeData.insideCustomerCount++      
-      // let index = this.exchangeData.customerList.indexOf(ocptId);
-      // this.exchangeData.customerList[index].status = "inside"
       this.exchangeData.customerList[this.exchangeData.customerList.indexOf(ocptId)].status = "inside"
       this.exchangeData.updateCheckIn(this.exchangeData.customerList[this.exchangeData.customerList
         .indexOf(ocptId)].id, "inside");
-      if(this.exchangeData.insideCustomerCount < this.maxCustomers && this.pendingCount>0){
+      if(this.exchangeData.insideCustomerCount < this.exchangeData.maxCustomers && this.pendingCount>0){
         this.startClock();
       } else {
         console.log('Calling to hold clock')
@@ -217,13 +211,7 @@ export class HomePage {
 
     if(this.exchangeData.insideCustomerCount>0){
       this.exchangeData.insideCustomerCount--
-      // this.countPendingCustomers();
-      
-      // if(this.holdTime==false && this.pendingCount>0){
-      //   console.log(this.pendingCount,'111111')
       this.startClock();
-      // }
-
       this.exchangeData.customerList[0].status = "completed"
       this.exchangeData.updateStatus(this.exchangeData.customerList[0].id, "completed");
 
@@ -233,14 +221,12 @@ export class HomePage {
     } else {
       this.loading.dismiss();
     }
-
-
   }
 
   skipCustomer(){
     this.pageLoader();
     this.loading.present();
-    if (this.exchangeData.insideCustomerCount < this.maxCustomers) {
+    if (this.exchangeData.insideCustomerCount < this.exchangeData.maxCustomers) {
       let found = false;
       let i = 0;
       this.exchangeData.customerList.forEach(element => {
@@ -248,7 +234,6 @@ export class HomePage {
           let index = this.exchangeData.customerList.indexOf(element);
           this.exchangeData.customerList[index].status = "skipped";
           this.exchangeData.customerList[index].updatedTime = Date.now();
-          // this.exchangeData.customerList[index].updatedTime = Date.now();
           this.exchangeData.updateStatus(this.exchangeData.customerList[index].id, "skipped");
           console.log('Inform to ',this.exchangeData.customerList[index].pNumber)
           if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Your have been skipped because of absent in time. Please resend previous sms before 20 minutes to re-enter with old number', function(){}, function(){});
@@ -316,37 +301,6 @@ export class HomePage {
     });
   }
 
-  // requestSMSPermission(){
-  //   this.platform.ready().then(() => {
-  //     this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_SMS).
-  //     then(success => {
-  //       console.log('Successfully granted send sms permission')
-  //     },
-  //     err => {
-  //       console.log('No permission to send sms permission')
-  //     });
-      
-  //     this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.RECEIVE_SMS).
-  //     then(success => {
-  //       console.log('Successfully granted send sms permission')
-  //     },
-  //     err => {
-  //       console.log('No permission to send sms permission')
-  //     });
-
-  //     this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.SEND_SMS).
-  //     then(success => {
-  //       console.log('Successfully granted send sms permission')
-  //     },
-  //     err => {
-  //       console.log('No permission to send sms permission')
-  //     }); 
-  //   },
-  //   Error => {
-  //     alert(JSON.stringify(Error))
-  //   });
-  // }
-
   refresh() {
     this.zone.run(() => {
       console.log('force update the screen');
@@ -365,7 +319,7 @@ export class HomePage {
 
   add(){
     this.countPendingCustomers();
-    if(this.pendingCount<5){
+    if(this.pendingCount<this.exchangeData.maxCustomers){
       this.exchangeData.customerList.push({id:this.generateNumber, pNumber:+94714142387, status:"pending", createdTime: Date.now()});  
       this.exchangeData.insertData(this.generateNumber, +94714142387, "pending");
     } else {
@@ -383,26 +337,14 @@ export class HomePage {
     });
   }
 
-  // dateFix(){
-  //   var dateNow = new Date();
-  //   return dateNow;
-  // }
-
-  // test(){
-  //   this.exchangeData.insideCustomerCount = this.exchangeData.insideCustomerCount;
-  //   this.generateNumber = this.exchangeData.lastCustomerNumber;
-  // }
-
-
   abandonCustomer(){
     this.platform.ready().then(() => {
       setInterval(() => {
         this.exchangeData.customerList.forEach(element => {
           if(element.status == 'skipped'){
-            // let skippedTime = Number(element.updatedTime)
             let timeElapsed = Date.now()-element.updatedTime;
             // if(timeElapsed>=1 200 000){
-            if(timeElapsed>=10000){
+            if(timeElapsed>=20000){
               console.log('íf is working')
               let index = this.exchangeData.customerList.indexOf(element)
               this.exchangeData.customerList[index].status = 'absent';
@@ -414,25 +356,6 @@ export class HomePage {
           }          
         });
       }, 5000);
-    })
-  }
-
-  onConnected(){
-    this.platform.ready().then(() => {
-      // let connectSubscription = 
-      this.network.onConnect().subscribe(() => {
-        console.log('network connected!');
-        // We just got a connection but we need to wait briefly
-        // before we determine the connection type. Might need to wait.
-        // prior to doing any api requests as well.
-        setTimeout(() => {
-          if (this.network.type === 'wifi') {
-            console.log('we got a wifi connection, woohoo!');
-          }
-          console.log('we got a ' ,this.network.type, ' connection!');
-          this.exchangeData.syncData();
-        }, 3000);
-      });
     })
   }
 }

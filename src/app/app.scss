@@ -45,14 +45,14 @@ ion-input{
 
 ion-menu[side=left] > .menu-inner {
     margin-top: 58px;
-    height: 90px;
+    height: 99px;
 }
 
 .custommenubutton{
     color: #FFFFFF;
     background-color: #0E0AD7;
     font-size: 18px;
-    line-height: 16px;
+    line-height: 20px;
     font-weight: 500;
 }
 
@@ -68,4 +68,9 @@ ion-menu[side=left] > .menu-inner {
     color: #fff;
     font-size: x-large;
     vertical-align: -webkit-baseline-middle;
+}
+
+.queText{
+    text-decoration: underline double;
+    font-size: x-large;
 }

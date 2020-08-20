@@ -6,6 +6,6 @@
 
 <ion-content padding>
   <label *ngFor="let skip of exchangeData.customerList" (click)="getBack(skip)">
-    <p *ngIf="skip.status=='skipped'">{{skip.id}}</p>
+    <p *ngIf="skip.status=='skipped'" class="queText">{{skip.id}}</p>
   </label>
 </ion-content>

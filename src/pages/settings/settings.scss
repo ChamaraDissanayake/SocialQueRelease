@@ -1,6 +1,8 @@
 page-settings {
-    
-    .loginlables{
+    .button-md{
+        background-color: unset;;
+    }
+    .signuplabels{
         font-style: normal;
         font-weight: normal;
         font-size: 14px;
@@ -8,10 +10,10 @@ page-settings {
         align-items: center;
         letter-spacing: 0.02em;
     }
-    .button-md{
-        background-color: unset;;
-    }
     .select-md .select-icon .select-icon-inner {
         color: #FFFFFF;
+    }
+    .select-md .select-icon {
+        width: 12% !important;
     }
 }

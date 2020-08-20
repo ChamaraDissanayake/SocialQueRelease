@@ -1,15 +1,60 @@
-<!--
-  Generated template for the SignupPage page.
+<ion-content padding class="mainbody">
+  <form [formGroup]="signup" (ngSubmit)="submitSellerDetails()">
 
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-header>
-  <ion-navbar>
-    <ion-title>signup</ion-title>
-  </ion-navbar>
-</ion-header>
+    <div style="margin-top: 50px;">
+      <ion-list>
+        <ion-label class="signuplabels">Select your Business Category</ion-label>
+        <ion-item class="inputboxdecoration">
+          <ion-label class="signuplabels" style="color: #6A77ED">Category</ion-label>
+          <ion-select  class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="signup.category" formControlName="category">
+            <ion-option value="Pharmacy">Pharmacy</ion-option>
+            <ion-option value="Stores">Stores</ion-option>
+            <ion-option value="Shop">Shop</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </div>
 
-<ion-content padding>
+    <div style="margin-top: 30px;">
+      <ion-label class="signuplabels">Shop Name</ion-label>
+      <ion-item class="inputboxdecoration">
+        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" placeholder="Enter your shop name here" type="text" [(ngModel)]="signup.shopName" formControlName="shopName"></ion-input>
+      </ion-item>      
+    </div>
+  
+    <div style="margin-top: 30px;">
+      <ion-label class="signuplabels">City</ion-label>
+      <ion-item class="inputboxdecoration">
+        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" placeholder="Enter your nearest city" type="text" [(ngModel)]="signup.city" formControlName="city"></ion-input>
+      </ion-item>
+    </div>
+  
+    <div style="margin-top: 30px;">
+      <ion-list>
+        <ion-label class="signuplabels">Language</ion-label>
+        <ion-item class="inputboxdecoration">   
+          <ion-label class="signuplabels" style="color: #6A77ED">Language</ion-label>     
+          <ion-select class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="signup.language" formControlName="language">
+            <ion-option value="English">English</ion-option>
+            <ion-option value="Sinhala">Sinhala</ion-option>
+            <ion-option value="Tamil">Tamil</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </div>
+  
+    <div style="margin-top: 30px;">
+      <ion-label class="signuplabels">Enter Your Mobile Number</ion-label>
+      <ion-item class="inputboxdecoration">        
+        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" type="tel" maxlength="10" minlength="10" placeholder="07X XX XX XXX" [(ngModel)]="signup.mobile" formControlName="mobile"></ion-input>
+      </ion-item>
+    </div>
+  
+    <div style="margin-top: 50px; text-align: center;">
+      <button type="submit" [disabled]="!signup.valid" class="submitbutton" ion-button round outline >Sign Up</button>
+    </div>
 
+  </form>
 </ion-content>
+
+
