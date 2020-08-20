@@ -37,10 +37,10 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
-    this.exchangeData.requestSMSPermission()
+    // this.exchangeData.requestSMSPermission();
     this.checkPermission();
     this.resetClock();
-    // this.onSMSArrive(); //Uncomment this before launch in real device
+    this.onSMSArrive(); //Uncomment this before launch in real device
     this.abandonCustomer();
     this.exchangeData.setupDB();
   }
@@ -203,6 +203,7 @@ export class HomePage {
       this.loading.dismiss();
     }
     this.resetClock();
+    this.holdTime = true;
   }
 
   goOut(){
@@ -253,6 +254,7 @@ export class HomePage {
     } else {
       this.loading.dismiss();
     }
+    this.holdTime = true;
   }
 
   getFromWaiting(){

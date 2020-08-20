@@ -30780,10 +30780,6 @@ page-signup .select-md .select-icon {
   width: 12% !important;
 }
 
-page-signup .inputtext {
-  min-width: -webkit-fill-available;
-}
-
 page-skipped .queText {
   color: chocolate;
 }

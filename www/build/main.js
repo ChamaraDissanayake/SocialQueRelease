@@ -61,7 +61,7 @@ var OtpPage = /** @class */ (function () {
     };
     OtpPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-otp',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/otp/otp.html"*/'<ion-header class="mainbody">\n  <ion-navbar color="pagedefault">\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="mainbody">\n  <form [formGroup]="otpFG" (ngSubmit)="verifyCode()">\n\n    <div style="margin-top: 50px;">\n      <ion-label class="otplabels">Please Enter The Verification Code</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext changeside" type="tel" maxlength="4" minlength="4" placeholder="____" [(ngModel)]="otpFG.otp"\n          formControlName="otp"></ion-input>\n      </ion-item>\n      <ion-label class="otplabels">Resend Verification Code: <span class="otplabels clicklink" (click)="verifyCode()">\n          Resend</span></ion-label>\n    </div>\n\n    <div class="buttonSection">\n      <button type="submit" [disabled]="!otpFG.valid" class="submitbutton" ion-button round outline>Verify</button>\n    </div>\n\n  </form>\n</ion-content>'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/otp/otp.html"*/,
+            selector: 'page-otp',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/otp/otp.html"*/'<ion-header class="mainbody">\n  <ion-navbar color="pagedefault">\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="mainbody">\n  <form [formGroup]="otpFG" (ngSubmit)="verifyCode()">\n\n    <div style="margin-top: 50px;">\n      <ion-label class="otplabels">Please Enter The Verification Code</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext changeside" type="tel" maxlength="4" minlength="4" placeholder="____" [(ngModel)]="otpFG.otp"\n          formControlName="otp"></ion-input>\n      </ion-item>\n      <!-- <ion-label class="otplabels">Resend Verification Code: <span class="otplabels clicklink" (click)="verifyCode()">\n          Resend</span></ion-label> -->\n    </div>\n\n    <div class="buttonSection">\n      <button type="submit" [disabled]="!otpFG.valid" class="submitbutton" ion-button round outline>Verify</button>\n    </div>\n\n  </form>\n</ion-content>'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/otp/otp.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_6__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
@@ -261,10 +261,10 @@ var HomePage = /** @class */ (function () {
         this.holdTime = false;
     }
     HomePage.prototype.ionViewDidLoad = function () {
-        this.exchangeData.requestSMSPermission();
+        // this.exchangeData.requestSMSPermission();
         this.checkPermission();
         this.resetClock();
-        // this.onSMSArrive(); //Uncomment this before launch in real device
+        this.onSMSArrive(); //Uncomment this before launch in real device
         this.abandonCustomer();
         this.exchangeData.setupDB();
     };
@@ -429,6 +429,7 @@ var HomePage = /** @class */ (function () {
             this.loading.dismiss();
         }
         this.resetClock();
+        this.holdTime = true;
     };
     HomePage.prototype.goOut = function () {
         this.pageLoader();
@@ -478,6 +479,7 @@ var HomePage = /** @class */ (function () {
         else {
             this.loading.dismiss();
         }
+        this.holdTime = true;
     };
     HomePage.prototype.getFromWaiting = function () {
         var _this = this;
@@ -574,10 +576,14 @@ var HomePage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <table style="min-width: -webkit-fill-available;">\n      <tr>\n        <td><label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label></td>\n        <td><label style="font-size: 36px; float: right; margin-right:50%;">{{exchangeData.insideCustomerCount}}</label></td>\n      </tr>\n      <tr>\n        <td><label style="font-size:24px; vertical-align: text-bottom;">Available Occupents</label></td>\n        <td><label style="font-size: 36px; float: right; margin-right:50%;">{{this.exchangeData.maxCustomers-exchangeData.insideCustomerCount}}</label></td>\n      </tr>\n    </table>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td style="display: flow-root;">\n          <label class="numberset">\n            <span *ngFor="let cstmrDetails of exchangeData.customerList">\n              <span ion-button class="btngetin" *ngIf="cstmrDetails.status ==\'pending\'" (click)="countGetIn(cstmrDetails)">\n                {{cstmrDetails.id}}\n              </span>\n            </span>\n          </label>\n        </td>\n      </tr>\n    </table>\n\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton" (click)="goOut()">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="skipCustomer()">Next</button>\n    </div>\n\n    <div>     \n      <label *ngFor="let x of messages">\n        <h2>{{x}}</h2>\n      </label>\n    </div>\n\n    <div ion-button (click)= "getNextTestNumber()"> Add Customers</div>\n    <!--<div ion-button (click)= "exchangeData.resetTable()"> Reset Table</div>\n    <div ion-button (click)= "requestSMSPermission()"> Check Permission</div>\n    <div ion-button (click)= "exchangeData.syncData()"> Sync Data</div> -->\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["N" /* NgZone */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["N" /* NgZone */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* LoadingController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* LoadingController */]) === "function" && _f || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */],
+            __WEBPACK_IMPORTED_MODULE_0__angular_core__["N" /* NgZone */],
+            __WEBPACK_IMPORTED_MODULE_3__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* LoadingController */]])
     ], HomePage);
     return HomePage;
-    var _a, _b, _c, _d, _e, _f;
 }());
 
 //# sourceMappingURL=home.js.map
@@ -749,10 +755,13 @@ var SignupPage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'page-signup',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/signup/signup.html"*/'<ion-content padding class="mainbody">\n  <form [formGroup]="signup" (ngSubmit)="submitSellerDetails()">\n\n    <div style="margin-top: 50px;">\n      <ion-list>\n        <ion-label class="signuplabels">Select your Business Category</ion-label>\n        <ion-item class="inputboxdecoration">\n          <ion-label class="signuplabels" style="color: #6A77ED">Category</ion-label>\n          <ion-select  class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="signup.category" formControlName="category">\n            <ion-option value="Pharmacy">Pharmacy</ion-option>\n            <ion-option value="Stores">Stores</ion-option>\n            <ion-option value="Shop">Shop</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Shop Name</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" placeholder="Enter your shop name here" type="text" [(ngModel)]="signup.shopName" formControlName="shopName"></ion-input>\n      </ion-item>      \n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">City</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" placeholder="Enter your nearest city" type="text" [(ngModel)]="signup.city" formControlName="city"></ion-input>\n      </ion-item>\n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-list>\n        <ion-label class="signuplabels">Language</ion-label>\n        <ion-item class="inputboxdecoration">   \n          <ion-label class="signuplabels" style="color: #6A77ED">Language</ion-label>     \n          <ion-select class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="signup.language" formControlName="language">\n            <ion-option value="English">English</ion-option>\n            <ion-option value="Sinhala">Sinhala</ion-option>\n            <ion-option value="Tamil">Tamil</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Enter Your Mobile Number</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" type="tel" maxlength="10" minlength="10" placeholder="07X XX XX XXX" [(ngModel)]="signup.mobile" formControlName="mobile"></ion-input>\n      </ion-item>\n    </div>\n  \n    <div style="margin-top: 50px; text-align: center;">\n      <button type="submit" [disabled]="!signup.valid" class="submitbutton" ion-button round outline >Sign Up</button>\n    </div>\n\n  </form>\n</ion-content>\n\n\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/signup/signup.html"*/,
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_5__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["g" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["g" /* NavParams */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__angular_forms__["a" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_forms__["a" /* FormBuilder */]) === "function" && _e || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["g" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */],
+            __WEBPACK_IMPORTED_MODULE_4__angular_forms__["a" /* FormBuilder */]])
     ], SignupPage);
     return SignupPage;
-    var _a, _b, _c, _d, _e;
 }());
 
 //# sourceMappingURL=signup.js.map

@@ -20,6 +20,9 @@
       "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+",
       "PACKAGE_NAME": "io.ionic.starter"
     },
+    "cordova-plugin-network-information": {
+      "PACKAGE_NAME": "io.ionic.starter"
+    },
     "cordova-plugin-sms": {
       "PACKAGE_NAME": "io.ionic.starter"
     },
@@ -33,9 +36,6 @@
       "PACKAGE_NAME": "io.ionic.starter"
     },
     "cordova-sqlite-storage": {
-      "PACKAGE_NAME": "io.ionic.starter"
-    },
-    "cordova-plugin-network-information": {
       "PACKAGE_NAME": "io.ionic.starter"
     }
   },
