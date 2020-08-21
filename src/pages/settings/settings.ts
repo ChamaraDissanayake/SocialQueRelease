@@ -52,9 +52,7 @@ export class SettingsPage {
     } else {
       this.editsignup.value.language = "English";
     }
-    // console.log(this.exchangeData.userDetails,'1111')
-    // this.exchangeData.userDetails = {"ID" : id, "MSISDN" : this.editsignup.value.mobile, "Categories" : this.editsignup.value.category, "Language": this.editsignup.value.language, "BusinessName" : this.editsignup.value.shopName, "City" : this.editsignup.value.city, "OccupantCount":this.editsignup.value.occupant};
-    // console.log(this.exchangeData.userDetails,'2222')
+
     if (this.editsignup.value.mobile) {
       let headers: any = new HttpHeaders({ 'Content-Type': 'application/json' }),
         options: any = {

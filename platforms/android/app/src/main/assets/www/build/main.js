@@ -177,9 +177,6 @@ var SettingsPage = /** @class */ (function () {
         else {
             this.editsignup.value.language = "English";
         }
-        // console.log(this.exchangeData.userDetails,'1111')
-        // this.exchangeData.userDetails = {"ID" : id, "MSISDN" : this.editsignup.value.mobile, "Categories" : this.editsignup.value.category, "Language": this.editsignup.value.language, "BusinessName" : this.editsignup.value.shopName, "City" : this.editsignup.value.city, "OccupantCount":this.editsignup.value.occupant};
-        // console.log(this.exchangeData.userDetails,'2222')
         if (this.editsignup.value.mobile) {
             var headers = new __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["c" /* HttpHeaders */]({ 'Content-Type': 'application/json' }), options = {
                 "ID": this.exchangeData.userDetails.ID, "MSISDN": this.editsignup.value.mobile, "Categories": this.editsignup.value.category, "Language": this.editsignup.value.language, "BusinessName": this.editsignup.value.shopName,
@@ -446,6 +443,7 @@ var HomePage = /** @class */ (function () {
         else {
             this.loading.dismiss();
         }
+        this.holdTime = true;
     };
     HomePage.prototype.skipCustomer = function () {
         var _this = this;
@@ -1152,23 +1150,32 @@ var ExchangeDataProvider = /** @class */ (function () {
     ExchangeDataProvider.prototype.requestSMSPermission = function () {
         var _this = this;
         this.platform.ready().then(function () {
-            _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.READ_SMS).
+            // this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_SMS).
+            // then(success => {
+            //   console.log('Successfully granted send sms permission')
+            // },
+            // err => {
+            //   console.log('No permission to send sms permission')
+            // });
+            // this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.RECEIVE_SMS).
+            // then(success => {
+            //   console.log('Successfully granted send sms permission')
+            // },
+            // err => {
+            //   console.log('No permission to send sms permission')
+            // });
+            // this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.SEND_SMS).
+            // then(success => {
+            //   console.log('Successfully granted send sms permission')
+            // },
+            // err => {
+            //   console.log('No permission to send sms permission')
+            // }); 
+            _this.androidPermissions.requestPermissions([_this.androidPermissions.PERMISSION.READ_SMS, _this.androidPermissions.PERMISSION.RECEIVE_SMS, _this.androidPermissions.PERMISSION.SEND_SMS]).
                 then(function (success) {
-                console.log('Successfully granted send sms permission');
+                console.log('Successfully granted sms permissions', success);
             }, function (err) {
-                console.log('No permission to send sms permission');
-            });
-            _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.RECEIVE_SMS).
-                then(function (success) {
-                console.log('Successfully granted send sms permission');
-            }, function (err) {
-                console.log('No permission to send sms permission');
-            });
-            _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.SEND_SMS).
-                then(function (success) {
-                console.log('Successfully granted send sms permission');
-            }, function (err) {
-                console.log('No permission to send sms permission');
+                console.log('No permission to handle sms', err);
             });
         }, function (Error) {
             alert(JSON.stringify(Error));

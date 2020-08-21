@@ -177,9 +177,6 @@ var SettingsPage = /** @class */ (function () {
         else {
             this.editsignup.value.language = "English";
         }
-        // console.log(this.exchangeData.userDetails,'1111')
-        // this.exchangeData.userDetails = {"ID" : id, "MSISDN" : this.editsignup.value.mobile, "Categories" : this.editsignup.value.category, "Language": this.editsignup.value.language, "BusinessName" : this.editsignup.value.shopName, "City" : this.editsignup.value.city, "OccupantCount":this.editsignup.value.occupant};
-        // console.log(this.exchangeData.userDetails,'2222')
         if (this.editsignup.value.mobile) {
             var headers = new __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["c" /* HttpHeaders */]({ 'Content-Type': 'application/json' }), options = {
                 "ID": this.exchangeData.userDetails.ID, "MSISDN": this.editsignup.value.mobile, "Categories": this.editsignup.value.category, "Language": this.editsignup.value.language, "BusinessName": this.editsignup.value.shopName,
@@ -264,7 +261,7 @@ var HomePage = /** @class */ (function () {
         // this.exchangeData.requestSMSPermission();
         this.checkPermission();
         this.resetClock();
-        this.onSMSArrive(); //Uncomment this before launch in real device
+        // this.onSMSArrive(); //Uncomment this before launch in real device
         this.abandonCustomer();
         this.exchangeData.setupDB();
     };
@@ -379,8 +376,7 @@ var HomePage = /** @class */ (function () {
         }
     };
     HomePage.prototype.replyCustomer = function (sms) {
-        if (SMS)
-            SMS.sendSMS(sms.address, 'Your number is ' + this.generateNumber, function () { }, function () { });
+        // if(SMS) SMS.sendSMS(sms.address, 'Your number is ' + this.generateNumber, function(){}, function(){});
         this.countPendingCustomers();
         if (this.pendingCount < this.exchangeData.maxCustomers) {
             this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: sms.address, status: "pending", createdTime: Date.now() });
@@ -446,6 +442,7 @@ var HomePage = /** @class */ (function () {
         else {
             this.loading.dismiss();
         }
+        this.holdTime = true;
     };
     HomePage.prototype.skipCustomer = function () {
         var _this = this;
@@ -461,8 +458,7 @@ var HomePage = /** @class */ (function () {
                     _this.exchangeData.customerList[index].updatedTime = Date.now();
                     _this.exchangeData.updateStatus(_this.exchangeData.customerList[index].id, "skipped");
                     console.log('Inform to ', _this.exchangeData.customerList[index].pNumber);
-                    if (SMS)
-                        SMS.sendSMS(_this.exchangeData.customerList[index].pNumber, 'Your have been skipped because of absent in time. Please resend previous sms before 20 minutes to re-enter with old number', function () { }, function () { });
+                    // if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Your have been skipped because of absent in time. Please resend previous sms before 20 minutes to re-enter with old number', function(){}, function(){});
                     found_1 = true;
                 }
                 if (element.status == 'pending') {
@@ -563,8 +559,7 @@ var HomePage = /** @class */ (function () {
                             _this.exchangeData.customerList[index].status = 'absent';
                             _this.exchangeData.updateStatus(_this.exchangeData.customerList[index].id, "absent");
                             _this.exchangeData.absentList.push(_this.exchangeData.customerList[index]);
-                            if (SMS)
-                                SMS.sendSMS(_this.exchangeData.customerList[index].pNumber, 'Your have been abandoned because of absent', function () { }, function () { });
+                            // if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Your have been abandoned because of absent', function(){}, function(){});
                             _this.exchangeData.customerList.splice(index, 1);
                         }
                     }
@@ -576,14 +571,10 @@ var HomePage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <table style="min-width: -webkit-fill-available;">\n      <tr>\n        <td><label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label></td>\n        <td><label style="font-size: 36px; float: right; margin-right:50%;">{{exchangeData.insideCustomerCount}}</label></td>\n      </tr>\n      <tr>\n        <td><label style="font-size:24px; vertical-align: text-bottom;">Available Occupents</label></td>\n        <td><label style="font-size: 36px; float: right; margin-right:50%;">{{this.exchangeData.maxCustomers-exchangeData.insideCustomerCount}}</label></td>\n      </tr>\n    </table>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td style="display: flow-root;">\n          <label class="numberset">\n            <span *ngFor="let cstmrDetails of exchangeData.customerList">\n              <span ion-button class="btngetin" *ngIf="cstmrDetails.status ==\'pending\'" (click)="countGetIn(cstmrDetails)">\n                {{cstmrDetails.id}}\n              </span>\n            </span>\n          </label>\n        </td>\n      </tr>\n    </table>\n\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton" (click)="goOut()">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="skipCustomer()">Next</button>\n    </div>\n\n    <div>     \n      <label *ngFor="let x of messages">\n        <h2>{{x}}</h2>\n      </label>\n    </div>\n\n    <div ion-button (click)= "getNextTestNumber()"> Add Customers</div>\n    <!--<div ion-button (click)= "exchangeData.resetTable()"> Reset Table</div>\n    <div ion-button (click)= "requestSMSPermission()"> Check Permission</div>\n    <div ion-button (click)= "exchangeData.syncData()"> Sync Data</div> -->\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */],
-            __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */],
-            __WEBPACK_IMPORTED_MODULE_0__angular_core__["N" /* NgZone */],
-            __WEBPACK_IMPORTED_MODULE_3__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* LoadingController */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["N" /* NgZone */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["N" /* NgZone */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* LoadingController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* LoadingController */]) === "function" && _f || Object])
     ], HomePage);
     return HomePage;
+    var _a, _b, _c, _d, _e, _f;
 }());
 
 //# sourceMappingURL=home.js.map
@@ -1152,23 +1143,32 @@ var ExchangeDataProvider = /** @class */ (function () {
     ExchangeDataProvider.prototype.requestSMSPermission = function () {
         var _this = this;
         this.platform.ready().then(function () {
-            _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.READ_SMS).
+            // this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_SMS).
+            // then(success => {
+            //   console.log('Successfully granted send sms permission')
+            // },
+            // err => {
+            //   console.log('No permission to send sms permission')
+            // });
+            // this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.RECEIVE_SMS).
+            // then(success => {
+            //   console.log('Successfully granted send sms permission')
+            // },
+            // err => {
+            //   console.log('No permission to send sms permission')
+            // });
+            // this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.SEND_SMS).
+            // then(success => {
+            //   console.log('Successfully granted send sms permission')
+            // },
+            // err => {
+            //   console.log('No permission to send sms permission')
+            // }); 
+            _this.androidPermissions.requestPermissions([_this.androidPermissions.PERMISSION.READ_SMS, _this.androidPermissions.PERMISSION.RECEIVE_SMS, _this.androidPermissions.PERMISSION.SEND_SMS]).
                 then(function (success) {
-                console.log('Successfully granted send sms permission');
+                console.log('Successfully granted sms permissions', success);
             }, function (err) {
-                console.log('No permission to send sms permission');
-            });
-            _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.RECEIVE_SMS).
-                then(function (success) {
-                console.log('Successfully granted send sms permission');
-            }, function (err) {
-                console.log('No permission to send sms permission');
-            });
-            _this.androidPermissions.requestPermission(_this.androidPermissions.PERMISSION.SEND_SMS).
-                then(function (success) {
-                console.log('Successfully granted send sms permission');
-            }, function (err) {
-                console.log('No permission to send sms permission');
+                console.log('No permission to handle sms', err);
             });
         }, function (Error) {
             alert(JSON.stringify(Error));

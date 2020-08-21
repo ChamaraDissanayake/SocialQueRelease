@@ -45,7 +45,8 @@ ion-input{
 
 ion-menu[side=left] > .menu-inner {
     margin-top: 58px;
-    height: 99px;
+    height: 94px;
+    background: #0E0AD7;
 }
 
 .custommenubutton{
@@ -73,4 +74,8 @@ ion-menu[side=left] > .menu-inner {
 .queText{
     text-decoration: underline double;
     font-size: x-large;
+}
+
+.list-md {
+    margin: unset
 }
