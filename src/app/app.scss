@@ -22,13 +22,12 @@ ion-input{
     line-height: 21px;
     align-items: center;
     letter-spacing: 0.02em;
-
     background-color: #6A77ED;
     color: #FFFFFF;
 }
 
 .submitbutton{
-    width: 327px;
+    width: -webkit-fill-available;
     height: 56px;
     background: #FFFFFF;
     border-radius: 100px;

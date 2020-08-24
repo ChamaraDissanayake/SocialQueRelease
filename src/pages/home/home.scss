@@ -1,11 +1,11 @@
 page-home {
     .redbutton{
         margin-top: 12.5px;
-        position: inherit;
+        // position: inherit;
         width: 59px;
         height: 59px;
-        left: 20px;
-        top: 449px;
+        left: 10px;
+        top: 34px;
         background: #DA1B1B;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         font-weight: bold;
@@ -13,12 +13,12 @@ page-home {
         line-height: 27px;        
     }
     .purplebutton{
-        float: right;
-        position: inherit;
+        // float: right;
+        // position: inherit;
         width: 74px;
         height: 74px;
-        left: 254px;
-        top: 440px;
+        right: 10px;
+        top: 40px;
         background: #3F0DCE;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         font-weight: bold;

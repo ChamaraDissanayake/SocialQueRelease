@@ -20,7 +20,7 @@
   </section>
 
 
-    <table style="margin-top: 40px;">
+    <table style="margin-top: 10%;">
       <tr>
         <td style="width: 45%;"></td>
         <td><label class="quelabel">Current Que Numbers</label></td>
@@ -36,22 +36,33 @@
             (click)="holdClock()">
           </circle-progress>
         </td>
-        <td style="display: flow-root;">
-          <label class="numberset">
-            <span *ngFor="let cstmrDetails of exchangeData.customerList">
-              <span ion-button class="btngetin" *ngIf="cstmrDetails.status =='pending'" (click)="countGetIn(cstmrDetails)">
-                {{cstmrDetails.id}}
+
+        <td>
+          <ion-scroll scrollY="true" style="height: 240px;">
+            <label class="numberset">
+              <span *ngFor="let cstmrDetails of exchangeData.customerList">
+                <span ion-button class="btngetin" *ngIf="cstmrDetails.status =='pending'" (click)="countGetIn(cstmrDetails)">
+                  {{cstmrDetails.id}}
+                </span>
               </span>
-            </span>
-          </label>
+            </label>
+          </ion-scroll>          
         </td>
       </tr>
     </table>
 
-    <div style="margin-top: 30%;">
+    <!-- <div style="margin-top: 30%;">
       <button ion-button danger round class="redbutton" (click)="goOut()">Out</button>
       <button ion-button danger round class="purplebutton" (click)="skipCustomer()">Next</button>
-    </div>
+    </div> -->
+
+    <ion-fab left bottom>
+      <ion-fab-button ion-button danger round class="redbutton" (click)="goOut()">Out</ion-fab-button>      
+    </ion-fab>
+    <ion-fab right bottom>
+      <ion-fab-button ion-button danger round class="purplebutton" (click)="skipCustomer()">Next</ion-fab-button>  
+    </ion-fab>
+    
 
     <div>     
       <label *ngFor="let x of messages">
@@ -59,8 +70,6 @@
       </label>
     </div>
 
-    <div ion-button (click)= "getNextTestNumber()"> Add Customers</div>
-    <!--<div ion-button (click)= "exchangeData.resetTable()"> Reset Table</div>
-    <div ion-button (click)= "requestSMSPermission()"> Check Permission</div>
-    <div ion-button (click)= "exchangeData.syncData()"> Sync Data</div> -->
+    <div style="margin-top: 100px;" ion-button (click)= "getNextTestNumber()"> Add Customers</div>
+    <!--<div ion-button (click)= "exchangeData.resetTable()"> Reset Table</div>-->
 </ion-content>

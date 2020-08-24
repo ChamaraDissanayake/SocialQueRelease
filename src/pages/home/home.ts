@@ -40,7 +40,7 @@ export class HomePage {
     // this.exchangeData.requestSMSPermission();
     this.checkPermission();
     this.resetClock();
-    // this.onSMSArrive(); //Uncomment this before launch in real device
+    this.onSMSArrive(); //Uncomment this before launch in real device
     this.abandonCustomer();
     this.exchangeData.setupDB();
   }
@@ -63,7 +63,7 @@ export class HomePage {
           this.skipCustomer();
         }
         this.setPresentage = ((this.percent / this.belowNumber) * 100);
-      }, 100);
+      }, 1000);
     }
   }
 
@@ -156,7 +156,7 @@ export class HomePage {
   }
 
   replyCustomer(sms){    
-    // if(SMS) SMS.sendSMS(sms.address, 'Your number is ' + this.generateNumber, function(){}, function(){});
+    if(SMS) SMS.sendSMS(sms.address, 'Your number is ' + this.generateNumber, function(){}, function(){});
     this.countPendingCustomers();
     if(this.pendingCount<this.exchangeData.maxCustomers){
       this.exchangeData.customerList.push({id:this.generateNumber, pNumber:sms.address, status:"pending", createdTime: Date.now()});
@@ -238,7 +238,7 @@ export class HomePage {
           this.exchangeData.customerList[index].updatedTime = Date.now();
           this.exchangeData.updateStatus(this.exchangeData.customerList[index].id, "skipped");
           console.log('Inform to ',this.exchangeData.customerList[index].pNumber)
-          // if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Your have been skipped because of absent in time. Please resend previous sms before 20 minutes to re-enter with old number', function(){}, function(){});
+          if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Your have been skipped because of absent in time. Please resend previous sms before 20 minutes to re-enter with old number', function(){}, function(){});
           found = true;
         }
         if(element.status == 'pending'){
@@ -346,14 +346,14 @@ export class HomePage {
         this.exchangeData.customerList.forEach(element => {
           if(element.status == 'skipped'){
             let timeElapsed = Date.now()-element.updatedTime;
-            // if(timeElapsed>=1 200 000){
-            if(timeElapsed>=20000){
+            if(timeElapsed>=1200000){
+            // if(timeElapsed>=20000){
               console.log('íf is working')
               let index = this.exchangeData.customerList.indexOf(element)
               this.exchangeData.customerList[index].status = 'absent';
               this.exchangeData.updateStatus(this.exchangeData.customerList[index].id, "absent");
               this.exchangeData.absentList.push(this.exchangeData.customerList[index]);
-              // if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Your have been abandoned because of absent', function(){}, function(){});
+              if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Your have been abandoned because of absent', function(){}, function(){});
               this.exchangeData.customerList.splice(index,1)         
             }    
           }          
