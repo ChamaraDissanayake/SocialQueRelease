@@ -53,15 +53,29 @@ var OtpPage = /** @class */ (function () {
             }
             else {
                 _this.otpFG.reset();
-                alert('Please try agani!');
+                alert('Please try again!');
             }
         }, function (error) {
             console.log(error);
         });
     };
+    OtpPage.prototype.onKeyUp = function (event) {
+        console.log(event);
+        if (event == 4) {
+            this.losefocus();
+            this.verifyCode();
+        }
+    };
+    OtpPage.prototype.losefocus = function () {
+        this.otpField['_native'].nativeElement.blur();
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_9" /* ViewChild */])('otpField'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */])
+    ], OtpPage.prototype, "otpField", void 0);
     OtpPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-otp',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/otp/otp.html"*/'<ion-header class="mainbody">\n  <ion-navbar color="pagedefault">\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="mainbody">\n  <form [formGroup]="otpFG" (ngSubmit)="verifyCode()">\n\n    <div style="margin-top: 50px;">\n      <ion-label class="otplabels">Please Enter The Verification Code</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext changeside" type="tel" maxlength="4" minlength="4" placeholder="____" [(ngModel)]="otpFG.otp"\n          formControlName="otp"></ion-input>\n      </ion-item>\n      <!-- <ion-label class="otplabels">Resend Verification Code: <span class="otplabels clicklink" (click)="verifyCode()">\n          Resend</span></ion-label> -->\n    </div>\n\n    <div class="buttonSection">\n      <button type="submit" [disabled]="!otpFG.valid" class="submitbutton" ion-button round outline>Verify</button>\n    </div>\n\n  </form>\n</ion-content>'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/otp/otp.html"*/,
+            selector: 'page-otp',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/otp/otp.html"*/'<ion-header class="mainbody">\n  <ion-navbar color="pagedefault">\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="mainbody">\n  <form [formGroup]="otpFG" (ngSubmit)="verifyCode()">\n\n    <div style="margin-top: 50px;">\n      <ion-label class="otplabels">Please Enter The Verification Code</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input #otpField class="inputtext changeside" type="tel" maxlength="4" minlength="4" placeholder="____" [(ngModel)]="otpFG.otp"\n          formControlName="otp" (keyup)=\'onKeyUp($event.target.value.length)\'></ion-input>\n      </ion-item>\n      <!-- <ion-label class="otplabels">Resend Verification Code: <span class="otplabels clicklink" (click)="verifyCode()">\n          Resend</span></ion-label> -->\n    </div>\n\n    <div class="buttonSection">\n      <button type="submit" [disabled]="!otpFG.valid" class="submitbutton" style="width: -webkit-fill-available;" ion-button round outline>Verify</button>\n    </div>\n\n  </form>\n</ion-content>'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/otp/otp.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_6__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
@@ -149,18 +163,40 @@ var SettingsPage = /** @class */ (function () {
         this.http = http;
         this.formBuilder = formBuilder;
         this.storage = storage;
+        this.validation_messages = {
+            'shopName': [
+                { type: 'required', message: '*Shop name is required!' }
+            ],
+            'city': [
+                { type: 'required', message: '*Located city is required!' }
+            ],
+            'mobile': [
+                { type: 'required', message: '*Mobile number is required!' },
+                { type: 'pattern', message: '*Not a valid mobile number!' }
+            ],
+            'occupant': [
+                { type: 'required', message: '*Occupant capacity is required!' }
+            ],
+        };
         this.baseURL = 'http://social.evokemusic.net/api/app/social-que/a-v1/putSellerDetail';
+        // this.editsignup = this.formBuilder.group({
+        //   category: ['Pharmacy'],
+        //   shopName: ['', Validators.required],
+        //   city: ['', Validators.required],
+        //   language: ['English'],
+        //   occupant: ['', Validators.required],
+        //   mobile: ['', [Validators.required, Validators.pattern('[0]{1}[7]{1}[0-9]{8}'), Validators.minLength(10)]]
+        // });
+    }
+    SettingsPage.prototype.ionViewWillLoad = function () {
         this.editsignup = this.formBuilder.group({
             category: ['Pharmacy'],
             shopName: ['', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required],
             city: ['', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required],
             language: ['English'],
-            occupant: ['', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required],
+            occupant: ['', [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].pattern('[0-9]{1,5}')]],
             mobile: ['', [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].pattern('[0]{1}[7]{1}[0-9]{8}'), __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].minLength(10)]]
         });
-    }
-    SettingsPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad SettingsPage');
     };
     SettingsPage.prototype.updateUserDetails = function () {
         var _this = this;
@@ -205,7 +241,7 @@ var SettingsPage = /** @class */ (function () {
     };
     SettingsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-settings',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/settings/settings.html"*/'<ion-header color="navbar">\n  <ion-navbar color="navbar">\n    <button ion-button (click)=goHome()>\n      <ion-icon name="arrow-back" style="font-size: x-large;"></ion-icon>\n    </button>\n    <label class="backBtnLable">Settings</label>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="subbody">\n  <form [formGroup]="editsignup" (ngSubmit)="updateUserDetails()">\n    <div style="margin-top: 50px;">\n      <ion-list>\n        <ion-label class="signuplabels">Select your Business Category</ion-label>\n        <ion-item class="inputboxdecoration">\n          <ion-label class="signuplabels" style="color: #6A77ED">Category</ion-label>\n          <ion-select  class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="editsignup.category" formControlName="category" value="{{this.exchangeData.userDetails.Categories}}">\n            <ion-option value="Pharmacy">Pharmacy</ion-option>\n            <ion-option value="Stores">Stores</ion-option>\n            <ion-option value="Shop">Shop</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Shop Name</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" placeholder="Enter your shop name here" type="text" [(ngModel)]="editsignup.shopName" formControlName="shopName" value="{{this.exchangeData.userDetails.BusinessName}}"></ion-input>\n      </ion-item>      \n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">City</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" placeholder="Enter your nearest city" type="text" [(ngModel)]="editsignup.city" formControlName="city" value="{{this.exchangeData.userDetails.City}}"></ion-input>\n      </ion-item>\n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-list>\n        <ion-label class="signuplabels">Language</ion-label>\n        <ion-item class="inputboxdecoration">   \n          <ion-label class="signuplabels" style="color: #6A77ED">Language</ion-label>     \n          <ion-select class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="editsignup.language" formControlName="language" value="{{this.exchangeData.userDetails.Language}}">\n            <ion-option value="English">English</ion-option>\n            <ion-option value="Sinhala">Sinhala</ion-option>\n            <ion-option value="Tamil">Tamil</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Enter Your Mobile Number</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" type="tel" maxlength="10" minlength="10" [(ngModel)]="editsignup.mobile" formControlName="mobile" value="{{this.exchangeData.userDetails.MSISDN}}"></ion-input>\n      </ion-item>\n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Occupant Count</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" type="tel" maxlength = "3" [(ngModel)]="editsignup.occupant" formControlName="occupant" value="{{this.exchangeData.userDetails.OccupantCount}}" onfocus="value=\'\'"></ion-input>\n      </ion-item>\n    </div>\n  \n    <div style="margin-top: 50px; text-align: center;">\n      <button type="submit" [disabled]="!editsignup.valid" class="submitbutton" ion-button round outline >Update</button>\n    </div>\n\n  </form>\n</ion-content>'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/settings/settings.html"*/,
+            selector: 'page-settings',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/settings/settings.html"*/'<ion-header color="navbar">\n  <ion-navbar color="navbar">\n    <button ion-button (click)=goHome()>\n      <ion-icon name="arrow-back" style="font-size: x-large;"></ion-icon>\n    </button>\n    <label class="backBtnLable">Settings</label>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="subbody">\n  <form [formGroup]="editsignup" (ngSubmit)="updateUserDetails()">\n    <div style="margin-top: 50px;">\n      <ion-list>\n        <ion-label class="signuplabels">Select your Business Category</ion-label>\n        <ion-item class="inputboxdecoration">\n          <ion-label class="signuplabels" style="color: #6A77ED">Category</ion-label>\n          <ion-select class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="editsignup.category" formControlName="category" value="{{this.exchangeData.userDetails.Categories}}">\n            <ion-option value="Pharmacy">Pharmacy</ion-option>\n            <ion-option value="Stores">Stores</ion-option>\n            <ion-option value="Shop">Shop</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Shop Name</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" placeholder="Enter your shop name here" type="text" [(ngModel)]="editsignup.shopName" formControlName="shopName" value="{{this.exchangeData.userDetails.BusinessName}}"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.shopName">\n          <div class="error-message" *ngIf="editsignup.get(\'shopName\').hasError(validation.type) && (editsignup.get(\'shopName\').dirty || editsignup.get(\'shopName\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">City</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" placeholder="Enter your nearest city" type="text" [(ngModel)]="editsignup.city" formControlName="city" value="{{this.exchangeData.userDetails.City}}"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.city">\n          <div class="error-message" *ngIf="editsignup.get(\'city\').hasError(validation.type) && (editsignup.get(\'city\').dirty || editsignup.get(\'city\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div> \n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-list>\n        <ion-label class="signuplabels">Language</ion-label>\n        <ion-item class="inputboxdecoration">   \n          <ion-label class="signuplabels" style="color: #6A77ED">Language</ion-label>     \n          <ion-select class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="editsignup.language" formControlName="language" value="{{this.exchangeData.userDetails.Language}}">\n            <ion-option value="English">English</ion-option>\n            <ion-option value="Sinhala">Sinhala</ion-option>\n            <ion-option value="Tamil">Tamil</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Enter Your Mobile Number</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" type="tel" maxlength="10" minlength="10" [(ngModel)]="editsignup.mobile" formControlName="mobile" value="{{this.exchangeData.userDetails.MSISDN}}"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.mobile">\n          <div class="error-message" *ngIf="editsignup.get(\'mobile\').hasError(validation.type) && (editsignup.get(\'mobile\').dirty || editsignup.get(\'mobile\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>\n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Occupant Count</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" type="tel" maxlength = "5" [(ngModel)]="editsignup.occupant" formControlName="occupant" value="{{this.exchangeData.userDetails.OccupantCount}}" onfocus="value=\'\'"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.occupant">\n          <div class="error-message" *ngIf="editsignup.get(\'occupant\').hasError(validation.type) && (editsignup.get(\'occupant\').dirty || editsignup.get(\'occupant\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n  \n    <div style="margin-top: 50px; text-align: center;">\n      <button type="submit" [disabled]="!editsignup.valid" class="submitbutton" style="width: -webkit-fill-available;" ion-button round outline >Update</button>\n    </div>\n\n  </form>\n</ion-content>'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/settings/settings.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
@@ -244,9 +280,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var HomePage = /** @class */ (function () {
-    function HomePage(
-        // private network: Network,
-        navCtrl, platform, androidPermissions, zone, exchangeData, loadingCtrl) {
+    function HomePage(navCtrl, platform, androidPermissions, zone, exchangeData, loadingCtrl) {
         this.navCtrl = navCtrl;
         this.platform = platform;
         this.androidPermissions = androidPermissions;
@@ -258,7 +292,6 @@ var HomePage = /** @class */ (function () {
         this.holdTime = false;
     }
     HomePage.prototype.ionViewDidLoad = function () {
-        // this.exchangeData.requestSMSPermission();
         this.checkPermission();
         this.resetClock();
         this.onSMSArrive(); //Uncomment this before launch in real device
@@ -272,7 +305,6 @@ var HomePage = /** @class */ (function () {
     };
     HomePage.prototype.startClock = function () {
         var _this = this;
-        // this.holdTime = false;
         clearInterval(this.timer);
         this.countPendingCustomers();
         if (this.exchangeData.customerList[0] != undefined && this.pendingCount > 0) {
@@ -283,7 +315,7 @@ var HomePage = /** @class */ (function () {
                     _this.skipCustomer();
                 }
                 _this.setPresentage = ((_this.percent / _this.belowNumber) * 100);
-            }, 100);
+            }, 1000);
         }
     };
     HomePage.prototype.holdClock = function () {
@@ -554,8 +586,8 @@ var HomePage = /** @class */ (function () {
                 _this.exchangeData.customerList.forEach(function (element) {
                     if (element.status == 'skipped') {
                         var timeElapsed = Date.now() - element.updatedTime;
-                        // if(timeElapsed>=1 200 000){
-                        if (timeElapsed >= 20000) {
+                        if (timeElapsed >= 1200000) {
+                            // if(timeElapsed>=20000){
                             console.log('íf is working');
                             var index = _this.exchangeData.customerList.indexOf(element);
                             _this.exchangeData.customerList[index].status = 'absent';
@@ -572,7 +604,7 @@ var HomePage = /** @class */ (function () {
     };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <table style="min-width: -webkit-fill-available;">\n      <tr>\n        <td><label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label></td>\n        <td><label style="font-size: 36px; float: right; margin-right:50%;">{{exchangeData.insideCustomerCount}}</label></td>\n      </tr>\n      <tr>\n        <td><label style="font-size:24px; vertical-align: text-bottom;">Available Occupents</label></td>\n        <td><label style="font-size: 36px; float: right; margin-right:50%;">{{this.exchangeData.maxCustomers-exchangeData.insideCustomerCount}}</label></td>\n      </tr>\n    </table>\n  </section>\n\n\n    <table style="margin-top: 40px;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n        <td style="display: flow-root;">\n          <label class="numberset">\n            <span *ngFor="let cstmrDetails of exchangeData.customerList">\n              <span ion-button class="btngetin" *ngIf="cstmrDetails.status ==\'pending\'" (click)="countGetIn(cstmrDetails)">\n                {{cstmrDetails.id}}\n              </span>\n            </span>\n          </label>\n        </td>\n      </tr>\n    </table>\n\n    <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton" (click)="goOut()">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="skipCustomer()">Next</button>\n    </div>\n\n    <div>     \n      <label *ngFor="let x of messages">\n        <h2>{{x}}</h2>\n      </label>\n    </div>\n\n    <div ion-button (click)= "getNextTestNumber()"> Add Customers</div>\n    <!--<div ion-button (click)= "exchangeData.resetTable()"> Reset Table</div>\n    <div ion-button (click)= "requestSMSPermission()"> Check Permission</div>\n    <div ion-button (click)= "exchangeData.syncData()"> Sync Data</div> -->\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
+            selector: 'page-home',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight: bold;">\n    <table style="min-width: -webkit-fill-available;">\n      <tr>\n        <td><label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label></td>\n        <td><label style="font-size: 36px; float: right; margin-right:50%;">{{exchangeData.insideCustomerCount}}</label></td>\n      </tr>\n      <tr>\n        <td><label style="font-size:24px; vertical-align: text-bottom;">Available Occupents</label></td>\n        <td><label style="font-size: 36px; float: right; margin-right:50%;">{{this.exchangeData.maxCustomers-exchangeData.insideCustomerCount}}</label></td>\n      </tr>\n    </table>\n  </section>\n\n\n    <table style="margin-top: 10%;">\n      <tr>\n        <td style="width: 45%;"></td>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td style="padding-top:30px;">\n          <circle-progress\n            [percent]="setPresentage"\n            [animation]="false"           \n            [clockwise]="true"\n            [showTitle]="true"\n            [title]="percent"\n            (click)="holdClock()">\n          </circle-progress>\n        </td>\n\n        <td>\n          <ion-scroll scrollY="true" style="height: 240px;">\n            <label class="numberset">\n              <span *ngFor="let cstmrDetails of exchangeData.customerList">\n                <span ion-button class="btngetin" *ngIf="cstmrDetails.status ==\'pending\'" (click)="countGetIn(cstmrDetails)">\n                  {{cstmrDetails.id}}\n                </span>\n              </span>\n            </label>\n          </ion-scroll>          \n        </td>\n      </tr>\n    </table>\n\n    <!-- <div style="margin-top: 30%;">\n      <button ion-button danger round class="redbutton" (click)="goOut()">Out</button>\n      <button ion-button danger round class="purplebutton" (click)="skipCustomer()">Next</button>\n    </div> -->\n\n    <ion-fab left bottom>\n      <button ion-fab danger round class="redbutton" (click)="goOut()">Out</button>      \n    </ion-fab>\n    <ion-fab right bottom>\n      <button ion-fab danger round class="purplebutton" (click)="skipCustomer()">Next</button>  \n    </ion-fab>\n    \n\n    <div>     \n      <label *ngFor="let x of messages">\n        <h2>{{x}}</h2>\n      </label>\n    </div>\n\n    <!-- <div style="margin-top: 100px;" ion-button (click)= "getNextTestNumber()"> Add Customers</div> -->\n    <!--<div ion-button (click)= "exchangeData.resetTable()"> Reset Table</div>-->\n</ion-content>\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/home/home.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */],
@@ -709,7 +741,24 @@ var SignupPage = /** @class */ (function () {
         this.navParams = navParams;
         this.http = http;
         this.formBuilder = formBuilder;
+        this.validation_messages = {
+            'shopName': [
+                { type: 'required', message: '*Shop name is required!' }
+            ],
+            'city': [
+                { type: 'required', message: '*Located city is required!' }
+            ],
+            'mobile': [
+                { type: 'required', message: '*Mobile number is required!' },
+                { type: 'pattern', message: '*Not a valid mobile number!' }
+            ]
+        };
         this.baseURL = 'http://social.evokemusic.net/api/app/social-que/a-v1/putSellerDetail';
+    }
+    SignupPage.prototype.ionViewDidLoad = function () {
+        this.exchangeData.requestSMSPermission();
+    };
+    SignupPage.prototype.ionViewWillLoad = function () {
         this.signup = this.formBuilder.group({
             category: ['Pharmacy'],
             shopName: ['', __WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* Validators */].required],
@@ -717,9 +766,6 @@ var SignupPage = /** @class */ (function () {
             language: ['English'],
             mobile: ['', [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* Validators */].pattern('[0]{1}[7]{1}[0-9]{8}'), __WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* Validators */].minLength(10)]]
         });
-    }
-    SignupPage.prototype.ionViewDidLoad = function () {
-        this.exchangeData.requestSMSPermission();
     };
     SignupPage.prototype.submitSellerDetails = function () {
         var _this = this;
@@ -751,7 +797,7 @@ var SignupPage = /** @class */ (function () {
     };
     SignupPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-signup',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/signup/signup.html"*/'<ion-content padding class="mainbody">\n  <form [formGroup]="signup" (ngSubmit)="submitSellerDetails()">\n\n    <div style="margin-top: 50px;">\n      <ion-list>\n        <ion-label class="signuplabels">Select your Business Category</ion-label>\n        <ion-item class="inputboxdecoration">\n          <ion-label class="signuplabels" style="color: #6A77ED">Category</ion-label>\n          <ion-select  class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="signup.category" formControlName="category">\n            <ion-option value="Pharmacy">Pharmacy</ion-option>\n            <ion-option value="Stores">Stores</ion-option>\n            <ion-option value="Shop">Shop</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Shop Name</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" placeholder="Enter your shop name here" type="text" [(ngModel)]="signup.shopName" formControlName="shopName"></ion-input>\n      </ion-item>      \n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">City</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" placeholder="Enter your nearest city" type="text" [(ngModel)]="signup.city" formControlName="city"></ion-input>\n      </ion-item>\n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-list>\n        <ion-label class="signuplabels">Language</ion-label>\n        <ion-item class="inputboxdecoration">   \n          <ion-label class="signuplabels" style="color: #6A77ED">Language</ion-label>     \n          <ion-select class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="signup.language" formControlName="language">\n            <ion-option value="English">English</ion-option>\n            <ion-option value="Sinhala">Sinhala</ion-option>\n            <ion-option value="Tamil">Tamil</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Enter Your Mobile Number</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" type="tel" maxlength="10" minlength="10" placeholder="07X XX XX XXX" [(ngModel)]="signup.mobile" formControlName="mobile"></ion-input>\n      </ion-item>\n    </div>\n  \n    <div style="margin-top: 50px; text-align: center;">\n      <button type="submit" [disabled]="!signup.valid" class="submitbutton" ion-button round outline >Sign Up</button>\n    </div>\n\n  </form>\n</ion-content>\n\n\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/signup/signup.html"*/,
+            selector: 'page-signup',template:/*ion-inline-start:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/signup/signup.html"*/'<ion-content padding class="mainbody">\n  <form [formGroup]="signup" (ngSubmit)="submitSellerDetails()">\n\n    <div style="margin-top: 50px;">\n      <ion-list>\n        <ion-label class="signuplabels">Select your Business Category</ion-label>\n        <ion-item class="inputboxdecoration">\n          <ion-label class="signuplabels" style="color: #6A77ED">Category</ion-label>\n          <ion-select  class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="signup.category" formControlName="category">\n            <ion-option value="Pharmacy">Pharmacy</ion-option>\n            <ion-option value="Stores">Stores</ion-option>\n            <ion-option value="Shop">Shop</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Shop Name</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" placeholder="Enter your shop name here" type="text" [(ngModel)]="signup.shopName" formControlName="shopName"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.shopName">\n          <div class="error-message" *ngIf="signup.get(\'shopName\').hasError(validation.type) && (signup.get(\'shopName\').dirty || signup.get(\'shopName\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">City</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" placeholder="Enter your nearest city" type="text" [(ngModel)]="signup.city" formControlName="city"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.city">\n          <div class="error-message" *ngIf="signup.get(\'city\').hasError(validation.type) && (signup.get(\'city\').dirty || signup.get(\'city\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-list>\n        <ion-label class="signuplabels">Language</ion-label>\n        <ion-item class="inputboxdecoration">   \n          <ion-label class="signuplabels" style="color: #6A77ED">Language</ion-label>     \n          <ion-select class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="signup.language" formControlName="language">\n            <ion-option value="English">English</ion-option>\n            <ion-option value="Sinhala">Sinhala</ion-option>\n            <ion-option value="Tamil">Tamil</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Enter Your Mobile Number</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" type="tel" maxlength="10" minlength="10" placeholder="07X XX XX XXX" [(ngModel)]="signup.mobile" formControlName="mobile"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.mobile">\n          <div class="error-message" *ngIf="signup.get(\'mobile\').hasError(validation.type) && (signup.get(\'mobile\').dirty || signup.get(\'mobile\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n  \n    <div style="margin-top: 50px; text-align: center;">\n      <button type="submit" [disabled]="!signup.valid" class="submitbutton" style="width: -webkit-fill-available;" ion-button round outline >Sign Up</button>\n    </div>\n\n  </form>\n</ion-content>\n\n'/*ion-inline-end:"/Users/dhanushka/Desktop/project/SocialQue/src/pages/signup/signup.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */],
             __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* NavController */],

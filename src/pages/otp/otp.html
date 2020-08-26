@@ -9,15 +9,15 @@
     <div style="margin-top: 50px;">
       <ion-label class="otplabels">Please Enter The Verification Code</ion-label>
       <ion-item class="inputboxdecoration">
-        <ion-input class="inputtext changeside" type="tel" maxlength="4" minlength="4" placeholder="____" [(ngModel)]="otpFG.otp"
-          formControlName="otp"></ion-input>
+        <ion-input #otpField class="inputtext changeside" type="tel" maxlength="4" minlength="4" placeholder="____" [(ngModel)]="otpFG.otp"
+          formControlName="otp" (keyup)='onKeyUp($event.target.value.length)'></ion-input>
       </ion-item>
       <!-- <ion-label class="otplabels">Resend Verification Code: <span class="otplabels clicklink" (click)="verifyCode()">
           Resend</span></ion-label> -->
     </div>
 
     <div class="buttonSection">
-      <button type="submit" [disabled]="!otpFG.valid" class="submitbutton" ion-button round outline>Verify</button>
+      <button type="submit" [disabled]="!otpFG.valid" class="submitbutton" style="width: -webkit-fill-available;" ion-button round outline>Verify</button>
     </div>
 
   </form>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
@@ -12,6 +12,7 @@ import { ExchangeDataProvider } from '../../providers/exchange-data/exchange-dat
   templateUrl: 'otp.html',
 })
 export class OtpPage {
+  @ViewChild('otpField') otpField: ElementRef;
   private otpFG : FormGroup;
   userDetails : any;
 
@@ -42,12 +43,24 @@ export class OtpPage {
         this.storage.set('currentUser', this.exchangeData.userDetails)
       } else {
         this.otpFG.reset();
-        alert('Please try agani!')
+        alert('Please try again!')
       }
     },
     (error : any) =>
     {
        console.log(error);
     });
+  }
+
+  onKeyUp(event){
+    console.log(event)
+    if(event==4){
+      this.losefocus();
+      this.verifyCode();
+    }
+  }
+
+  losefocus() {
+    this.otpField['_native'].nativeElement.blur()
   }
 }

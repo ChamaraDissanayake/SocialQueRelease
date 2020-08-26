@@ -30592,7 +30592,6 @@ ion-input input::placeholder {
 }
 
 .submitbutton {
-  width: 327px;
   height: 56px;
   background: #FFFFFF;
   border-radius: 100px;
@@ -30608,7 +30607,8 @@ ion-input input::placeholder {
 
 ion-menu[side=left] > .menu-inner {
   margin-top: 58px;
-  height: 99px;
+  height: 94px;
+  background: #0E0AD7;
 }
 
 .custommenubutton {
@@ -30639,17 +30639,20 @@ ion-menu[side=left] > .menu-inner {
   font-size: x-large;
 }
 
+.list-md {
+  margin: unset;
+}
+
 page-about .button-md {
   background-color: unset;
 }
 
 page-home .redbutton {
   margin-top: 12.5px;
-  position: inherit;
   width: 59px;
   height: 59px;
-  left: 20px;
-  top: 449px;
+  left: 10px;
+  top: 34px;
   background: #DA1B1B;
   -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -30659,12 +30662,10 @@ page-home .redbutton {
 }
 
 page-home .purplebutton {
-  float: right;
-  position: inherit;
   width: 74px;
   height: 74px;
-  left: 254px;
-  top: 440px;
+  right: 10px;
+  top: 40px;
   background: #3F0DCE;
   -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -30707,7 +30708,6 @@ page-otp .buttonSection {
 
 page-otp .text-input-md {
   letter-spacing: 80px;
-  cursor: none;
 }
 
 page-otp .otplabels {
@@ -30760,6 +30760,11 @@ page-settings .select-md .select-icon {
   width: 12% !important;
 }
 
+page-settings .error-message {
+  margin-left: 8%;
+  color: red;
+}
+
 page-signup .signuplabels {
   font-style: normal;
   font-weight: normal;
@@ -30778,6 +30783,11 @@ page-signup .select-md .select-icon .select-icon-inner {
 
 page-signup .select-md .select-icon {
   width: 12% !important;
+}
+
+page-signup .error-message {
+  margin-left: 8%;
+  color: gold;
 }
 
 page-skipped .queText {

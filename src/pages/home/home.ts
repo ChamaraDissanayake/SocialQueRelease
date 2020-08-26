@@ -2,7 +2,6 @@ import { Component, NgZone } from '@angular/core';
 import { NavController, Platform, LoadingController } from 'ionic-angular';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { ExchangeDataProvider } from '../../providers/exchange-data/exchange-data';
-// import { Network } from '@ionic-native/network';
 
 declare var SMS: any;
 
@@ -23,7 +22,6 @@ export class HomePage {
   loading : any;
 
   constructor(
-    // private network: Network,
     public navCtrl: NavController,
     public platform: Platform,
     public androidPermissions: AndroidPermissions,
@@ -37,7 +35,6 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
-    // this.exchangeData.requestSMSPermission();
     this.checkPermission();
     this.resetClock();
     this.onSMSArrive(); //Uncomment this before launch in real device
@@ -52,7 +49,6 @@ export class HomePage {
   }
 
   startClock() {
-    // this.holdTime = false;
     clearInterval(this.timer);
     this.countPendingCustomers();
     if (this.exchangeData.customerList[0] != undefined && this.pendingCount>0) {

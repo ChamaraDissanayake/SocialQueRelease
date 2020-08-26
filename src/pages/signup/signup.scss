@@ -13,7 +13,8 @@ page-signup {
     .select-md .select-icon {
         width: 12% !important;
     }
-    // .inputtext{
-    //     min-width: -webkit-fill-available;
-    // }
+    .error-message {
+        margin-left: 8%;
+        color: gold;
+    }
 }

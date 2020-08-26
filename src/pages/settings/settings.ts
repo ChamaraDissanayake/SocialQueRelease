@@ -25,19 +25,42 @@ export class SettingsPage {
     public storage: Storage
   ) {
     this.baseURL = 'http://social.evokemusic.net/api/app/social-que/a-v1/putSellerDetail'
+    // this.editsignup = this.formBuilder.group({
+    //   category: ['Pharmacy'],
+    //   shopName: ['', Validators.required],
+    //   city: ['', Validators.required],
+    //   language: ['English'],
+    //   occupant: ['', Validators.required],
+    //   mobile: ['', [Validators.required, Validators.pattern('[0]{1}[7]{1}[0-9]{8}'), Validators.minLength(10)]]
+    // });
+  }
+
+  ionViewWillLoad() {
     this.editsignup = this.formBuilder.group({
-      category: ['Pharmacy'],
-      shopName: ['', Validators.required],
-      city: ['', Validators.required],
+      category:['Pharmacy'],
+      shopName:['', Validators.required],
+      city: ['', Validators.required],        
       language: ['English'],
-      occupant: ['', Validators.required],
-      mobile: ['', [Validators.required, Validators.pattern('[0]{1}[7]{1}[0-9]{8}'), Validators.minLength(10)]]
+      occupant: ['', [Validators.required, Validators.pattern('[0-9]{1,5}')]],
+      mobile:['', [Validators.required, Validators.pattern('[0]{1}[7]{1}[0-9]{8}'), Validators.minLength(10)]]
     });
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SettingsPage');
-  }
+  validation_messages = {
+    'shopName': [
+      { type: 'required', message: '*Shop name is required!' }
+    ],
+    'city': [
+      { type: 'required', message: '*Located city is required!' }
+    ],
+    'mobile': [
+      { type: 'required', message: '*Mobile number is required!' },
+      { type: 'pattern', message: '*Not a valid mobile number!' }
+    ],
+    'occupant': [
+      { type: 'required', message: '*Occupant capacity is required!' }
+    ],
+  };
 
   updateUserDetails() {
     this.exchangeData.maxCustomers = this.editsignup.value.occupant;

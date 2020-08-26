@@ -21,18 +21,34 @@ export class SignupPage {
     private formBuilder: FormBuilder
     ) {
       this.baseURL = 'http://social.evokemusic.net/api/app/social-que/a-v1/putSellerDetail'
-      this.signup = this.formBuilder.group({
-        category:['Pharmacy'],
-        shopName: ['', Validators.required],
-        city: ['', Validators.required],        
-        language: ['English'],
-        mobile:['', [Validators.required, Validators.pattern('[0]{1}[7]{1}[0-9]{8}'), Validators.minLength(10)]]
-      });
     }
 
   ionViewDidLoad() {
     this.exchangeData.requestSMSPermission();
   }
+
+  ionViewWillLoad() {
+    this.signup = this.formBuilder.group({
+      category:['Pharmacy'],
+      shopName:['', Validators.required],
+      city: ['', Validators.required],        
+      language: ['English'],
+      mobile:['', [Validators.required, Validators.pattern('[0]{1}[7]{1}[0-9]{8}'), Validators.minLength(10)]]
+    });
+  }
+
+  validation_messages = {
+    'shopName': [
+      { type: 'required', message: '*Shop name is required!' }
+    ],
+    'city': [
+      { type: 'required', message: '*Located city is required!' }
+    ],
+    'mobile': [
+      { type: 'required', message: '*Mobile number is required!' },
+      { type: 'pattern', message: '*Not a valid mobile number!' }
+    ]
+  };
 
   submitSellerDetails(){
     

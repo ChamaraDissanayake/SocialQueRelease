@@ -26,15 +26,29 @@
     <div style="margin-top: 30px;">
       <ion-label class="signuplabels">Shop Name</ion-label>
       <ion-item class="inputboxdecoration">
-        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" placeholder="Enter your shop name here" type="text" [(ngModel)]="editsignup.shopName" formControlName="shopName" value="{{this.exchangeData.userDetails.BusinessName}}"></ion-input>
-      </ion-item>      
+        <ion-input class="inputtext" placeholder="Enter your shop name here" type="text" [(ngModel)]="editsignup.shopName" formControlName="shopName" value="{{this.exchangeData.userDetails.BusinessName}}"></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validation_messages.shopName">
+          <div class="error-message" *ngIf="editsignup.get('shopName').hasError(validation.type) && (editsignup.get('shopName').dirty || editsignup.get('shopName').touched)">
+            {{ validation.message }}
+          </div>
+        </ng-container>
+      </div>  
     </div>
   
     <div style="margin-top: 30px;">
       <ion-label class="signuplabels">City</ion-label>
       <ion-item class="inputboxdecoration">
-        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" placeholder="Enter your nearest city" type="text" [(ngModel)]="editsignup.city" formControlName="city" value="{{this.exchangeData.userDetails.City}}"></ion-input>
+        <ion-input class="inputtext" placeholder="Enter your nearest city" type="text" [(ngModel)]="editsignup.city" formControlName="city" value="{{this.exchangeData.userDetails.City}}"></ion-input>
       </ion-item>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validation_messages.city">
+          <div class="error-message" *ngIf="editsignup.get('city').hasError(validation.type) && (editsignup.get('city').dirty || editsignup.get('city').touched)">
+            {{ validation.message }}
+          </div>
+        </ng-container>
+      </div> 
     </div>
   
     <div style="margin-top: 30px;">
@@ -54,19 +68,33 @@
     <div style="margin-top: 30px;">
       <ion-label class="signuplabels">Enter Your Mobile Number</ion-label>
       <ion-item class="inputboxdecoration">        
-        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" type="tel" maxlength="10" minlength="10" [(ngModel)]="editsignup.mobile" formControlName="mobile" value="{{this.exchangeData.userDetails.MSISDN}}"></ion-input>
+        <ion-input class="inputtext" type="tel" maxlength="10" minlength="10" [(ngModel)]="editsignup.mobile" formControlName="mobile" value="{{this.exchangeData.userDetails.MSISDN}}"></ion-input>
       </ion-item>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validation_messages.mobile">
+          <div class="error-message" *ngIf="editsignup.get('mobile').hasError(validation.type) && (editsignup.get('mobile').dirty || editsignup.get('mobile').touched)">
+            {{ validation.message }}
+          </div>
+        </ng-container>
+      </div>
     </div>
 
     <div style="margin-top: 30px;">
       <ion-label class="signuplabels">Occupant Count</ion-label>
       <ion-item class="inputboxdecoration">        
-        <ion-input class="inputtext" style="min-width: -webkit-fill-available;" type="tel" maxlength = "3" [(ngModel)]="editsignup.occupant" formControlName="occupant" value="{{this.exchangeData.userDetails.OccupantCount}}" onfocus="value=''"></ion-input>
+        <ion-input class="inputtext" type="tel" maxlength = "5" [(ngModel)]="editsignup.occupant" formControlName="occupant" value="{{this.exchangeData.userDetails.OccupantCount}}" onfocus="value=''"></ion-input>
       </ion-item>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validation_messages.occupant">
+          <div class="error-message" *ngIf="editsignup.get('occupant').hasError(validation.type) && (editsignup.get('occupant').dirty || editsignup.get('occupant').touched)">
+            {{ validation.message }}
+          </div>
+        </ng-container>
+      </div>  
     </div>
   
     <div style="margin-top: 50px; text-align: center;">
-      <button type="submit" [disabled]="!editsignup.valid" class="submitbutton" ion-button round outline >Update</button>
+      <button type="submit" [disabled]="!editsignup.valid" class="submitbutton" style="width: -webkit-fill-available;" ion-button round outline >Update</button>
     </div>
 
   </form>
