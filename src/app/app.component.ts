@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { Camera, CameraOptions } from '@ionic-native/camera';
+// import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Storage } from '@ionic/storage';
 
 import { SettingsPage } from '../pages/settings/settings'
@@ -24,7 +24,7 @@ export class SocialQue {
   pages: Array<{title: string, component: any}>;
 
   constructor(
-    private camera: Camera,
+    // private camera: Camera,
     public platform: Platform, 
     public statusBar: StatusBar, 
     public splashScreen: SplashScreen,
@@ -63,17 +63,17 @@ export class SocialQue {
     this.nav.setRoot(page.component);
   }
 
-  getImage() {
-    const options: CameraOptions = {
-      quality: 100,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
-    }
+  // getImage() {
+  //   const options: CameraOptions = {
+  //     quality: 100,
+  //     destinationType: this.camera.DestinationType.FILE_URI,
+  //     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
+  //   }
   
-    this.camera.getPicture(options).then((imageData) => {
-      this.imageURI = imageData;
-    }, (err) => {
-      console.log(err);
-    });
-  }
+  //   this.camera.getPicture(options).then((imageData) => {
+  //     this.imageURI = imageData;
+  //   }, (err) => {
+  //     console.log(err);
+  //   });
+  // }
 }
