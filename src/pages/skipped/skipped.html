@@ -4,8 +4,12 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <label *ngFor="let skip of exchangeData.customerList" (click)="getBack(skip)">
-    <p *ngIf="skip.status=='skipped'" class="queText">{{skip.id}}</p>
+<ion-content padding style="text-align: -webkit-center;">
+  <label class="numberset">
+    <span *ngFor="let skip of exchangeData.customerList">
+      <span ion-button class="btngetin" *ngIf="skip.status=='skipped'">
+        {{skip.id}}
+      </span>
+    </span>
   </label>
 </ion-content>

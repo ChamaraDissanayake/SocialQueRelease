@@ -16,6 +16,7 @@ export class ExchangeDataProvider {
   lastCustomerNumber: number;
   userDetails: any;
   maxCustomers: number;
+  shopName: string;
   
   
   constructor(
@@ -31,8 +32,7 @@ export class ExchangeDataProvider {
       this.absentList = [];
       this.insideCustomerCount = 0;
       this.lastCustomerNumber = 100000;
-      // alert('provider is running')
-      // this.setupDB();
+      this.shopName = "";
       this.onConnected();
       this.baseURL = 'http://social.evokemusic.net/api/app/social-que/a-v1/putCustomerDetail'
   }

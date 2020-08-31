@@ -6,61 +6,59 @@
 
 <ion-content padding>
 
-  <section style="font-weight: bold;">
-    <table style="min-width: -webkit-fill-available;">
-      <tr>
-        <td><label style="font-size:24px; vertical-align: text-bottom;">Current Occupents</label></td>
-        <td><label style="font-size: 36px; float: right; margin-right:50%;">{{exchangeData.insideCustomerCount}}</label></td>
+  <section style="font-weight:500; padding-top: 16px;">
+    <table style="width: -webkit-fill-available; text-align: center;">
+      <tr>        
+        <td><input class="roundlabel" readonly value="{{exchangeData.insideCustomerCount}}"></td>
+        <td><input class="roundlabel" readonly value="{{this.exchangeData.maxCustomers-exchangeData.insideCustomerCount}}"></td>
       </tr>
       <tr>
-        <td><label style="font-size:24px; vertical-align: text-bottom;">Available Occupents</label></td>
-        <td><label style="font-size: 36px; float: right; margin-right:50%;">{{this.exchangeData.maxCustomers-exchangeData.insideCustomerCount}}</label></td>
+        <td style=" padding-top: 3%;"><label style="font-size:16px;">Current Occupants</label></td>
+        <td style=" padding-top: 3%;"><label style="font-size:16px;">Available Occupants</label></td>
       </tr>
     </table>
   </section>
 
-
-    <table style="margin-top: 10%;">
+  <section>
+    <table style="margin-top: 5%; width: -webkit-fill-available; text-align: center;">
       <tr>
-        <td style="width: 45%;"></td>
         <td><label class="quelabel">Current Que Numbers</label></td>
       </tr>
       <tr>
-        <td style="padding-top:30px;">
-          <circle-progress
-            [percent]="setPresentage"
-            [animation]="false"           
-            [clockwise]="true"
-            [showTitle]="true"
-            [title]="percent"
-            (click)="holdClock()">
-          </circle-progress>
-        </td>
-
         <td>
-          <ion-scroll scrollY="true" style="height: 240px;">
+          <ion-scroll scrollY="true" style="height: 170px;">
             <label class="numberset">
               <span *ngFor="let cstmrDetails of exchangeData.customerList">
                 <span ion-button class="btngetin" *ngIf="cstmrDetails.status =='pending'" (click)="countGetIn(cstmrDetails)">
                   {{cstmrDetails.id}}
                 </span>
               </span>
+              <span *ngFor="let dmy of this.dummyOccupents">
+                <span #test ion-button class="btngetin"></span>
+              </span>              
             </label>
-          </ion-scroll>          
+          </ion-scroll>
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: -webkit-center;">
+          <div class = "clockouter">
+            <circle-progress
+              [percent]="setPresentage"
+              [title]="percent+' Sec'"
+              (click)="holdClock()">
+            </circle-progress>
+          </div>
         </td>
       </tr>
     </table>
-
-    <!-- <div style="margin-top: 30%;">
-      <button ion-button danger round class="redbutton" (click)="goOut()">Out</button>
-      <button ion-button danger round class="purplebutton" (click)="skipCustomer()">Next</button>
-    </div> -->
+  </section>
 
     <ion-fab left bottom>
-      <button ion-fab danger round class="redbutton" (click)="goOut()">Out</button>      
+      <button ion-fab class="custom-actionbutton" style="left: 20px;" (click)="goOut()">Out</button>      
     </ion-fab>
     <ion-fab right bottom>
-      <button ion-fab danger round class="purplebutton" (click)="skipCustomer()">Next</button>  
+      <button ion-fab class="custom-actionbutton" style="right: 20px;" (click)="skipCustomer()">Next</button>  
     </ion-fab>
     
 
@@ -70,6 +68,7 @@
       </label>
     </div>
 
-    <!-- <div style="margin-top: 100px;" ion-button (click)= "getNextTestNumber()"> Add Customers</div> -->
+    <div style="margin-top: 100px;" ion-button (click)= "getNextTestNumber()"> Add Customers</div>
     <!--<div ion-button (click)= "exchangeData.resetTable()"> Reset Table</div>-->
+    <!-- <div ion-button (click)= "test()">Test</div> -->
 </ion-content>

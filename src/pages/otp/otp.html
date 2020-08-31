@@ -6,7 +6,7 @@
 <ion-content padding class="mainbody">
   <form [formGroup]="otpFG" (ngSubmit)="verifyCode()">
 
-    <div style="margin-top: 50px;">
+    <div>
       <ion-label class="otplabels">Please Enter The Verification Code</ion-label>
       <ion-item class="inputboxdecoration">
         <ion-input #otpField class="inputtext changeside" type="tel" maxlength="4" minlength="4" placeholder="____" [(ngModel)]="otpFG.otp"
@@ -17,7 +17,7 @@
     </div>
 
     <div class="buttonSection">
-      <button type="submit" [disabled]="!otpFG.valid" class="submitbutton" style="width: -webkit-fill-available;" ion-button round outline>Verify</button>
+      <button type="submit" [disabled]="!otpFG.valid" class="submitbutton" ion-button round outline>Verify</button>
     </div>
 
   </form>

@@ -1,5 +1,5 @@
 .mainbody{
-    background-color: #5B69E9;
+    background-color: #5e6ae0;
     font-family: Roboto;
     color: #FFFFFF;
 }
@@ -27,9 +27,10 @@ ion-input{
 }
 
 .submitbutton{
+    width: 50%;
     height: 56px;
     background: #FFFFFF;
-    border-radius: 100px;
+    border-radius: 10px;
     font-size: 18px;
     line-height: 21px;
     letter-spacing: 0.02em;
@@ -41,15 +42,13 @@ ion-input{
     // color: #E9E9FD;;
 }
 
-ion-menu[side=left] > .menu-inner {
-    margin-top: 58px;
-    height: 94px;
-    background: #0E0AD7;
-}
+// ion-menu[side=left] > .menu-inner {
+    // background: #0E0AD7;
+// }
 
 .custommenubutton{
     color: #FFFFFF;
-    background-color: #0E0AD7;
+    background-color: rgb(35, 39, 83);
     font-size: 18px;
     line-height: 20px;
     font-weight: 500;
@@ -74,6 +73,30 @@ ion-menu[side=left] > .menu-inner {
     font-size: x-large;
 }
 
-.list-md {
-    margin: unset
+// .list-md {
+//     margin: 1px solid;
+// }
+
+.toolbar-md-navbar .toolbar-background-md {
+    background: rgb(9, 18, 132);
+}
+
+.btngetin{
+    border-radius: 15px;
+    width: 150px;
+    height: 30px;
+    font-size: larger;
+    background-color: #5e6ae0;
+    margin: 2px 20% 2px 20%;
+}
+
+.numberset{
+    padding-top: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 21px;
+}
+
+.list-md .item-block .item-inner {
+    border-bottom: unset;
 }

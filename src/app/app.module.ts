@@ -1,6 +1,20 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
+
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { SQLite } from '@ionic-native/sqlite';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { Network } from '@ionic-native/network';
+import { File } from '@ionic-native/file';
+import { Camera } from '@ionic-native/camera';
+// import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+
+import { IonicStorageModule } from '@ionic/storage';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 import { SocialQue } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -11,18 +25,10 @@ import { OtpPage } from '../pages/otp/otp';
 import { SettingsPage } from '../pages/settings/settings';
 import { TabsPage } from '../pages/tabs/tabs';
 import { AboutPage } from '../pages/about/about';
-
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { SQLite } from '@ionic-native/sqlite';
-import { IonicStorageModule } from '@ionic/storage';
-
-import { NgCircleProgressModule } from 'ng-circle-progress';
-import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { TermsPage } from '../pages/terms/terms';
 import { ExchangeDataProvider } from '../providers/exchange-data/exchange-data';
-import { HttpClientModule } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
-import { Network } from '@ionic-native/network';
+
+
 
 
 @NgModule({
@@ -35,7 +41,8 @@ import { Network } from '@ionic-native/network';
     WaitinglistPage,
     SkippedPage,
     TabsPage,
-    AboutPage
+    AboutPage,
+    TermsPage
   ],
   imports: [
     IonicStorageModule.forRoot(),
@@ -45,16 +52,20 @@ import { Network } from '@ionic-native/network';
     IonicModule.forRoot(SocialQue),
     NgCircleProgressModule.forRoot({
       // set defaults here
-      radius: 50,
-      outerStrokeWidth: 10,
-      // innerStrokeWidth: 0,
-      outerStrokeColor: "#0D1333",
+      radius: 55,
+      outerStrokeWidth: 2,
+      innerStrokeWidth: 3,
+      outerStrokeColor: "#5e6ae0",
       showInnerStroke: false,
-      // innerStrokeColor: "#FFFFFF",
+      backgroundColor: "rgb(244, 244, 244)",
       animationDuration: 0,
       showUnits: false,
       showSubtitle: false,
-      titleFontSize: "36"      
+      titleFontSize: "14px",
+      animation: false,           
+      clockwise: true,
+      showTitle: true,
+      titleColor: "black"
     }),
   ],
   bootstrap: [IonicApp],
@@ -67,7 +78,8 @@ import { Network } from '@ionic-native/network';
     WaitinglistPage,
     SkippedPage,
     TabsPage,
-    AboutPage
+    AboutPage,
+    TermsPage
   ],
   providers: [
     Network,
@@ -76,7 +88,12 @@ import { Network } from '@ionic-native/network';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ExchangeDataProvider,
-    SQLite
+    SQLite,
+    // FileTransfer,
+    // FileUploadOptions,
+    // FileTransferObject,
+    File,
+    Camera
   ],
   schemas:      [ CUSTOM_ELEMENTS_SCHEMA ]
 })

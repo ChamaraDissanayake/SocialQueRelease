@@ -20,7 +20,8 @@ export class HomePage {
   generateNumber: number;
   pendingCount : number;
   loading : any;
-
+  dummyOccupents: any[];
+  
   constructor(
     public navCtrl: NavController,
     public platform: Platform,
@@ -31,15 +32,16 @@ export class HomePage {
     ) {    
     this.percent = 45;
     this.belowNumber = 45;
-    this.holdTime = false;    
+    this.holdTime = false;     
   }
 
   ionViewDidLoad() {
     this.checkPermission();
     this.resetClock();
-    this.onSMSArrive(); //Uncomment this before launch in real device
+    // this.onSMSArrive(); //Uncomment this before launch in real device
     this.abandonCustomer();
     this.exchangeData.setupDB();
+    this.blankOccupent();
   }
 
   pageLoader(){
@@ -135,6 +137,7 @@ export class HomePage {
           this.getNextNumber(sms);
           console.log('New list is started')
         }
+        this.blankOccupent();
       } else{
         console.log('Not a valid sms')
       }
@@ -152,7 +155,7 @@ export class HomePage {
   }
 
   replyCustomer(sms){    
-    if(SMS) SMS.sendSMS(sms.address, 'Your number is ' + this.generateNumber, function(){}, function(){});
+    // if(SMS) SMS.sendSMS(sms.address, 'Your number is ' + this.generateNumber, function(){}, function(){});
     this.countPendingCustomers();
     if(this.pendingCount<this.exchangeData.maxCustomers){
       this.exchangeData.customerList.push({id:this.generateNumber, pNumber:sms.address, status:"pending", createdTime: Date.now()});
@@ -162,6 +165,7 @@ export class HomePage {
       this.exchangeData.insertData(this.generateNumber, sms.address, "waiting");
     }
     this.refresh();
+    this.blankOccupent();
   }
 
   countGetIn(customer){
@@ -200,6 +204,7 @@ export class HomePage {
     }
     this.resetClock();
     this.holdTime = true;
+    this.blankOccupent();
   }
 
   goOut(){
@@ -234,7 +239,7 @@ export class HomePage {
           this.exchangeData.customerList[index].updatedTime = Date.now();
           this.exchangeData.updateStatus(this.exchangeData.customerList[index].id, "skipped");
           console.log('Inform to ',this.exchangeData.customerList[index].pNumber)
-          if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Your have been skipped because of absent in time. Please resend previous sms before 20 minutes to re-enter with old number', function(){}, function(){});
+          // if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Your have been skipped because of absent in time. Please resend previous sms before 20 minutes to re-enter with old number', function(){}, function(){});
           found = true;
         }
         if(element.status == 'pending'){
@@ -252,6 +257,7 @@ export class HomePage {
       this.loading.dismiss();
     }
     this.holdTime = true;
+    this.blankOccupent();
   }
 
   getFromWaiting(){
@@ -263,6 +269,7 @@ export class HomePage {
         found = true;
       }
     });
+    this.blankOccupent();
   }
 
   checkPermission() {
@@ -325,6 +332,7 @@ export class HomePage {
       this.exchangeData.customerList.push({id:this.generateNumber, pNumber:+94714142387, status:"waiting", createdTime: Date.now()});          
       this.exchangeData.insertData(this.generateNumber, +94714142387, "waiting");
     }
+    this.blankOccupent();
   }
 
   countPendingCustomers(){
@@ -342,19 +350,29 @@ export class HomePage {
         this.exchangeData.customerList.forEach(element => {
           if(element.status == 'skipped'){
             let timeElapsed = Date.now()-element.updatedTime;
-            if(timeElapsed>=1200000){
-            // if(timeElapsed>=20000){
+            console.log(timeElapsed/1000, "timeElapsed")          
+            if(timeElapsed >= 1200000){
+              console.log("Done! timeElapsed ",timeElapsed/1000)
               console.log('íf is working')
               let index = this.exchangeData.customerList.indexOf(element)
               this.exchangeData.customerList[index].status = 'absent';
               this.exchangeData.updateStatus(this.exchangeData.customerList[index].id, "absent");
               this.exchangeData.absentList.push(this.exchangeData.customerList[index]);
-              if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Your have been abandoned because of absent', function(){}, function(){});
+              // if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Your have been abandoned because of absent', function(){}, function(){});
               this.exchangeData.customerList.splice(index,1)         
             }    
           }          
         });
       }, 5000);
     })
+  }
+
+  blankOccupent(){
+    this.dummyOccupents = [];
+    this.countPendingCustomers();
+
+    for(let i=1; i<=this.exchangeData.maxCustomers-this.pendingCount; i++){      
+      this.dummyOccupents.push(i)
+    }
   }
 }

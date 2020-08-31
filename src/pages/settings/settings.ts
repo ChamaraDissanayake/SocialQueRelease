@@ -64,6 +64,7 @@ export class SettingsPage {
 
   updateUserDetails() {
     this.exchangeData.maxCustomers = this.editsignup.value.occupant;
+    this.exchangeData.shopName = this.editsignup.value.shopName;
 
     if (this.editsignup.value.category) {
       console.log(this.editsignup.value.category, '22222')

@@ -4,9 +4,12 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <label *ngFor="let waiting of exchangeData.customerList">
-    <p *ngIf="waiting.status=='waiting'" class="queText">{{waiting.id}}</p>
+<ion-content padding style="text-align: -webkit-center;">
+  <label class="numberset">
+    <span *ngFor="let waiting of exchangeData.customerList">
+      <span ion-button class="btngetin" *ngIf="waiting.status=='waiting'">
+        {{waiting.id}}
+      </span>
+    </span>
   </label>
-
 </ion-content>
