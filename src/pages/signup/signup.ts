@@ -51,7 +51,8 @@ export class SignupPage {
   };
 
   submitSellerDetails(){
-    
+    let arrangedMobile = this.signup.value.mobile.substring(1, 11);
+
     if(this.signup.value.category){
       console.log(this.signup.value.category,'22222')
     } else {
@@ -63,18 +64,19 @@ export class SignupPage {
       this.signup.value.language = "English";
     }
     let headers   : any   = new HttpHeaders({ 'Content-Type': 'application/json' }),
-        options   : any   = {"MSISDN" : this.signup.value.mobile, "Categories" : this.signup.value.category, "Language": this.signup.value.language, "BusinessName" : this.signup.value.shopName, 
+        options   : any   = {"MSISDN" : arrangedMobile, "Categories" : this.signup.value.category, "Language": this.signup.value.language, "BusinessName" : this.signup.value.shopName, 
           "City" : this.signup.value.city, "Type":"Free", "GPS":"6.8923865,79.8717421", "OccupantCount":5, "CreatedDate": Date.now()},
         url       : any       = this.baseURL;
+
       this.http.post(url, JSON.stringify(options), headers)
       .subscribe((data : any) => {
         console.log(`Congratulations data was successfully added`, data);
-        this.exchangeData.userDetails = {"ID" : data.data.id ,"MSISDN" : data.data.MSISDN, "Categories" : data.data.Categories, "Language": data.data.Language, "BusinessName" : data.data.BusinessName, "City" : data.data.City, "OccupantCount":data.data.OccupantCount};
+        this.exchangeData.userDetails = {"ID" : data.data.id ,"MSISDN" : '0' + data.data.MSISDN, "Categories" : data.data.Categories, "Language": data.data.Language, "BusinessName" : data.data.BusinessName, "City" : data.data.City, "OccupantCount":data.data.OccupantCount};
       },
       (error : any) => {
         console.log('Something went wrong!',error);
       });
-      this.submitLoginDetails();
+    this.submitLoginDetails();
   }
 
   submitLoginDetails(){

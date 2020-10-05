@@ -63,6 +63,7 @@ export class SettingsPage {
   };
 
   updateUserDetails() {
+    let arrangedMobile = this.editsignup.value.mobile.substring(1, 11);
     this.exchangeData.maxCustomers = this.editsignup.value.occupant;
     this.exchangeData.shopName = this.editsignup.value.shopName;
 
@@ -77,22 +78,23 @@ export class SettingsPage {
       this.editsignup.value.language = "English";
     }
 
-    if (this.editsignup.value.mobile) {
+    // if (this.editsignup.value.mobile) {
       let headers: any = new HttpHeaders({ 'Content-Type': 'application/json' }),
         options: any = {
-          "ID": this.exchangeData.userDetails.ID, "MSISDN": this.editsignup.value.mobile, "Categories": this.editsignup.value.category, "Language": this.editsignup.value.language, "BusinessName": this.editsignup.value.shopName,
+          "ID": this.exchangeData.userDetails.ID, "MSISDN": arrangedMobile, "Categories": this.editsignup.value.category, "Language": this.editsignup.value.language, "BusinessName": this.editsignup.value.shopName,
           "City": this.editsignup.value.city, "Type": "Free", "GPS": "6.8923865,79.8717421", "OccupantCount": this.editsignup.value.occupant, "CreatedDate": Date.now()
         },
         url: any = this.baseURL;
+
       this.http.post(url, JSON.stringify(options), headers)
       .subscribe((data: any) => {
         console.log(`Congratulations data was successfully added`, data);
         if(this.exchangeData.userDetails.MSISDN == this.editsignup.value.mobile){
-          this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount };
+          this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": '0' + data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount };
           this.storage.set('currentUser', this.exchangeData.userDetails);
           this.goHome();
         } else {
-          this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount };
+          this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": '0' + data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount };
           this.storage.set('currentUser', null);
           this.navCtrl.push(OtpPage);
         }
@@ -100,7 +102,7 @@ export class SettingsPage {
       (error: any) => {
         console.log('Something went wrong!', error);
       });      
-    }
+    // }
   }
   goHome() {
     this.navCtrl.setRoot(TabsPage);

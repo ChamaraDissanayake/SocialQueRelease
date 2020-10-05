@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-// import { Camera, CameraOptions } from '@ionic-native/camera';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Storage } from '@ionic/storage';
 
 import { SettingsPage } from '../pages/settings/settings'
@@ -19,19 +19,23 @@ export class SocialQue {
   @ViewChild(Nav) nav: Nav;
   rootPage: any;
   imageURI:any;
-  imageFileName:any;
+  // imageFileName:any;
+  date: any;
 
   pages: Array<{title: string, component: any}>;
 
   constructor(
-    // private camera: Camera,
-    public platform: Platform, 
+    private camera: Camera,
+    public platform: Platform,
     public statusBar: StatusBar, 
     public splashScreen: SplashScreen,
     private exchangeData: ExchangeDataProvider,
     public storage:Storage
     ) {
+    this.date = new Date().getDate();
     this.initializeApp();
+    this.checkDate();
+
     this.pages = [
       { title: 'Settings', component: SettingsPage },
       { title: 'About', component: AboutPage },
@@ -47,8 +51,16 @@ export class SocialQue {
         this.rootPage = TabsPage;
       } else {
         this.exchangeData.maxCustomers = 5;
-        this.rootPage = SignupPage;
+        this.rootPage = SignupPage;        
       }
+    });
+
+    this.storage.get('currentUserImage').then((val) => {
+      if(val == null){
+        this.imageURI = "assets/imgs/Test.jpg";
+      } else {
+        this.imageURI = val;
+      }      
     });
   }
 
@@ -63,17 +75,39 @@ export class SocialQue {
     this.nav.setRoot(page.component);
   }
 
-  // getImage() {
-  //   const options: CameraOptions = {
-  //     quality: 100,
-  //     destinationType: this.camera.DestinationType.FILE_URI,
-  //     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
-  //   }
-  
-  //   this.camera.getPicture(options).then((imageData) => {
-  //     this.imageURI = imageData;
-  //   }, (err) => {
-  //     console.log(err);
-  //   });
-  // }
+  getImage() {
+    const options: CameraOptions = {
+      quality: 70,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+      saveToPhotoAlbum: true,
+      allowEdit: true,
+      targetWidth: 200,
+      targetHeight: 200
+    }
+
+    this.camera.getPicture(options).then((imageData) => {
+      this.imageURI = "data:image/jpeg;base64," + imageData;
+      this.storage.set('currentUserImage', this.imageURI)
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
+  checkDate(){
+    this.storage.get('currentDate').then((val) => {
+      if(val == null){
+        console.log('Add new date')
+        this.storage.set('currentDate', this.date);
+      }
+      else if(this.date != val){
+        console.log('Updated to new date')
+        this.exchangeData.resetTable();
+        this.storage.set('currentDate', this.date);
+      }      
+      else {
+        console.log("Same date", this.date, val);
+      }      
+    });
+  }
 }

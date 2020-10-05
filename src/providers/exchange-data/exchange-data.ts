@@ -192,29 +192,6 @@ export class ExchangeDataProvider {
 
   requestSMSPermission(){
     this.platform.ready().then(() => {
-      // this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_SMS).
-      // then(success => {
-      //   console.log('Successfully granted send sms permission')
-      // },
-      // err => {
-      //   console.log('No permission to send sms permission')
-      // });
-      
-      // this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.RECEIVE_SMS).
-      // then(success => {
-      //   console.log('Successfully granted send sms permission')
-      // },
-      // err => {
-      //   console.log('No permission to send sms permission')
-      // });
-
-      // this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.SEND_SMS).
-      // then(success => {
-      //   console.log('Successfully granted send sms permission')
-      // },
-      // err => {
-      //   console.log('No permission to send sms permission')
-      // }); 
       this.androidPermissions.requestPermissions([this.androidPermissions.PERMISSION.READ_SMS,this.androidPermissions.PERMISSION.RECEIVE_SMS,this.androidPermissions.PERMISSION.SEND_SMS]).
       then(success => {
         console.log('Successfully granted sms permissions',success)

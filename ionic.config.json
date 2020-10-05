@@ -1,7 +1,6 @@
 {
   "name": "SocialQue",
   "integrations": {
-    "capacitor": {},
     "cordova": {}
   },
   "type": "ionic-angular"

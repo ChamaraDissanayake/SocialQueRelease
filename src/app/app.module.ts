@@ -8,8 +8,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { SQLite } from '@ionic-native/sqlite';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Network } from '@ionic-native/network';
-// import { File } from '@ionic-native/file';
-// import { Camera } from '@ionic-native/camera';
+import { File } from '@ionic-native/file';
+import { Camera } from '@ionic-native/camera';
+import { AppMinimize } from '@ionic-native/app-minimize';
 // import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 
 import { IonicStorageModule } from '@ionic/storage';
@@ -85,6 +86,7 @@ import { ExchangeDataProvider } from '../providers/exchange-data/exchange-data';
     Network,
     AndroidPermissions,
     StatusBar,
+    AppMinimize,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ExchangeDataProvider,
@@ -92,8 +94,8 @@ import { ExchangeDataProvider } from '../providers/exchange-data/exchange-data';
     // FileTransfer,
     // FileUploadOptions,
     // FileTransferObject,
-    // File,
-    // Camera
+    File,
+    Camera
   ],
   schemas:      [ CUSTOM_ELEMENTS_SCHEMA ]
 })

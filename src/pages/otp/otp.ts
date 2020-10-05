@@ -1,11 +1,13 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, Platform } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 
 import { TabsPage } from '../tabs/tabs';
 import { ExchangeDataProvider } from '../../providers/exchange-data/exchange-data';
+
+declare var SMS: any;
 
 @Component({
   selector: 'page-otp',
@@ -18,7 +20,8 @@ export class OtpPage {
 
   constructor(
     private exchangeData: ExchangeDataProvider,
-    public navCtrl: NavController, 
+    public navCtrl: NavController,
+    public platform: Platform,
     public navParams: NavParams,
     public http: HttpClient,
     private formBuilder: FormBuilder,
@@ -30,14 +33,13 @@ export class OtpPage {
   }
 
   ionViewDidLoad() {
-
+    this.onSMSArrive();
   }
 
   verifyCode(){
     this.http.get('http://social.evokemusic.net/api/app/social-que/a-v1/otpValidate?ID='+this.exchangeData.userDetails.ID+'&OTP='+this.otpFG.value.otp)
     .subscribe((data : any) => 
     {
-      // this.exchangeData.userDetails = {"ID" : data.data.id ,"MSISDN" : data.data.MSISDN, "Categories" : data.data.Categories, "Language": data.data.Language, "BusinessName" : data.data.BusinessName, "City" : data.data.City, "OccupantCount":data.data.OccupantCount};
       if (data.status == 'verification-succeed') {
         this.navCtrl.setRoot(TabsPage);
         this.storage.set('currentUser', this.exchangeData.userDetails)
@@ -62,5 +64,32 @@ export class OtpPage {
 
   losefocus() {
     this.otpField['_native'].nativeElement.blur()
+  }
+
+  onSMSArrive(){
+    this.platform.ready().then(() => {
+      if(SMS) SMS.startWatch(function(){
+            console.log('watching started');
+           }, function(){
+          console.log('failed to start watching');
+      });
+      document.addEventListener('onSMSArrive', function(e){
+        console.log('sms arrived')
+        this.checkSMS(e.data);
+        }.bind(this)
+      );
+    })
+  }
+
+  checkSMS(sms){
+    console.log(sms.body,'33333')
+    this.platform.ready().then(() => {
+      let isTrue = sms.body.includes("Your confirmation code is ");
+      if(isTrue){
+        console.log("working")
+        this.otpFG.value.otp = sms.body.substring(26,31);
+        this.verifyCode();
+      }      
+    })
   }
 }
