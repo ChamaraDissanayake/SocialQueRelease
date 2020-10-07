@@ -64,6 +64,11 @@ export class SettingsPage {
 
   updateUserDetails() {
     let arrangedMobile = this.editsignup.value.mobile.substring(1, 11);
+
+    if(this.exchangeData.maxCustomers != this.editsignup.value.occupant){
+      this.exchangeData.occupentCountChanged=true;
+    }
+    
     this.exchangeData.maxCustomers = this.editsignup.value.occupant;
     this.exchangeData.shopName = this.editsignup.value.shopName;
 

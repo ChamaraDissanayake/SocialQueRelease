@@ -9,14 +9,15 @@ import { Network } from '@ionic-native/network';
 @Injectable()
 export class ExchangeDataProvider {
   baseURL: any;
-  customerList: any [];
+  customerList: any[];
   completedList: any[];
-  absentList: any [];
+  absentList: any[];
   insideCustomerCount: number;
   lastCustomerNumber: number;
   userDetails: any;
   maxCustomers: number;
   shopName: string;
+  occupentCountChanged: boolean;
   
   
   constructor(
@@ -27,6 +28,7 @@ export class ExchangeDataProvider {
     public platform: Platform,
     // public storage:Storage
     ) {
+      this.occupentCountChanged = false;
       this.customerList = [];
       this.completedList = [];
       this.absentList = [];
