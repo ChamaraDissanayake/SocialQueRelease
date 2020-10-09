@@ -16,6 +16,7 @@ export class ExchangeDataProvider {
   lastCustomerNumber: number;
   userDetails: any;
   maxCustomers: number;
+  queLength: number;
   shopName: string;
   occupentCountChanged: boolean;
   
@@ -97,7 +98,6 @@ export class ExchangeDataProvider {
               for(let i=0; i <result.rows.length; i++) {                
                 if(result.rows.item(i).Status == 'inside'){
                   this.insideCustomerCount++
-                  console.log(this.insideCustomerCount,'22222',this.maxCustomers)
                 }
                 this.lastCustomerNumber = result.rows.item(i).QueNo;
                 this.customerList.push({id: result.rows.item(i).QueNo, pNumber: result.rows.item(i).MSISDN, status: result.rows.item(i).Status, updatedTime: result.rows.item(i).UpdatedTime})

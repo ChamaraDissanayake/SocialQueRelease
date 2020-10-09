@@ -47,10 +47,12 @@ export class SocialQue {
       this.exchangeData.userDetails = val;
       if(this.exchangeData.userDetails != null){
         this.exchangeData.maxCustomers = this.exchangeData.userDetails.OccupantCount;
+        this.exchangeData.queLength = this.exchangeData.userDetails.QueueLength;
         this.exchangeData.shopName = this.exchangeData.userDetails.BusinessName;
         this.rootPage = TabsPage;
       } else {
         this.exchangeData.maxCustomers = 5;
+        this.exchangeData.queLength = 5;
         this.rootPage = SignupPage;        
       }
     });

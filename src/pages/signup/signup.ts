@@ -54,12 +54,10 @@ export class SignupPage {
     let arrangedMobile = this.signup.value.mobile.substring(1, 11);
 
     if(this.signup.value.category){
-      console.log(this.signup.value.category,'22222')
     } else {
       this.signup.value.category = "Pharmacy";
     }
     if(this.signup.value.language){
-      console.log(this.signup.value.language,'33333')
     } else {
       this.signup.value.language = "English";
     }
@@ -71,7 +69,8 @@ export class SignupPage {
       this.http.post(url, JSON.stringify(options), headers)
       .subscribe((data : any) => {
         console.log(`Congratulations data was successfully added`, data);
-        this.exchangeData.userDetails = {"ID" : data.data.id ,"MSISDN" : '0' + data.data.MSISDN, "Categories" : data.data.Categories, "Language": data.data.Language, "BusinessName" : data.data.BusinessName, "City" : data.data.City, "OccupantCount":data.data.OccupantCount};
+        this.exchangeData.userDetails = {"ID" : data.data.id ,"MSISDN" : '0' + data.data.MSISDN, "Categories" : data.data.Categories, "Language": data.data.Language, "BusinessName" : data.data.BusinessName, "City" : data.data.City, "OccupantCount":data.data.OccupantCount, "QueueLength":5};
+        console.log(this.exchangeData.userDetails)
       },
       (error : any) => {
         console.log('Something went wrong!',error);

@@ -92,6 +92,20 @@
         </ng-container>
       </div>  
     </div>
+
+    <div style="margin-top: 30px;">
+      <ion-label class="signuplabels">Queue Length</ion-label>
+      <ion-item class="inputboxdecoration">        
+        <ion-input class="inputtext" type="tel" maxlength = "5" [(ngModel)]="editsignup.que" formControlName="que" value="{{this.exchangeData.userDetails.QueueLength}}" onfocus="value=''"></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validation_messages.que">
+          <div class="error-message" *ngIf="editsignup.get('que').hasError(validation.type) && (editsignup.get('que').dirty || editsignup.get('que').touched)">
+            {{ validation.message }}
+          </div>
+        </ng-container>
+      </div>  
+    </div>
   
     <div style="margin-top: 50px; text-align: center;">
       <button type="submit" [disabled]="!editsignup.valid" class="submitbutton" ion-button round outline >Update</button>

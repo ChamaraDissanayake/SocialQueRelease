@@ -19,8 +19,20 @@
     </table>
   </section>
 
+  <!-- <section>
+    <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+    <ion-list>
+      <ion-item *ngFor="let item of items">
+        {{ item }}
+      </ion-item>
+    </ion-list>
+  </section>   -->
+
   <section>
     <table style="margin-top: 5%; width: -webkit-fill-available; text-align: center;">
+      <!-- <tr>
+        <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+      </tr> -->
       <tr>
         <td><label class="quelabel">Current Que Numbers</label></td>
       </tr>
@@ -68,7 +80,7 @@
       </label>
     </div>
 
-    <div style="margin-top: 100px;" ion-button (click)= "getNextTestNumber()"> Add Customers</div>
+    <!-- <div style="margin-top: 100px;" ion-button (click)= "getNextTestNumber()"> Add Customers</div> -->
     <!--<div ion-button (click)= "exchangeData.resetTable()"> Reset Table</div>-->
     <!-- <div ion-button (click)= "test()">test</div> -->
 </ion-content>

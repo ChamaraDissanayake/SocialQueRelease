@@ -206,6 +206,9 @@ var SettingsPage = /** @class */ (function () {
             'occupant': [
                 { type: 'required', message: '*Occupant capacity is required!' }
             ],
+            'que': [
+                { type: 'required', message: '*Queue length is required!' }
+            ]
         };
         this.baseURL = 'http://social.evokemusic.net/api/app/social-que/a-v1/putSellerDetail';
         // this.editsignup = this.formBuilder.group({
@@ -224,13 +227,14 @@ var SettingsPage = /** @class */ (function () {
             city: ['', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required],
             language: ['English'],
             occupant: ['', [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].pattern('[0-9]{1,5}')]],
+            que: ['', [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].pattern('[0-9]{1,5}')]],
             mobile: ['', [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].pattern('[0]{1}[7]{1}[0-9]{8}'), __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].minLength(10)]]
         });
     };
     SettingsPage.prototype.updateUserDetails = function () {
         var _this = this;
         var arrangedMobile = this.editsignup.value.mobile.substring(1, 11);
-        if (this.exchangeData.maxCustomers != this.editsignup.value.occupant) {
+        if (this.exchangeData.maxCustomers != this.editsignup.value.occupant || this.exchangeData.queLength != this.editsignup.value.que) {
             this.exchangeData.occupentCountChanged = true;
         }
         this.exchangeData.maxCustomers = this.editsignup.value.occupant;
@@ -256,13 +260,15 @@ var SettingsPage = /** @class */ (function () {
             .subscribe(function (data) {
             console.log("Congratulations data was successfully added", data);
             if (_this.exchangeData.userDetails.MSISDN == _this.editsignup.value.mobile) {
-                _this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": '0' + data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount };
+                _this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": '0' + data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount, "QueueLength": parseInt(_this.editsignup.value.que) };
                 _this.storage.set('currentUser', _this.exchangeData.userDetails);
+                _this.exchangeData.queLength = parseInt(_this.editsignup.value.que);
                 _this.goHome();
             }
             else {
-                _this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": '0' + data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount };
+                _this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": '0' + data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount, "QueueLength": parseInt(_this.editsignup.value.que) };
                 _this.storage.set('currentUser', null);
+                _this.exchangeData.queLength = parseInt(_this.editsignup.value.que);
                 _this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_7__otp_otp__["a" /* OtpPage */]);
             }
         }, function (error) {
@@ -275,7 +281,7 @@ var SettingsPage = /** @class */ (function () {
     };
     SettingsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-settings',template:/*ion-inline-start:"/Users/chamara/Desktop/project/SocialQue/src/pages/settings/settings.html"*/'<ion-header color="navbar">\n  <ion-navbar color="navbar">\n    <button ion-button (click)=goHome()>\n      <ion-icon name="arrow-back" style="font-size: x-large;"></ion-icon>\n    </button>\n    <label class="backBtnLable">Settings</label>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="subbody">\n  <form [formGroup]="editsignup" (ngSubmit)="updateUserDetails()">\n    <div style="margin-top: 50px;">\n      <ion-list>\n        <ion-label class="signuplabels">Select your Business Category</ion-label>\n        <ion-item class="inputboxdecoration">\n          <ion-label class="signuplabels" style="color: #6A77ED">Category</ion-label>\n          <ion-select class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="editsignup.category" formControlName="category" value="{{this.exchangeData.userDetails.Categories}}">\n            <ion-option value="Pharmacy">Pharmacy</ion-option>\n            <ion-option value="Stores">Stores</ion-option>\n            <ion-option value="Shop">Shop</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Shop Name</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" placeholder="Enter your shop name here" type="text" [(ngModel)]="editsignup.shopName" formControlName="shopName" value="{{this.exchangeData.userDetails.BusinessName}}"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.shopName">\n          <div class="error-message" *ngIf="editsignup.get(\'shopName\').hasError(validation.type) && (editsignup.get(\'shopName\').dirty || editsignup.get(\'shopName\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">City</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" placeholder="Enter your nearest city" type="text" [(ngModel)]="editsignup.city" formControlName="city" value="{{this.exchangeData.userDetails.City}}"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.city">\n          <div class="error-message" *ngIf="editsignup.get(\'city\').hasError(validation.type) && (editsignup.get(\'city\').dirty || editsignup.get(\'city\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div> \n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-list>\n        <ion-label class="signuplabels">Language</ion-label>\n        <ion-item class="inputboxdecoration">   \n          <ion-label class="signuplabels" style="color: #6A77ED">Language</ion-label>     \n          <ion-select class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="editsignup.language" formControlName="language" value="{{this.exchangeData.userDetails.Language}}">\n            <ion-option value="English">English</ion-option>\n            <ion-option value="Sinhala">Sinhala</ion-option>\n            <ion-option value="Tamil">Tamil</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Enter Your Mobile Number</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" type="tel" maxlength="10" minlength="10" [(ngModel)]="editsignup.mobile" formControlName="mobile" value="{{this.exchangeData.userDetails.MSISDN}}"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.mobile">\n          <div class="error-message" *ngIf="editsignup.get(\'mobile\').hasError(validation.type) && (editsignup.get(\'mobile\').dirty || editsignup.get(\'mobile\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>\n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Occupant Count</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" type="tel" maxlength = "5" [(ngModel)]="editsignup.occupant" formControlName="occupant" value="{{this.exchangeData.userDetails.OccupantCount}}" onfocus="value=\'\'"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.occupant">\n          <div class="error-message" *ngIf="editsignup.get(\'occupant\').hasError(validation.type) && (editsignup.get(\'occupant\').dirty || editsignup.get(\'occupant\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n  \n    <div style="margin-top: 50px; text-align: center;">\n      <button type="submit" [disabled]="!editsignup.valid" class="submitbutton" ion-button round outline >Update</button>\n    </div>\n\n  </form>\n</ion-content>'/*ion-inline-end:"/Users/chamara/Desktop/project/SocialQue/src/pages/settings/settings.html"*/,
+            selector: 'page-settings',template:/*ion-inline-start:"/Users/chamara/Desktop/project/SocialQue/src/pages/settings/settings.html"*/'<ion-header color="navbar">\n  <ion-navbar color="navbar">\n    <button ion-button (click)=goHome()>\n      <ion-icon name="arrow-back" style="font-size: x-large;"></ion-icon>\n    </button>\n    <label class="backBtnLable">Settings</label>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="subbody">\n  <form [formGroup]="editsignup" (ngSubmit)="updateUserDetails()">\n    <div style="margin-top: 50px;">\n      <ion-list>\n        <ion-label class="signuplabels">Select your Business Category</ion-label>\n        <ion-item class="inputboxdecoration">\n          <ion-label class="signuplabels" style="color: #6A77ED">Category</ion-label>\n          <ion-select class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="editsignup.category" formControlName="category" value="{{this.exchangeData.userDetails.Categories}}">\n            <ion-option value="Pharmacy">Pharmacy</ion-option>\n            <ion-option value="Stores">Stores</ion-option>\n            <ion-option value="Shop">Shop</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Shop Name</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" placeholder="Enter your shop name here" type="text" [(ngModel)]="editsignup.shopName" formControlName="shopName" value="{{this.exchangeData.userDetails.BusinessName}}"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.shopName">\n          <div class="error-message" *ngIf="editsignup.get(\'shopName\').hasError(validation.type) && (editsignup.get(\'shopName\').dirty || editsignup.get(\'shopName\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">City</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" placeholder="Enter your nearest city" type="text" [(ngModel)]="editsignup.city" formControlName="city" value="{{this.exchangeData.userDetails.City}}"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.city">\n          <div class="error-message" *ngIf="editsignup.get(\'city\').hasError(validation.type) && (editsignup.get(\'city\').dirty || editsignup.get(\'city\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div> \n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-list>\n        <ion-label class="signuplabels">Language</ion-label>\n        <ion-item class="inputboxdecoration">   \n          <ion-label class="signuplabels" style="color: #6A77ED">Language</ion-label>     \n          <ion-select class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="editsignup.language" formControlName="language" value="{{this.exchangeData.userDetails.Language}}">\n            <ion-option value="English">English</ion-option>\n            <ion-option value="Sinhala">Sinhala</ion-option>\n            <ion-option value="Tamil">Tamil</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Enter Your Mobile Number</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" type="tel" maxlength="10" minlength="10" [(ngModel)]="editsignup.mobile" formControlName="mobile" value="{{this.exchangeData.userDetails.MSISDN}}"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.mobile">\n          <div class="error-message" *ngIf="editsignup.get(\'mobile\').hasError(validation.type) && (editsignup.get(\'mobile\').dirty || editsignup.get(\'mobile\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>\n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Occupant Count</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" type="tel" maxlength = "5" [(ngModel)]="editsignup.occupant" formControlName="occupant" value="{{this.exchangeData.userDetails.OccupantCount}}" onfocus="value=\'\'"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.occupant">\n          <div class="error-message" *ngIf="editsignup.get(\'occupant\').hasError(validation.type) && (editsignup.get(\'occupant\').dirty || editsignup.get(\'occupant\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Queue Length</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" type="tel" maxlength = "5" [(ngModel)]="editsignup.que" formControlName="que" value="{{this.exchangeData.userDetails.QueueLength}}" onfocus="value=\'\'"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.que">\n          <div class="error-message" *ngIf="editsignup.get(\'que\').hasError(validation.type) && (editsignup.get(\'que\').dirty || editsignup.get(\'que\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n  \n    <div style="margin-top: 50px; text-align: center;">\n      <button type="submit" [disabled]="!editsignup.valid" class="submitbutton" ion-button round outline >Update</button>\n    </div>\n\n  </form>\n</ion-content>'/*ion-inline-end:"/Users/chamara/Desktop/project/SocialQue/src/pages/settings/settings.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
@@ -324,10 +330,13 @@ var HomePage = /** @class */ (function () {
         this.zone = zone;
         this.exchangeData = exchangeData;
         this.loadingCtrl = loadingCtrl;
+        this.searchQuery = '';
         this.nextPendingId = 100000;
+        this.nextPendingPnumber = null;
         this.percent = 45;
         this.belowNumber = 45;
         this.holdTime = false;
+        // this.initializeItems(); 
     }
     HomePage.prototype.ionViewDidLoad = function () {
         var _this = this;
@@ -347,6 +356,42 @@ var HomePage = /** @class */ (function () {
             _this.appMinimize.minimize();
         });
     };
+    // initializeItems() {
+    //   console.log('test')
+    //   // this.items = [
+    //   //   'Amsterdam',
+    //   //   'Bogota',
+    //   //   'Warakapola',
+    //   //   'Nittambuwa',
+    //   //   'Colombo'
+    //   // ];
+    //   this.exchangeData.customerList.forEach(element => {
+    //     // console.log(element)
+    //     if(element.id == 'pending'){
+    //       this.items.push(element.id);
+    //       console.log(this.items);
+    //     }
+    //   });
+    // }
+    // getItems(ev: any) {
+    //   // Reset items back to all of the items
+    //   this.initializeItems();
+    //   // set val to the value of the searchbar
+    //   const val = ev.target.value;
+    //   // console.log(ev.target.value)
+    //   // if the value is an empty string don't filter the items
+    //   if (val && val.trim() != '') {
+    //     console.log(this.items)
+    //     // this.items = this.items.filter((item) => {
+    //     //   // return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
+    //     //   console.log(item)
+    //     // })
+    //     // this.exchangeData.customerList = this.exchangeData.customerList.filter((item) => {
+    //     //   return (item.id.indexOf(val) > -1)
+    //     //   // console.log(item.id)
+    //     // })
+    //   }
+    // }
     HomePage.prototype.pageLoader = function () {
         this.loading = this.loadingCtrl.create({
             content: 'Please wait...'
@@ -357,6 +402,11 @@ var HomePage = /** @class */ (function () {
         clearInterval(this.timer);
         this.countPendingCustomers();
         if (this.exchangeData.customerList[0] != undefined && this.pendingCount > 0) {
+            if (SMS)
+                SMS.sendSMS(this.nextPendingPnumber, 'Your turn, please come inside. Your number is ' + this.nextPendingId + '.', function () { }, function () {
+                    alert('Message sending failed. Please check your balance');
+                });
+            console.log(this.nextPendingPnumber, 'Your turn, please come inside. Your number is ' + this.nextPendingId + '.');
             this.timer = setInterval(function () {
                 _this.percent--;
                 if (_this.percent <= 0) {
@@ -396,62 +446,11 @@ var HomePage = /** @class */ (function () {
             }.bind(_this));
         });
     };
-    // checkSMS(sms){
-    //   this.platform.ready().then(() => {
-    //     // let existingNumber = false;
-    //     let key = sms.body.toLowerCase().includes('pass');
-    //     if(key){
-    //       if(this.exchangeData.customerList.length){
-    //         this.exchangeData.customerList.forEach(element => {
-    //           if(sms.address==element.pNumber){
-    //             // existingNumber = true;
-    //             if(element.status=='skipped'){
-    //               this.countPendingCustomers();
-    //               this.exchangeData.customerList[this.exchangeData.customerList.indexOf(element)].updatedTime = Date.now();
-    //               if(this.pendingCount<this.exchangeData.maxCustomers){
-    //                 this.exchangeData.customerList[this.exchangeData.customerList.indexOf(element)].status = "pending";
-    //                 this.exchangeData.updateStatus(this.exchangeData.customerList[this.exchangeData.customerList
-    //                   .indexOf(element)].id, "pending");
-    //                 if(SMS) SMS.sendSMS(sms.address, 'Please come and rejoin now. Your number is '+ element.id, function(){}, function(){});
-    //               } else {
-    //                 this.exchangeData.customerList[this.exchangeData.customerList.indexOf(element)].status = "waiting";
-    //                 this.exchangeData.updateStatus(this.exchangeData.customerList[this.exchangeData.customerList
-    //                   .indexOf(element)].id, "waiting");
-    //                 if(SMS) SMS.sendSMS('Please come after 10 minutes. Your number is ' + element.id + '. Present number is ' + this.nextPendingId);
-    //               }
-    //               this.refresh();
-    //             } else {
-    //               console.log('customer already in queue')
-    //               if(SMS) SMS.sendSMS(sms.address, 'You are already in the queue. Your number is '+ element.id + '. Present number is ' + this.nextPendingId, function(){}, function(){});
-    //             }
-    //           } else {
-    //             this.getNextNumber(sms);
-    //             console.log('New number added to list')
-    //           }
-    //         });
-    //         // Promise.all(this.exchangeData.customerList).then(() => 
-    //         //   console.log('for loop ended')
-    //         // );
-    //         // if(existingNumber){
-    //         //   console.log(existingNumber,'customer already in queue')
-    //         // } else {
-    //         //   this.getNextNumber(sms);
-    //         //   console.log(existingNumber,'New number added to list')
-    //         // }
-    //       } else {
-    //         this.getNextNumber(sms);
-    //         console.log('New list is started')
-    //       }
-    //       this.blankOccupent();
-    //     } else{
-    //       console.log('Not a valid sms')
-    //     }
-    //   })
-    // }
     HomePage.prototype.checkSMS = function (sms) {
         var _this = this;
         this.platform.ready().then(function () {
             var existingNumber = null;
+            var isNotSkipped = true;
             var key = sms.body.toLowerCase().includes('pass');
             if (key) {
                 if (_this.exchangeData.customerList.length) {
@@ -459,21 +458,26 @@ var HomePage = /** @class */ (function () {
                         if (sms.address == element.pNumber) {
                             existingNumber = element.id;
                             if (element.status == 'skipped') {
+                                isNotSkipped = false;
                                 _this.countPendingCustomers();
                                 _this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].updatedTime = Date.now();
-                                if (_this.pendingCount < _this.exchangeData.maxCustomers) {
+                                if (_this.pendingCount < _this.exchangeData.queLength) {
                                     _this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].status = "pending";
                                     _this.exchangeData.updateStatus(_this.exchangeData.customerList[_this.exchangeData.customerList
                                         .indexOf(element)].id, "pending");
                                     if (SMS)
-                                        SMS.sendSMS(sms.address, 'Please come and rejoin now. Your number is ' + element.id, function () { }, function () { });
+                                        SMS.sendSMS(sms.address, 'Please come and rejoin now. Your number is ' + element.id, function () { }, function () {
+                                            alert('Message sending failed. Please check your balance');
+                                        });
                                 }
                                 else {
                                     _this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].status = "waiting";
                                     _this.exchangeData.updateStatus(_this.exchangeData.customerList[_this.exchangeData.customerList
                                         .indexOf(element)].id, "waiting");
                                     if (SMS)
-                                        SMS.sendSMS('Please come after 10 minutes. Your number is ' + element.id + '. Present number is ' + _this.nextPendingId);
+                                        SMS.sendSMS('Please come after 10 minutes to rejoin. Your number is ' + element.id + '. Present number is ' + _this.nextPendingId + '.', function () { }, function () {
+                                            alert('Message sending failed. Please check your balance');
+                                        });
                                 }
                                 _this.refresh();
                             }
@@ -483,9 +487,13 @@ var HomePage = /** @class */ (function () {
                     //   console.log('for loop ended')
                     // );
                     if (existingNumber) {
-                        if (SMS)
-                            SMS.sendSMS(sms.address, 'You are already in the queue. Your number is ' + existingNumber + '. Present number is ' + _this.nextPendingId, function () { }, function () { });
-                        console.log(existingNumber, 'customer already in queue');
+                        if (isNotSkipped) {
+                            if (SMS)
+                                SMS.sendSMS(sms.address, 'You are already in the queue. Your number is ' + existingNumber + '. Present number is ' + _this.nextPendingId, function () { }, function () {
+                                    alert('Message sending failed. Please check your balance');
+                                });
+                            console.log(existingNumber, 'customer already in queue');
+                        }
                     }
                     else {
                         _this.getNextNumber(sms);
@@ -515,15 +523,19 @@ var HomePage = /** @class */ (function () {
     };
     HomePage.prototype.replyCustomer = function (sms) {
         this.countPendingCustomers();
-        if (this.pendingCount < this.exchangeData.maxCustomers) {
+        if (this.pendingCount < this.exchangeData.queLength) {
             if (SMS)
-                SMS.sendSMS(sms.address, 'Please come and present now. Your number is ' + this.generateNumber, function () { }, function () { });
+                SMS.sendSMS(sms.address, 'Please come and present now. Your number is ' + this.generateNumber, function () { }, function () {
+                    alert('Message sending failed. Please check your balance');
+                });
             this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: sms.address, status: "pending", createdTime: Date.now() });
             this.exchangeData.insertData(this.generateNumber, sms.address, "pending");
         }
         else {
             if (SMS)
-                SMS.sendSMS('Please come after 10 minutes. Your number is ' + this.generateNumber + '. Present number is ' + this.nextPendingId);
+                SMS.sendSMS('Please come after 10 minutes. Your number is ' + this.generateNumber + '. Present number is ' + this.nextPendingId + '.', function () { }, function () {
+                    alert('Message sending failed. Please check your balance');
+                });
             this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: sms.address, status: "waiting", createdTime: Date.now() });
             this.exchangeData.insertData(this.generateNumber, sms.address, "waiting");
         }
@@ -601,7 +613,9 @@ var HomePage = /** @class */ (function () {
                     _this.exchangeData.updateStatus(_this.exchangeData.customerList[index].id, "skipped");
                     console.log(_this.exchangeData.customerList[index].pNumber, 'Your have been skipped because of absent in time. Please resend previous sms before 20 minutes to re-enter with old number');
                     if (SMS)
-                        SMS.sendSMS(_this.exchangeData.customerList[index].pNumber, 'Your have been skipped because of absent in time. Please resend previous sms before 20 minutes to re-enter with old number', function () { }, function () { });
+                        SMS.sendSMS(_this.exchangeData.customerList[index].pNumber, 'Your have been skipped because of absent in time. Please resend previous sms before 20 minutes to re-enter with old number', function () { }, function () {
+                            alert('Message sending failed. Please check your balance');
+                        });
                     found_1 = true;
                 }
                 if (element.status == 'pending') {
@@ -631,7 +645,9 @@ var HomePage = /** @class */ (function () {
                 found = true;
                 var index = _this.exchangeData.customerList.indexOf(element);
                 if (SMS)
-                    SMS.sendSMS(_this.exchangeData.customerList[index].pNumber, 'Please come and present now. Your number is ' + _this.exchangeData.customerList[index].id, function () { }, function () { });
+                    SMS.sendSMS(_this.exchangeData.customerList[index].pNumber, 'Please come and present now. Your number is ' + _this.exchangeData.customerList[index].id, function () { }, function () {
+                        alert('Message sending failed. Please check your balance');
+                    });
                 console.log(_this.exchangeData.customerList[index].pNumber, 'Please come and present now. Your number is ' + _this.exchangeData.customerList[index].id);
             }
         });
@@ -676,7 +692,7 @@ var HomePage = /** @class */ (function () {
     };
     HomePage.prototype.addTest = function () {
         this.countPendingCustomers();
-        if (this.pendingCount < this.exchangeData.maxCustomers) {
+        if (this.pendingCount < this.exchangeData.queLength) {
             this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: +94714142387, status: "pending", createdTime: Date.now() });
             this.exchangeData.insertData(this.generateNumber, +94714142387, "pending");
             console.log('Please come and present now. Your number is ' + this.generateNumber);
@@ -698,6 +714,7 @@ var HomePage = /** @class */ (function () {
                 _this.pendingCount++;
                 if (bool) {
                     _this.nextPendingId = element.id;
+                    _this.nextPendingPnumber = element.pNumber;
                     bool = false;
                 }
             }
@@ -716,7 +733,9 @@ var HomePage = /** @class */ (function () {
                             _this.exchangeData.updateStatus(_this.exchangeData.customerList[index].id, "absent");
                             _this.exchangeData.absentList.push(_this.exchangeData.customerList[index]);
                             if (SMS)
-                                SMS.sendSMS(_this.exchangeData.customerList[index].pNumber, 'Your have been abandoned because of absent', function () { }, function () { });
+                                SMS.sendSMS(_this.exchangeData.customerList[index].pNumber, 'Your have been abandoned because of absent', function () { }, function () {
+                                    alert('Message sending failed. Please check your balance');
+                                });
                             _this.exchangeData.customerList.splice(index, 1);
                         }
                     }
@@ -727,8 +746,12 @@ var HomePage = /** @class */ (function () {
     HomePage.prototype.blankOccupent = function () {
         this.dummyOccupents = [];
         this.countPendingCustomers();
-        for (var i = 1; i <= this.exchangeData.maxCustomers - this.pendingCount; i++) {
+        for (var i = 1; i <= this.exchangeData.queLength - this.pendingCount; i++) {
             this.dummyOccupents.push(i);
+        }
+        if (this.dummyOccupents.length == this.exchangeData.queLength) {
+            this.holdTime = true;
+            this.holdClock();
         }
     };
     HomePage.prototype.sendBackToWaiting = function () {
@@ -739,13 +762,16 @@ var HomePage = /** @class */ (function () {
                 _this.exchangeData.updateStatus(_this.exchangeData.customerList[_this.exchangeData.customerList.indexOf(element)].id, "waiting");
             }
         });
-        for (var i = 0; i < this.exchangeData.maxCustomers; i++) {
+        for (var i = 0; i < this.exchangeData.queLength; i++) {
             this.getFromWaiting();
         }
     };
+    HomePage.prototype.test = function () {
+        console.log(this.exchangeData.userDetails);
+    };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"/Users/chamara/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight:500; padding-top: 16px;">\n    <table style="width: -webkit-fill-available; text-align: center;">\n      <tr>        \n        <td><input class="roundlabel" readonly value="{{exchangeData.insideCustomerCount}}"></td>\n        <td><input class="roundlabel" readonly value="{{this.exchangeData.maxCustomers-exchangeData.insideCustomerCount}}"></td>\n      </tr>\n      <tr>\n        <td style=" padding-top: 3%;"><label style="font-size:16px;">Current Occupants</label></td>\n        <td style=" padding-top: 3%;"><label style="font-size:16px;">Available Occupants</label></td>\n      </tr>\n    </table>\n  </section>\n\n  <section>\n    <table style="margin-top: 5%; width: -webkit-fill-available; text-align: center;">\n      <tr>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td>\n          <ion-scroll scrollY="true" style="height: 170px;">\n            <label class="numberset">\n              <span *ngFor="let cstmrDetails of exchangeData.customerList">\n                <span ion-button class="btngetin" *ngIf="cstmrDetails.status ==\'pending\'" (click)="countGetIn(cstmrDetails)">\n                  {{cstmrDetails.id}}\n                </span>\n              </span>\n              <span *ngFor="let dmy of this.dummyOccupents">\n                <span #empty ion-button class="btngetin"></span>\n              </span>              \n            </label>\n          </ion-scroll>\n        </td>\n      </tr>\n      <tr>\n        <td style="text-align: -webkit-center;">\n          <div class = "clockouter">\n            <circle-progress\n              [percent]="setPresentage"\n              [title]="percent+\' Sec\'"\n              (click)="holdClock()">\n            </circle-progress>\n          </div>\n        </td>\n      </tr>\n    </table>\n  </section>\n\n    <ion-fab left bottom>\n      <button ion-fab class="custom-actionbutton" style="left: 20px;" (click)="goOut()">Out</button>      \n    </ion-fab>\n    <ion-fab right bottom>\n      <button ion-fab class="custom-actionbutton" style="right: 20px;" (click)="skipCustomer()">Next</button>  \n    </ion-fab>\n    \n\n    <div>     \n      <label *ngFor="let x of messages">\n        <h2>{{x}}</h2>\n      </label>\n    </div>\n\n    <div style="margin-top: 100px;" ion-button (click)= "getNextTestNumber()"> Add Customers</div>\n    <!--<div ion-button (click)= "exchangeData.resetTable()"> Reset Table</div>-->\n    <!-- <div ion-button (click)= "test()">test</div> -->\n</ion-content>'/*ion-inline-end:"/Users/chamara/Desktop/project/SocialQue/src/pages/home/home.html"*/
+            selector: 'page-home',template:/*ion-inline-start:"/Users/chamara/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight:500; padding-top: 16px;">\n    <table style="width: -webkit-fill-available; text-align: center;">\n      <tr>        \n        <td><input class="roundlabel" readonly value="{{exchangeData.insideCustomerCount}}"></td>\n        <td><input class="roundlabel" readonly value="{{this.exchangeData.maxCustomers-exchangeData.insideCustomerCount}}"></td>\n      </tr>\n      <tr>\n        <td style=" padding-top: 3%;"><label style="font-size:16px;">Current Occupants</label></td>\n        <td style=" padding-top: 3%;"><label style="font-size:16px;">Available Occupants</label></td>\n      </tr>\n    </table>\n  </section>\n\n  <!-- <section>\n    <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>\n    <ion-list>\n      <ion-item *ngFor="let item of items">\n        {{ item }}\n      </ion-item>\n    </ion-list>\n  </section>   -->\n\n  <section>\n    <table style="margin-top: 5%; width: -webkit-fill-available; text-align: center;">\n      <!-- <tr>\n        <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>\n      </tr> -->\n      <tr>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td>\n          <ion-scroll scrollY="true" style="height: 170px;">\n            <label class="numberset">\n              <span *ngFor="let cstmrDetails of exchangeData.customerList">\n                <span ion-button class="btngetin" *ngIf="cstmrDetails.status ==\'pending\'" (click)="countGetIn(cstmrDetails)">\n                  {{cstmrDetails.id}}\n                </span>\n              </span>\n              <span *ngFor="let dmy of this.dummyOccupents">\n                <span #empty ion-button class="btngetin"></span>\n              </span>              \n            </label>\n          </ion-scroll>\n        </td>\n      </tr>\n      <tr>\n        <td style="text-align: -webkit-center;">\n          <div class = "clockouter">\n            <circle-progress\n              [percent]="setPresentage"\n              [title]="percent+\' Sec\'"\n              (click)="holdClock()">\n            </circle-progress>\n          </div>\n        </td>\n      </tr>\n    </table>\n  </section>\n\n    <ion-fab left bottom>\n      <button ion-fab class="custom-actionbutton" style="left: 20px;" (click)="goOut()">Out</button>      \n    </ion-fab>\n    <ion-fab right bottom>\n      <button ion-fab class="custom-actionbutton" style="right: 20px;" (click)="skipCustomer()">Next</button>  \n    </ion-fab>\n    \n\n    <div>     \n      <label *ngFor="let x of messages">\n        <h2>{{x}}</h2>\n      </label>\n    </div>\n\n    <div style="margin-top: 100px;" ion-button (click)= "getNextTestNumber()"> Add Customers</div>\n    <!--<div ion-button (click)= "exchangeData.resetTable()"> Reset Table</div>-->\n    <div ion-button (click)= "test()">test</div>\n</ion-content>'/*ion-inline-end:"/Users/chamara/Desktop/project/SocialQue/src/pages/home/home.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */],
@@ -913,13 +939,11 @@ var SignupPage = /** @class */ (function () {
         var _this = this;
         var arrangedMobile = this.signup.value.mobile.substring(1, 11);
         if (this.signup.value.category) {
-            console.log(this.signup.value.category, '22222');
         }
         else {
             this.signup.value.category = "Pharmacy";
         }
         if (this.signup.value.language) {
-            console.log(this.signup.value.language, '33333');
         }
         else {
             this.signup.value.language = "English";
@@ -929,7 +953,8 @@ var SignupPage = /** @class */ (function () {
         this.http.post(url, JSON.stringify(options), headers)
             .subscribe(function (data) {
             console.log("Congratulations data was successfully added", data);
-            _this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": '0' + data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount };
+            _this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": '0' + data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount, "QueueLength": 5 };
+            console.log(_this.exchangeData.userDetails);
         }, function (error) {
             console.log('Something went wrong!', error);
         });
@@ -1312,7 +1337,6 @@ var ExchangeDataProvider = /** @class */ (function () {
                         for (var i = 0; i < result.rows.length; i++) {
                             if (result.rows.item(i).Status == 'inside') {
                                 _this.insideCustomerCount++;
-                                console.log(_this.insideCustomerCount, '22222', _this.maxCustomers);
                             }
                             _this.lastCustomerNumber = result.rows.item(i).QueNo;
                             _this.customerList.push({ id: result.rows.item(i).QueNo, pNumber: result.rows.item(i).MSISDN, status: result.rows.item(i).Status, updatedTime: result.rows.item(i).UpdatedTime });
@@ -1558,11 +1582,13 @@ var SocialQue = /** @class */ (function () {
             _this.exchangeData.userDetails = val;
             if (_this.exchangeData.userDetails != null) {
                 _this.exchangeData.maxCustomers = _this.exchangeData.userDetails.OccupantCount;
+                _this.exchangeData.queLength = _this.exchangeData.userDetails.QueueLength;
                 _this.exchangeData.shopName = _this.exchangeData.userDetails.BusinessName;
                 _this.rootPage = __WEBPACK_IMPORTED_MODULE_7__pages_tabs_tabs__["a" /* TabsPage */];
             }
             else {
                 _this.exchangeData.maxCustomers = 5;
+                _this.exchangeData.queLength = 5;
                 _this.rootPage = __WEBPACK_IMPORTED_MODULE_8__pages_signup_signup__["a" /* SignupPage */];
             }
         });

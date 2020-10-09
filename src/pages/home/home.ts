@@ -11,6 +11,8 @@ declare var SMS: any;
   templateUrl: 'home.html'
 })
 export class HomePage {
+  searchQuery: string = '';
+  items: string[];
   timer: any;
   percent: number;
   belowNumber: number;
@@ -23,6 +25,7 @@ export class HomePage {
   loading : any;
   dummyOccupents: any[];
   nextPendingId: number = 100000;
+  nextPendingPnumber: any = null;
   
   constructor(
     public navCtrl: NavController,
@@ -35,7 +38,8 @@ export class HomePage {
     ) {    
     this.percent = 45;
     this.belowNumber = 45;
-    this.holdTime = false;     
+    this.holdTime = false;    
+    // this.initializeItems(); 
   }
 
   ionViewDidLoad() {
@@ -57,6 +61,48 @@ export class HomePage {
     });
   }
 
+  // initializeItems() {
+  //   console.log('test')
+  //   // this.items = [
+  //   //   'Amsterdam',
+  //   //   'Bogota',
+  //   //   'Warakapola',
+  //   //   'Nittambuwa',
+  //   //   'Colombo'
+  //   // ];
+
+  //   this.exchangeData.customerList.forEach(element => {
+  //     // console.log(element)
+  //     if(element.id == 'pending'){
+  //       this.items.push(element.id);
+  //       console.log(this.items);
+  //     }
+  //   });
+    
+  // }
+
+  // getItems(ev: any) {
+  //   // Reset items back to all of the items
+  //   this.initializeItems();
+
+  //   // set val to the value of the searchbar
+  //   const val = ev.target.value;
+  //   // console.log(ev.target.value)
+  //   // if the value is an empty string don't filter the items
+  //   if (val && val.trim() != '') {
+  //     console.log(this.items)
+  //     // this.items = this.items.filter((item) => {
+  //     //   // return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
+  //     //   console.log(item)
+  //     // })
+  //     // this.exchangeData.customerList = this.exchangeData.customerList.filter((item) => {
+  //     //   return (item.id.indexOf(val) > -1)
+  //     //   // console.log(item.id)
+  //     // })
+  //   }
+  // }
+
+
   pageLoader(){
     this.loading = this.loadingCtrl.create({
       content: 'Please wait...'
@@ -67,6 +113,10 @@ export class HomePage {
     clearInterval(this.timer);
     this.countPendingCustomers();
     if (this.exchangeData.customerList[0] != undefined && this.pendingCount>0) {
+      if(SMS) SMS.sendSMS(this.nextPendingPnumber, 'Your turn, please come inside. Your number is '+ this.nextPendingId+'.', function(){}, function(){
+        alert('Message sending failed. Please check your balance');
+      });
+      console.log(this.nextPendingPnumber, 'Your turn, please come inside. Your number is '+ this.nextPendingId+'.')
       this.timer = setInterval(() => {
         this.percent--;
         if (this.percent <= 0) {
@@ -111,25 +161,32 @@ export class HomePage {
   checkSMS(sms){
     this.platform.ready().then(() => {
       let existingNumber = null;
+      let isNotSkipped = true;
+
       let key = sms.body.toLowerCase().includes('pass');
       if(key){
         if(this.exchangeData.customerList.length){
           this.exchangeData.customerList.forEach(element => {
             if(sms.address==element.pNumber){
               existingNumber = element.id;
-              if(element.status=='skipped'){                
+              if(element.status=='skipped'){
+                isNotSkipped = false;
                 this.countPendingCustomers();
                 this.exchangeData.customerList[this.exchangeData.customerList.indexOf(element)].updatedTime = Date.now();
-                if(this.pendingCount<this.exchangeData.maxCustomers){
+                if(this.pendingCount<this.exchangeData.queLength){
                   this.exchangeData.customerList[this.exchangeData.customerList.indexOf(element)].status = "pending";
                   this.exchangeData.updateStatus(this.exchangeData.customerList[this.exchangeData.customerList
                     .indexOf(element)].id, "pending");
-                  if(SMS) SMS.sendSMS(sms.address, 'Please come and rejoin now. Your number is '+ element.id, function(){}, function(){});
+                  if(SMS) SMS.sendSMS(sms.address, 'Please come and rejoin now. Your number is '+ element.id, function(){}, function(){
+                    alert('Message sending failed. Please check your balance');
+                  });
                 } else {
                   this.exchangeData.customerList[this.exchangeData.customerList.indexOf(element)].status = "waiting";
                   this.exchangeData.updateStatus(this.exchangeData.customerList[this.exchangeData.customerList
                     .indexOf(element)].id, "waiting");
-                  if(SMS) SMS.sendSMS('Please come after 10 minutes. Your number is ' + element.id + '. Present number is ' + this.nextPendingId);
+                  if(SMS) SMS.sendSMS('Please come after 10 minutes to rejoin. Your number is ' + element.id + '. Present number is ' + this.nextPendingId + '.', function(){}, function(){
+                    alert('Message sending failed. Please check your balance');
+                  });
                 }
                 this.refresh();
               }
@@ -140,15 +197,19 @@ export class HomePage {
           // );
 
           if(existingNumber){
-            if(SMS) SMS.sendSMS(sms.address, 'You are already in the queue. Your number is '+ existingNumber + '. Present number is ' + this.nextPendingId, function(){}, function(){});
-            console.log(existingNumber,'customer already in queue')
+            if(isNotSkipped){
+              if(SMS) SMS.sendSMS(sms.address, 'You are already in the queue. Your number is '+ existingNumber + '. Present number is ' + this.nextPendingId, function(){}, function(){
+                alert('Message sending failed. Please check your balance');
+              });
+              console.log(existingNumber,'customer already in queue');
+            }            
           } else {
             this.getNextNumber(sms);
-            console.log(existingNumber,'New number added to list')
+            console.log(existingNumber,'New number added to list');
           }
         } else {
           this.getNextNumber(sms);
-          console.log('New list is started')
+          console.log('New list is started');
         }
         this.blankOccupent();
       } else{
@@ -169,12 +230,16 @@ export class HomePage {
 
   replyCustomer(sms){        
     this.countPendingCustomers();
-    if(this.pendingCount<this.exchangeData.maxCustomers){
-      if(SMS) SMS.sendSMS(sms.address, 'Please come and present now. Your number is '+ this.generateNumber, function(){}, function(){});
+    if(this.pendingCount<this.exchangeData.queLength){
+      if(SMS) SMS.sendSMS(sms.address, 'Please come and present now. Your number is '+ this.generateNumber, function(){}, function(){
+        alert('Message sending failed. Please check your balance');
+      });
       this.exchangeData.customerList.push({id:this.generateNumber, pNumber:sms.address, status:"pending", createdTime: Date.now()});
       this.exchangeData.insertData(this.generateNumber, sms.address, "pending");
     } else {
-      if(SMS) SMS.sendSMS('Please come after 10 minutes. Your number is ' + this.generateNumber + '. Present number is ' + this.nextPendingId);
+      if(SMS) SMS.sendSMS('Please come after 10 minutes. Your number is ' + this.generateNumber + '. Present number is ' + this.nextPendingId + '.', function(){}, function(){
+        alert('Message sending failed. Please check your balance');
+      });
       this.exchangeData.customerList.push({id:this.generateNumber, pNumber:sms.address, status:"waiting", createdTime: Date.now()});
       this.exchangeData.insertData(this.generateNumber, sms.address, "waiting");
     }
@@ -237,6 +302,7 @@ export class HomePage {
       this.loading.dismiss();
     }
     this.holdTime = true;
+
   }
 
   skipCustomer(){
@@ -252,7 +318,9 @@ export class HomePage {
           this.exchangeData.customerList[index].updatedTime = Date.now();
           this.exchangeData.updateStatus(this.exchangeData.customerList[index].id, "skipped");
           console.log(this.exchangeData.customerList[index].pNumber, 'Your have been skipped because of absent in time. Please resend previous sms before 20 minutes to re-enter with old number');
-          if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Your have been skipped because of absent in time. Please resend previous sms before 20 minutes to re-enter with old number', function(){}, function(){});
+          if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Your have been skipped because of absent in time. Please resend previous sms before 20 minutes to re-enter with old number', function(){}, function(){
+            alert('Message sending failed. Please check your balance');
+          });
           found = true;
         }
         if(element.status == 'pending'){
@@ -280,7 +348,9 @@ export class HomePage {
         this.exchangeData.updateStatus(this.exchangeData.customerList[this.exchangeData.customerList.indexOf(element)].id, "pending");
         found = true;
         let index = this.exchangeData.customerList.indexOf(element);
-        if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Please come and present now. Your number is ' + this.exchangeData.customerList[index].id, function(){}, function(){});
+        if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Please come and present now. Your number is ' + this.exchangeData.customerList[index].id, function(){}, function(){
+          alert('Message sending failed. Please check your balance');
+        });
         console.log(this.exchangeData.customerList[index].pNumber, 'Please come and present now. Your number is ' + this.exchangeData.customerList[index].id)
       }
     });
@@ -328,31 +398,31 @@ export class HomePage {
     });    
   }
 
-  getNextTestNumber(){    
-    if(this.generateNumber>this.exchangeData.lastCustomerNumber){
-      this.generateNumber++
-      this.addTest()
-    } else{
-      this.generateNumber = this.exchangeData.lastCustomerNumber+1;
-      this.addTest()
-    }
-  }
+  // getNextTestNumber(){    
+  //   if(this.generateNumber>this.exchangeData.lastCustomerNumber){
+  //     this.generateNumber++
+  //     this.addTest()
+  //   } else{
+  //     this.generateNumber = this.exchangeData.lastCustomerNumber+1;
+  //     this.addTest()
+  //   }
+  // }
 
-  addTest(){
-    this.countPendingCustomers();
-    if(this.pendingCount<this.exchangeData.maxCustomers){
-      this.exchangeData.customerList.push({id:this.generateNumber, pNumber:+94714142387, status:"pending", createdTime: Date.now()});  
-      this.exchangeData.insertData(this.generateNumber, +94714142387, "pending");
-      console.log('Please come and present now. Your number is '+ this.generateNumber)
-    } else {
-      console.log('Please come after 10 minutes. Your number is ' + this.generateNumber + '. Present number is ' + this.nextPendingId)
-      this.exchangeData.customerList.push({id:this.generateNumber, pNumber:+94714142387, status:"waiting", createdTime: Date.now()});          
-      this.exchangeData.insertData(this.generateNumber, +94714142387, "waiting");
-    }
-    this.blankOccupent();
-  }
+  // addTest(){
+  //   this.countPendingCustomers();
+  //   if(this.pendingCount<this.exchangeData.queLength){
+  //     this.exchangeData.customerList.push({id:this.generateNumber, pNumber:+94714142387, status:"pending", createdTime: Date.now()});  
+  //     this.exchangeData.insertData(this.generateNumber, +94714142387, "pending");
+  //     console.log('Please come and present now. Your number is '+ this.generateNumber)
+  //   } else {
+  //     console.log('Please come after 10 minutes. Your number is ' + this.generateNumber + '. Present number is ' + this.nextPendingId)
+  //     this.exchangeData.customerList.push({id:this.generateNumber, pNumber:+94714142387, status:"waiting", createdTime: Date.now()});          
+  //     this.exchangeData.insertData(this.generateNumber, +94714142387, "waiting");
+  //   }
+  //   this.blankOccupent();
+  // }
 
-  countPendingCustomers(){    
+  countPendingCustomers(){
     let bool: boolean;
     bool = true;
     this.pendingCount = 0;
@@ -361,6 +431,7 @@ export class HomePage {
         this.pendingCount++;
         if(bool){
           this.nextPendingId = element.id;
+          this.nextPendingPnumber = element.pNumber;
           bool = false;
         }
       }
@@ -378,7 +449,9 @@ export class HomePage {
               this.exchangeData.customerList[index].status = 'absent';
               this.exchangeData.updateStatus(this.exchangeData.customerList[index].id, "absent");
               this.exchangeData.absentList.push(this.exchangeData.customerList[index]);
-              if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Your have been abandoned because of absent', function(){}, function(){});
+              if(SMS) SMS.sendSMS(this.exchangeData.customerList[index].pNumber, 'Your have been abandoned because of absent', function(){}, function(){
+                alert('Message sending failed. Please check your balance');
+              });
               this.exchangeData.customerList.splice(index,1)         
             }    
           }          
@@ -391,8 +464,12 @@ export class HomePage {
     this.dummyOccupents = [];
     this.countPendingCustomers();
 
-    for(let i=1; i<=this.exchangeData.maxCustomers-this.pendingCount; i++){      
+    for(let i=1; i<=this.exchangeData.queLength-this.pendingCount; i++){      
       this.dummyOccupents.push(i)
+    }
+    if(this.dummyOccupents.length==this.exchangeData.queLength){
+      this.holdTime = true;
+      this.holdClock();
     }
   }
 
@@ -403,12 +480,12 @@ export class HomePage {
         this.exchangeData.updateStatus(this.exchangeData.customerList[this.exchangeData.customerList.indexOf(element)].id, "waiting");        
       }
     });
-    for(let i = 0; i<this.exchangeData.maxCustomers; i++) {
+    for(let i = 0; i<this.exchangeData.queLength; i++) {
       this.getFromWaiting();
     }
   }
 
   // test(){
-  //   let text = 'DHANUSHKA chamara Dissanayake'
+  //   console.log(this.exchangeData.userDetails);
   // }
 }

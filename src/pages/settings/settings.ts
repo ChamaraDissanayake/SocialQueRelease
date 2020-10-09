@@ -42,6 +42,7 @@ export class SettingsPage {
       city: ['', Validators.required],        
       language: ['English'],
       occupant: ['', [Validators.required, Validators.pattern('[0-9]{1,5}')]],
+      que: ['', [Validators.required, Validators.pattern('[0-9]{1,5}')]],
       mobile:['', [Validators.required, Validators.pattern('[0]{1}[7]{1}[0-9]{8}'), Validators.minLength(10)]]
     });
   }
@@ -60,12 +61,15 @@ export class SettingsPage {
     'occupant': [
       { type: 'required', message: '*Occupant capacity is required!' }
     ],
+    'que': [
+      { type: 'required', message: '*Queue length is required!' }
+    ]
   };
 
   updateUserDetails() {
     let arrangedMobile = this.editsignup.value.mobile.substring(1, 11);
 
-    if(this.exchangeData.maxCustomers != this.editsignup.value.occupant){
+    if(this.exchangeData.maxCustomers != this.editsignup.value.occupant || this.exchangeData.queLength != this.editsignup.value.que){
       this.exchangeData.occupentCountChanged=true;
     }
     
@@ -95,12 +99,14 @@ export class SettingsPage {
       .subscribe((data: any) => {
         console.log(`Congratulations data was successfully added`, data);
         if(this.exchangeData.userDetails.MSISDN == this.editsignup.value.mobile){
-          this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": '0' + data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount };
+          this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": '0' + data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount, "QueueLength":parseInt(this.editsignup.value.que)};
           this.storage.set('currentUser', this.exchangeData.userDetails);
+          this.exchangeData.queLength = parseInt(this.editsignup.value.que);
           this.goHome();
         } else {
-          this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": '0' + data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount };
+          this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": '0' + data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount, "QueueLength":parseInt(this.editsignup.value.que)};
           this.storage.set('currentUser', null);
+          this.exchangeData.queLength = parseInt(this.editsignup.value.que);
           this.navCtrl.push(OtpPage);
         }
       },
