@@ -5,11 +5,26 @@
 </ion-header>
 
 <ion-content padding style="text-align: -webkit-center;">
+
+  <section>
+    <ion-searchbar #searchbarid (ionInput)="getItems($event)" [showCancelButton]="true"></ion-searchbar>
+  </section>
+
   <label class="numberset">
-    <span *ngFor="let waiting of exchangeData.customerList">
-      <span ion-button class="btngetin" *ngIf="waiting.status=='waiting'">
-        {{waiting.id}}
-      </span>
-    </span>
+      <ion-list>
+        <ion-row>
+          <ion-col col-12 *ngFor = "let item of items" style="text-align-last: center; padding: unset;">
+            <ion-item-sliding>
+              <ion-item>
+                <span ion-button class="btngetin">{{ item }}</span>
+              </ion-item>
+              <ion-item-options side="left">
+                <span ion-button color="danger" style="height: 50%; align-self: center;" (click)="forceGetIn(item)">Get Inside</span>
+              </ion-item-options>
+            </ion-item-sliding>
+          </ion-col>
+        </ion-row>
+      </ion-list>
   </label>
+  
 </ion-content>

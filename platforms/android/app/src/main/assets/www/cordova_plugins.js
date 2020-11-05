@@ -9,6 +9,14 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
+      "id": "cordova-plugin-appminimize.AppMinimize",
+      "file": "plugins/cordova-plugin-appminimize/www/AppMinimize.js",
+      "pluginId": "cordova-plugin-appminimize",
+      "clobbers": [
+        "cordova.plugins.appMinimize"
+      ]
+    },
+    {
       "id": "cordova-plugin-camera.Camera",
       "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
       "pluginId": "cordova-plugin-camera",
@@ -287,16 +295,17 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-plugin-appminimize.AppMinimize",
-      "file": "plugins/cordova-plugin-appminimize/www/AppMinimize.js",
-      "pluginId": "cordova-plugin-appminimize",
+      "id": "cordova-plugin-market.Market",
+      "file": "plugins/cordova-plugin-market/www/market.js",
+      "pluginId": "cordova-plugin-market",
       "clobbers": [
-        "cordova.plugins.appMinimize"
+        "cordova.plugins.market"
       ]
     }
   ];
   module.exports.metadata = {
     "cordova-plugin-android-permissions": "1.0.2",
+    "cordova-plugin-appminimize": "1.0.1",
     "cordova-plugin-camera": "4.1.0",
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-file": "6.0.2",
@@ -308,6 +317,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-statusbar": "2.4.2",
     "cordova-plugin-whitelist": "1.3.3",
     "cordova-sqlite-storage": "5.0.1",
-    "cordova-plugin-appminimize": "1.0.1"
+    "cordova-plugin-market": "1.2.0"
   };
 });

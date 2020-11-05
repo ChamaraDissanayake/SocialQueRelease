@@ -42,7 +42,7 @@ export class OtpPage {
     {
       if (data.status == 'verification-succeed') {
         this.navCtrl.setRoot(TabsPage);
-        this.storage.set('currentUser', this.exchangeData.userDetails)
+        this.storage.set('currentUser', this.exchangeData.userDetails);        
       } else {
         this.otpFG.reset();
         alert('Please try again!')

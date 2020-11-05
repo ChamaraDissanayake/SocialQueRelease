@@ -20,7 +20,6 @@ export class SocialQue {
   rootPage: any;
   imageURI:any;
   // imageFileName:any;
-  date: any;
 
   pages: Array<{title: string, component: any}>;
 
@@ -31,10 +30,9 @@ export class SocialQue {
     public splashScreen: SplashScreen,
     private exchangeData: ExchangeDataProvider,
     public storage:Storage
-    ) {
-    this.date = new Date().getDate();
+    ) {    
     this.initializeApp();
-    this.checkDate();
+    this.exchangeData.checkDate();
 
     this.pages = [
       { title: 'Settings', component: SettingsPage },
@@ -93,23 +91,6 @@ export class SocialQue {
       this.storage.set('currentUserImage', this.imageURI)
     }, (err) => {
       console.log(err);
-    });
-  }
-
-  checkDate(){
-    this.storage.get('currentDate').then((val) => {
-      if(val == null){
-        console.log('Add new date')
-        this.storage.set('currentDate', this.date);
-      }
-      else if(this.date != val){
-        console.log('Updated to new date')
-        this.exchangeData.resetTable();
-        this.storage.set('currentDate', this.date);
-      }      
-      else {
-        console.log("Same date", this.date, val);
-      }      
     });
   }
 }

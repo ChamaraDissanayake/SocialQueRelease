@@ -66,11 +66,12 @@ export class SignupPage {
           "City" : this.signup.value.city, "Type":"Free", "GPS":"6.8923865,79.8717421", "OccupantCount":5, "CreatedDate": Date.now()},
         url       : any       = this.baseURL;
 
+      console.log(options,'22222')
       this.http.post(url, JSON.stringify(options), headers)
       .subscribe((data : any) => {
-        console.log(`Congratulations data was successfully added`, data);
+        console.log(`Congratulations data added successfully`, data);
         this.exchangeData.userDetails = {"ID" : data.data.id ,"MSISDN" : '0' + data.data.MSISDN, "Categories" : data.data.Categories, "Language": data.data.Language, "BusinessName" : data.data.BusinessName, "City" : data.data.City, "OccupantCount":data.data.OccupantCount, "QueueLength":5};
-        console.log(this.exchangeData.userDetails)
+        console.log(this.exchangeData.userDetails, '333333')
       },
       (error : any) => {
         console.log('Something went wrong!',error);

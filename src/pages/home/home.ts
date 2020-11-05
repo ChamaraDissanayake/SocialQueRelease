@@ -3,6 +3,7 @@ import { NavController, Platform, LoadingController } from 'ionic-angular';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { AppMinimize } from '@ionic-native/app-minimize';
 import { ExchangeDataProvider } from '../../providers/exchange-data/exchange-data';
+// import { combineAll } from 'rxjs/operator/combineAll';
 
 declare var SMS: any;
 
@@ -11,8 +12,6 @@ declare var SMS: any;
   templateUrl: 'home.html'
 })
 export class HomePage {
-  searchQuery: string = '';
-  items: string[];
   timer: any;
   percent: number;
   belowNumber: number;
@@ -24,7 +23,7 @@ export class HomePage {
   pendingCount : number;
   loading : any;
   dummyOccupents: any[];
-  nextPendingId: number = 100000;
+  nextPendingId: number = 1000;
   nextPendingPnumber: any = null;
   
   constructor(
@@ -34,12 +33,11 @@ export class HomePage {
     public androidPermissions: AndroidPermissions,
     private zone: NgZone,
     private exchangeData: ExchangeDataProvider,
-    public loadingCtrl: LoadingController,
+    public loadingCtrl: LoadingController
     ) {    
     this.percent = 45;
     this.belowNumber = 45;
     this.holdTime = false;    
-    // this.initializeItems(); 
   }
 
   ionViewDidLoad() {
@@ -54,54 +52,23 @@ export class HomePage {
     }
     setTimeout(() => {
       this.blankOccupent();
+      this.exchangeData.checkForUpdate();
     }, 1500);
+
+    // setTimeout(() => {
+    //   this.exchangeData.checkForUpdate();
+    // }, 5000);
 
     this.platform.registerBackButtonAction(() => {
       this.appMinimize.minimize();
     });
+
+    setInterval(() => {
+      this.exchangeData.checkForUpdate();
+      this.exchangeData.checkDate();
+      console.log('checking date and update')
+    }, 1200000);
   }
-
-  // initializeItems() {
-  //   console.log('test')
-  //   // this.items = [
-  //   //   'Amsterdam',
-  //   //   'Bogota',
-  //   //   'Warakapola',
-  //   //   'Nittambuwa',
-  //   //   'Colombo'
-  //   // ];
-
-  //   this.exchangeData.customerList.forEach(element => {
-  //     // console.log(element)
-  //     if(element.id == 'pending'){
-  //       this.items.push(element.id);
-  //       console.log(this.items);
-  //     }
-  //   });
-    
-  // }
-
-  // getItems(ev: any) {
-  //   // Reset items back to all of the items
-  //   this.initializeItems();
-
-  //   // set val to the value of the searchbar
-  //   const val = ev.target.value;
-  //   // console.log(ev.target.value)
-  //   // if the value is an empty string don't filter the items
-  //   if (val && val.trim() != '') {
-  //     console.log(this.items)
-  //     // this.items = this.items.filter((item) => {
-  //     //   // return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
-  //     //   console.log(item)
-  //     // })
-  //     // this.exchangeData.customerList = this.exchangeData.customerList.filter((item) => {
-  //     //   return (item.id.indexOf(val) > -1)
-  //     //   // console.log(item.id)
-  //     // })
-  //   }
-  // }
-
 
   pageLoader(){
     this.loading = this.loadingCtrl.create({
@@ -110,9 +77,13 @@ export class HomePage {
   }
 
   startClock() {
+    if(this.percent<10){
+      this.resetClock();
+    }
     clearInterval(this.timer);
     this.countPendingCustomers();
-    if (this.exchangeData.customerList[0] != undefined && this.pendingCount>0) {
+    console.log('working clock',this.exchangeData.customerList[0] != undefined, this.pendingCount>0, this.exchangeData.maxCustomers>this.exchangeData.insideCustomerCount)
+    if (this.exchangeData.customerList[0] != undefined && this.pendingCount>0 && this.exchangeData.maxCustomers>this.exchangeData.insideCustomerCount) {
       if(SMS) SMS.sendSMS(this.nextPendingPnumber, 'Your turn, please come inside. Your number is '+ this.nextPendingId+'.', function(){}, function(){
         alert('Message sending failed. Please check your balance');
       });
@@ -129,7 +100,7 @@ export class HomePage {
   }
 
   holdClock() {
-    if (this.holdTime == true || this.exchangeData.insideCustomerCount == this.exchangeData.maxCustomers) {
+    if (this.holdTime == true || this.exchangeData.insideCustomerCount >= this.exchangeData.maxCustomers) {
       clearInterval(this.timer);
       this.holdTime = false;
     } else {
@@ -283,20 +254,26 @@ export class HomePage {
     this.resetClock();
     this.holdTime = true;
     this.blankOccupent();
+    console.log(this.exchangeData.customerList)
   }
 
   goOut(){
+    let index = 0;
     this.pageLoader();
-    this.loading.present();
-
     if(this.exchangeData.insideCustomerCount>0){
+      this.loading.present();
       this.exchangeData.insideCustomerCount--
       this.startClock();
-      this.exchangeData.customerList[0].status = "completed"
-      this.exchangeData.updateStatus(this.exchangeData.customerList[0].id, "completed");
+      this.exchangeData.customerList.forEach(element => {
+        if(element.status == 'inside'){
+          index = this.exchangeData.customerList.indexOf(element);
+        }
+      });
+      this.exchangeData.customerList[index].status = "completed"
+      this.exchangeData.updateStatus(this.exchangeData.customerList[index].id, "completed");
 
-      this.exchangeData.completedList.push(this.exchangeData.customerList[0])
-      this.exchangeData.customerList.splice(0,1);
+      this.exchangeData.completedList.push(this.exchangeData.customerList[index])
+      this.exchangeData.customerList.splice(index,1);
       this.loading.dismiss();
     } else {
       this.loading.dismiss();
@@ -484,8 +461,4 @@ export class HomePage {
       this.getFromWaiting();
     }
   }
-
-  // test(){
-  //   console.log(this.exchangeData.userDetails);
-  // }
 }

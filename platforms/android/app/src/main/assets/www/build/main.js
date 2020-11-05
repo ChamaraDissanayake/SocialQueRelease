@@ -9,7 +9,7 @@ webpackJsonp([0],{
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common_http__ = __webpack_require__(52);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_storage__ = __webpack_require__(80);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_storage__ = __webpack_require__(61);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__tabs_tabs__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_exchange_data_exchange_data__ = __webpack_require__(40);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -106,9 +106,9 @@ var OtpPage = /** @class */ (function () {
             selector: 'page-otp',template:/*ion-inline-start:"/Users/chamara/Desktop/project/SocialQue/src/pages/otp/otp.html"*/'<ion-header class="mainbody">\n  <ion-navbar color="pagedefault">\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="mainbody">\n  <form [formGroup]="otpFG" (ngSubmit)="verifyCode()">\n\n    <div>\n      <ion-label class="otplabels">Please Enter The Verification Code</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input #otpField class="inputtext changeside" type="tel" maxlength="4" minlength="4" placeholder="____" [(ngModel)]="otpFG.otp"\n          formControlName="otp" (keyup)=\'onKeyUp($event.target.value.length)\'></ion-input>\n      </ion-item>\n      <!-- <ion-label class="otplabels">Resend Verification Code: <span class="otplabels clicklink" (click)="verifyCode()">\n          Resend</span></ion-label> -->\n    </div>\n\n    <div class="buttonSection">\n      <button type="submit" [disabled]="!otpFG.valid" class="submitbutton" ion-button round outline>Verify</button>\n    </div>\n\n  </form>\n</ion-content>'/*ion-inline-end:"/Users/chamara/Desktop/project/SocialQue/src/pages/otp/otp.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_6__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */],
             __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["a" /* HttpClient */],
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormBuilder */],
             __WEBPACK_IMPORTED_MODULE_4__ionic_storage__["b" /* Storage */]])
@@ -137,7 +137,7 @@ webpackEmptyAsyncContext.id = 166;
 
 /***/ }),
 
-/***/ 313:
+/***/ 314:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -150,11 +150,11 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 313;
+webpackEmptyAsyncContext.id = 314;
 
 /***/ }),
 
-/***/ 353:
+/***/ 354:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -164,7 +164,7 @@ webpackEmptyAsyncContext.id = 313;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common_http__ = __webpack_require__(52);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_exchange_data_exchange_data__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_storage__ = __webpack_require__(80);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_storage__ = __webpack_require__(61);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__tabs_tabs__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__otp_otp__ = __webpack_require__(155);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -204,21 +204,13 @@ var SettingsPage = /** @class */ (function () {
                 { type: 'pattern', message: '*Not a valid mobile number!' }
             ],
             'occupant': [
-                { type: 'required', message: '*Occupant capacity is required!' }
+                { type: 'required', message: '*Occupant capacity required!' }
             ],
             'que': [
-                { type: 'required', message: '*Queue length is required!' }
+                { type: 'required', message: '*Queue length required!' }
             ]
         };
         this.baseURL = 'http://social.evokemusic.net/api/app/social-que/a-v1/putSellerDetail';
-        // this.editsignup = this.formBuilder.group({
-        //   category: ['Pharmacy'],
-        //   shopName: ['', Validators.required],
-        //   city: ['', Validators.required],
-        //   language: ['English'],
-        //   occupant: ['', Validators.required],
-        //   mobile: ['', [Validators.required, Validators.pattern('[0]{1}[7]{1}[0-9]{8}'), Validators.minLength(10)]]
-        // });
     }
     SettingsPage.prototype.ionViewWillLoad = function () {
         this.editsignup = this.formBuilder.group({
@@ -226,8 +218,8 @@ var SettingsPage = /** @class */ (function () {
             shopName: ['', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required],
             city: ['', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required],
             language: ['English'],
-            occupant: ['', [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].pattern('[0-9]{1,5}')]],
-            que: ['', [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].pattern('[0-9]{1,5}')]],
+            occupant: ['', [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].pattern('[0-9]{1,4}'), __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].min(1)]],
+            que: ['', [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].pattern('[0-9]{1,4}'), __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].min(1)]],
             mobile: ['', [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].pattern('[0]{1}[7]{1}[0-9]{8}'), __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].minLength(10)]]
         });
     };
@@ -251,7 +243,6 @@ var SettingsPage = /** @class */ (function () {
         else {
             this.editsignup.value.language = "English";
         }
-        // if (this.editsignup.value.mobile) {
         var headers = new __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["c" /* HttpHeaders */]({ 'Content-Type': 'application/json' }), options = {
             "ID": this.exchangeData.userDetails.ID, "MSISDN": arrangedMobile, "Categories": this.editsignup.value.category, "Language": this.editsignup.value.language, "BusinessName": this.editsignup.value.shopName,
             "City": this.editsignup.value.city, "Type": "Free", "GPS": "6.8923865,79.8717421", "OccupantCount": this.editsignup.value.occupant, "CreatedDate": Date.now()
@@ -274,18 +265,17 @@ var SettingsPage = /** @class */ (function () {
         }, function (error) {
             console.log('Something went wrong!', error);
         });
-        // }
     };
     SettingsPage.prototype.goHome = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__tabs_tabs__["a" /* TabsPage */]);
     };
     SettingsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-settings',template:/*ion-inline-start:"/Users/chamara/Desktop/project/SocialQue/src/pages/settings/settings.html"*/'<ion-header color="navbar">\n  <ion-navbar color="navbar">\n    <button ion-button (click)=goHome()>\n      <ion-icon name="arrow-back" style="font-size: x-large;"></ion-icon>\n    </button>\n    <label class="backBtnLable">Settings</label>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="subbody">\n  <form [formGroup]="editsignup" (ngSubmit)="updateUserDetails()">\n    <div style="margin-top: 50px;">\n      <ion-list>\n        <ion-label class="signuplabels">Select your Business Category</ion-label>\n        <ion-item class="inputboxdecoration">\n          <ion-label class="signuplabels" style="color: #6A77ED">Category</ion-label>\n          <ion-select class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="editsignup.category" formControlName="category" value="{{this.exchangeData.userDetails.Categories}}">\n            <ion-option value="Pharmacy">Pharmacy</ion-option>\n            <ion-option value="Stores">Stores</ion-option>\n            <ion-option value="Shop">Shop</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Shop Name</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" placeholder="Enter your shop name here" type="text" [(ngModel)]="editsignup.shopName" formControlName="shopName" value="{{this.exchangeData.userDetails.BusinessName}}"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.shopName">\n          <div class="error-message" *ngIf="editsignup.get(\'shopName\').hasError(validation.type) && (editsignup.get(\'shopName\').dirty || editsignup.get(\'shopName\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">City</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" placeholder="Enter your nearest city" type="text" [(ngModel)]="editsignup.city" formControlName="city" value="{{this.exchangeData.userDetails.City}}"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.city">\n          <div class="error-message" *ngIf="editsignup.get(\'city\').hasError(validation.type) && (editsignup.get(\'city\').dirty || editsignup.get(\'city\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div> \n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-list>\n        <ion-label class="signuplabels">Language</ion-label>\n        <ion-item class="inputboxdecoration">   \n          <ion-label class="signuplabels" style="color: #6A77ED">Language</ion-label>     \n          <ion-select class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="editsignup.language" formControlName="language" value="{{this.exchangeData.userDetails.Language}}">\n            <ion-option value="English">English</ion-option>\n            <ion-option value="Sinhala">Sinhala</ion-option>\n            <ion-option value="Tamil">Tamil</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Enter Your Mobile Number</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" type="tel" maxlength="10" minlength="10" [(ngModel)]="editsignup.mobile" formControlName="mobile" value="{{this.exchangeData.userDetails.MSISDN}}"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.mobile">\n          <div class="error-message" *ngIf="editsignup.get(\'mobile\').hasError(validation.type) && (editsignup.get(\'mobile\').dirty || editsignup.get(\'mobile\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>\n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Occupant Count</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" type="tel" maxlength = "5" [(ngModel)]="editsignup.occupant" formControlName="occupant" value="{{this.exchangeData.userDetails.OccupantCount}}" onfocus="value=\'\'"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.occupant">\n          <div class="error-message" *ngIf="editsignup.get(\'occupant\').hasError(validation.type) && (editsignup.get(\'occupant\').dirty || editsignup.get(\'occupant\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Queue Length</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" type="tel" maxlength = "5" [(ngModel)]="editsignup.que" formControlName="que" value="{{this.exchangeData.userDetails.QueueLength}}" onfocus="value=\'\'"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.que">\n          <div class="error-message" *ngIf="editsignup.get(\'que\').hasError(validation.type) && (editsignup.get(\'que\').dirty || editsignup.get(\'que\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n  \n    <div style="margin-top: 50px; text-align: center;">\n      <button type="submit" [disabled]="!editsignup.valid" class="submitbutton" ion-button round outline >Update</button>\n    </div>\n\n  </form>\n</ion-content>'/*ion-inline-end:"/Users/chamara/Desktop/project/SocialQue/src/pages/settings/settings.html"*/,
+            selector: 'page-settings',template:/*ion-inline-start:"/Users/chamara/Desktop/project/SocialQue/src/pages/settings/settings.html"*/'<ion-header color="navbar">\n  <ion-navbar color="navbar">\n    <button ion-button (click)=goHome()>\n      <ion-icon name="arrow-back" style="font-size: x-large;"></ion-icon>\n    </button>\n    <label class="backBtnLable">Settings</label>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="subbody">\n  <form [formGroup]="editsignup" (ngSubmit)="updateUserDetails()">\n    <div style="margin-top: 50px;">\n      <ion-list>\n        <ion-label class="signuplabels">Select your Business Category</ion-label>\n        <ion-item class="inputboxdecoration">\n          <ion-label class="signuplabels" style="color: #6A77ED">Category</ion-label>\n          <ion-select class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="editsignup.category" formControlName="category" value="{{this.exchangeData.userDetails.Categories}}">\n            <ion-option value="Pharmacy">Pharmacy</ion-option>\n            <ion-option value="Stores">Stores</ion-option>\n            <ion-option value="Shop">Shop</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Shop Name</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" placeholder="Enter your shop name here" type="text" [(ngModel)]="editsignup.shopName" formControlName="shopName" value="{{this.exchangeData.userDetails.BusinessName}}"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.shopName">\n          <div class="error-message" *ngIf="editsignup.get(\'shopName\').hasError(validation.type) && (editsignup.get(\'shopName\').dirty || editsignup.get(\'shopName\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">City</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" placeholder="Enter your nearest city" type="text" [(ngModel)]="editsignup.city" formControlName="city" value="{{this.exchangeData.userDetails.City}}"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.city">\n          <div class="error-message" *ngIf="editsignup.get(\'city\').hasError(validation.type) && (editsignup.get(\'city\').dirty || editsignup.get(\'city\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div> \n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-list>\n        <ion-label class="signuplabels">Language</ion-label>\n        <ion-item class="inputboxdecoration">   \n          <ion-label class="signuplabels" style="color: #6A77ED">Language</ion-label>     \n          <ion-select class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="editsignup.language" formControlName="language" value="{{this.exchangeData.userDetails.Language}}">\n            <ion-option value="English">English</ion-option>\n            <ion-option value="Sinhala">Sinhala</ion-option>\n            <ion-option value="Tamil">Tamil</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Enter Your Mobile Number</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" type="tel" maxlength="10" minlength="10" [(ngModel)]="editsignup.mobile" formControlName="mobile" value="{{this.exchangeData.userDetails.MSISDN}}"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.mobile">\n          <div class="error-message" *ngIf="editsignup.get(\'mobile\').hasError(validation.type) && (editsignup.get(\'mobile\').dirty || editsignup.get(\'mobile\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>\n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Occupant Count</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" type="tel" maxlength = "4" [(ngModel)]="editsignup.occupant" formControlName="occupant" value="{{this.exchangeData.userDetails.OccupantCount}}"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.occupant">\n          <div class="error-message" *ngIf="editsignup.get(\'occupant\').hasError(validation.type) && (editsignup.get(\'occupant\').dirty || editsignup.get(\'occupant\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Queue Length</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" type="tel" maxlength = "4" [(ngModel)]="editsignup.que" formControlName="que" value="{{this.exchangeData.userDetails.QueueLength}}"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.que">\n          <div class="error-message" *ngIf="editsignup.get(\'que\').hasError(validation.type) && (editsignup.get(\'que\').dirty || editsignup.get(\'que\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n  \n    <div style="margin-top: 50px; text-align: center;">\n      <button type="submit" [disabled]="!editsignup.valid" class="submitbutton" ion-button round outline >Update</button>\n    </div>\n\n  </form>\n</ion-content>'/*ion-inline-end:"/Users/chamara/Desktop/project/SocialQue/src/pages/settings/settings.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */],
             __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["a" /* HttpClient */],
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormBuilder */],
             __WEBPACK_IMPORTED_MODULE_5__ionic_storage__["b" /* Storage */]])
@@ -297,7 +287,7 @@ var SettingsPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 354:
+/***/ 355:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -330,13 +320,11 @@ var HomePage = /** @class */ (function () {
         this.zone = zone;
         this.exchangeData = exchangeData;
         this.loadingCtrl = loadingCtrl;
-        this.searchQuery = '';
-        this.nextPendingId = 100000;
+        this.nextPendingId = 1000;
         this.nextPendingPnumber = null;
         this.percent = 45;
         this.belowNumber = 45;
         this.holdTime = false;
-        // this.initializeItems(); 
     }
     HomePage.prototype.ionViewDidLoad = function () {
         var _this = this;
@@ -351,47 +339,20 @@ var HomePage = /** @class */ (function () {
         }
         setTimeout(function () {
             _this.blankOccupent();
+            _this.exchangeData.checkForUpdate();
         }, 1500);
+        // setTimeout(() => {
+        //   this.exchangeData.checkForUpdate();
+        // }, 5000);
         this.platform.registerBackButtonAction(function () {
             _this.appMinimize.minimize();
         });
+        setInterval(function () {
+            _this.exchangeData.checkForUpdate();
+            _this.exchangeData.checkDate();
+            console.log('checking date and update');
+        }, 1200000);
     };
-    // initializeItems() {
-    //   console.log('test')
-    //   // this.items = [
-    //   //   'Amsterdam',
-    //   //   'Bogota',
-    //   //   'Warakapola',
-    //   //   'Nittambuwa',
-    //   //   'Colombo'
-    //   // ];
-    //   this.exchangeData.customerList.forEach(element => {
-    //     // console.log(element)
-    //     if(element.id == 'pending'){
-    //       this.items.push(element.id);
-    //       console.log(this.items);
-    //     }
-    //   });
-    // }
-    // getItems(ev: any) {
-    //   // Reset items back to all of the items
-    //   this.initializeItems();
-    //   // set val to the value of the searchbar
-    //   const val = ev.target.value;
-    //   // console.log(ev.target.value)
-    //   // if the value is an empty string don't filter the items
-    //   if (val && val.trim() != '') {
-    //     console.log(this.items)
-    //     // this.items = this.items.filter((item) => {
-    //     //   // return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
-    //     //   console.log(item)
-    //     // })
-    //     // this.exchangeData.customerList = this.exchangeData.customerList.filter((item) => {
-    //     //   return (item.id.indexOf(val) > -1)
-    //     //   // console.log(item.id)
-    //     // })
-    //   }
-    // }
     HomePage.prototype.pageLoader = function () {
         this.loading = this.loadingCtrl.create({
             content: 'Please wait...'
@@ -399,9 +360,13 @@ var HomePage = /** @class */ (function () {
     };
     HomePage.prototype.startClock = function () {
         var _this = this;
+        if (this.percent < 10) {
+            this.resetClock();
+        }
         clearInterval(this.timer);
         this.countPendingCustomers();
-        if (this.exchangeData.customerList[0] != undefined && this.pendingCount > 0) {
+        console.log('working clock', this.exchangeData.customerList[0] != undefined, this.pendingCount > 0, this.exchangeData.maxCustomers > this.exchangeData.insideCustomerCount);
+        if (this.exchangeData.customerList[0] != undefined && this.pendingCount > 0 && this.exchangeData.maxCustomers > this.exchangeData.insideCustomerCount) {
             if (SMS)
                 SMS.sendSMS(this.nextPendingPnumber, 'Your turn, please come inside. Your number is ' + this.nextPendingId + '.', function () { }, function () {
                     alert('Message sending failed. Please check your balance');
@@ -418,7 +383,7 @@ var HomePage = /** @class */ (function () {
         }
     };
     HomePage.prototype.holdClock = function () {
-        if (this.holdTime == true || this.exchangeData.insideCustomerCount == this.exchangeData.maxCustomers) {
+        if (this.holdTime == true || this.exchangeData.insideCustomerCount >= this.exchangeData.maxCustomers) {
             clearInterval(this.timer);
             this.holdTime = false;
         }
@@ -580,17 +545,25 @@ var HomePage = /** @class */ (function () {
         this.resetClock();
         this.holdTime = true;
         this.blankOccupent();
+        console.log(this.exchangeData.customerList);
     };
     HomePage.prototype.goOut = function () {
+        var _this = this;
+        var index = 0;
         this.pageLoader();
-        this.loading.present();
         if (this.exchangeData.insideCustomerCount > 0) {
+            this.loading.present();
             this.exchangeData.insideCustomerCount--;
             this.startClock();
-            this.exchangeData.customerList[0].status = "completed";
-            this.exchangeData.updateStatus(this.exchangeData.customerList[0].id, "completed");
-            this.exchangeData.completedList.push(this.exchangeData.customerList[0]);
-            this.exchangeData.customerList.splice(0, 1);
+            this.exchangeData.customerList.forEach(function (element) {
+                if (element.status == 'inside') {
+                    index = _this.exchangeData.customerList.indexOf(element);
+                }
+            });
+            this.exchangeData.customerList[index].status = "completed";
+            this.exchangeData.updateStatus(this.exchangeData.customerList[index].id, "completed");
+            this.exchangeData.completedList.push(this.exchangeData.customerList[index]);
+            this.exchangeData.customerList.splice(index, 1);
             this.loading.dismiss();
         }
         else {
@@ -680,30 +653,28 @@ var HomePage = /** @class */ (function () {
             console.log('force update the screen');
         });
     };
-    HomePage.prototype.getNextTestNumber = function () {
-        if (this.generateNumber > this.exchangeData.lastCustomerNumber) {
-            this.generateNumber++;
-            this.addTest();
-        }
-        else {
-            this.generateNumber = this.exchangeData.lastCustomerNumber + 1;
-            this.addTest();
-        }
-    };
-    HomePage.prototype.addTest = function () {
-        this.countPendingCustomers();
-        if (this.pendingCount < this.exchangeData.queLength) {
-            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: +94714142387, status: "pending", createdTime: Date.now() });
-            this.exchangeData.insertData(this.generateNumber, +94714142387, "pending");
-            console.log('Please come and present now. Your number is ' + this.generateNumber);
-        }
-        else {
-            console.log('Please come after 10 minutes. Your number is ' + this.generateNumber + '. Present number is ' + this.nextPendingId);
-            this.exchangeData.customerList.push({ id: this.generateNumber, pNumber: +94714142387, status: "waiting", createdTime: Date.now() });
-            this.exchangeData.insertData(this.generateNumber, +94714142387, "waiting");
-        }
-        this.blankOccupent();
-    };
+    // getNextTestNumber(){    
+    //   if(this.generateNumber>this.exchangeData.lastCustomerNumber){
+    //     this.generateNumber++
+    //     this.addTest()
+    //   } else{
+    //     this.generateNumber = this.exchangeData.lastCustomerNumber+1;
+    //     this.addTest()
+    //   }
+    // }
+    // addTest(){
+    //   this.countPendingCustomers();
+    //   if(this.pendingCount<this.exchangeData.queLength){
+    //     this.exchangeData.customerList.push({id:this.generateNumber, pNumber:+94714142387, status:"pending", createdTime: Date.now()});  
+    //     this.exchangeData.insertData(this.generateNumber, +94714142387, "pending");
+    //     console.log('Please come and present now. Your number is '+ this.generateNumber)
+    //   } else {
+    //     console.log('Please come after 10 minutes. Your number is ' + this.generateNumber + '. Present number is ' + this.nextPendingId)
+    //     this.exchangeData.customerList.push({id:this.generateNumber, pNumber:+94714142387, status:"waiting", createdTime: Date.now()});          
+    //     this.exchangeData.insertData(this.generateNumber, +94714142387, "waiting");
+    //   }
+    //   this.blankOccupent();
+    // }
     HomePage.prototype.countPendingCustomers = function () {
         var _this = this;
         var bool;
@@ -766,20 +737,17 @@ var HomePage = /** @class */ (function () {
             this.getFromWaiting();
         }
     };
-    HomePage.prototype.test = function () {
-        console.log(this.exchangeData.userDetails);
-    };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"/Users/chamara/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight:500; padding-top: 16px;">\n    <table style="width: -webkit-fill-available; text-align: center;">\n      <tr>        \n        <td><input class="roundlabel" readonly value="{{exchangeData.insideCustomerCount}}"></td>\n        <td><input class="roundlabel" readonly value="{{this.exchangeData.maxCustomers-exchangeData.insideCustomerCount}}"></td>\n      </tr>\n      <tr>\n        <td style=" padding-top: 3%;"><label style="font-size:16px;">Current Occupants</label></td>\n        <td style=" padding-top: 3%;"><label style="font-size:16px;">Available Occupants</label></td>\n      </tr>\n    </table>\n  </section>\n\n  <!-- <section>\n    <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>\n    <ion-list>\n      <ion-item *ngFor="let item of items">\n        {{ item }}\n      </ion-item>\n    </ion-list>\n  </section>   -->\n\n  <section>\n    <table style="margin-top: 5%; width: -webkit-fill-available; text-align: center;">\n      <!-- <tr>\n        <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>\n      </tr> -->\n      <tr>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td>\n          <ion-scroll scrollY="true" style="height: 170px;">\n            <label class="numberset">\n              <span *ngFor="let cstmrDetails of exchangeData.customerList">\n                <span ion-button class="btngetin" *ngIf="cstmrDetails.status ==\'pending\'" (click)="countGetIn(cstmrDetails)">\n                  {{cstmrDetails.id}}\n                </span>\n              </span>\n              <span *ngFor="let dmy of this.dummyOccupents">\n                <span #empty ion-button class="btngetin"></span>\n              </span>              \n            </label>\n          </ion-scroll>\n        </td>\n      </tr>\n      <tr>\n        <td style="text-align: -webkit-center;">\n          <div class = "clockouter">\n            <circle-progress\n              [percent]="setPresentage"\n              [title]="percent+\' Sec\'"\n              (click)="holdClock()">\n            </circle-progress>\n          </div>\n        </td>\n      </tr>\n    </table>\n  </section>\n\n    <ion-fab left bottom>\n      <button ion-fab class="custom-actionbutton" style="left: 20px;" (click)="goOut()">Out</button>      \n    </ion-fab>\n    <ion-fab right bottom>\n      <button ion-fab class="custom-actionbutton" style="right: 20px;" (click)="skipCustomer()">Next</button>  \n    </ion-fab>\n    \n\n    <div>     \n      <label *ngFor="let x of messages">\n        <h2>{{x}}</h2>\n      </label>\n    </div>\n\n    <div style="margin-top: 100px;" ion-button (click)= "getNextTestNumber()"> Add Customers</div>\n    <!--<div ion-button (click)= "exchangeData.resetTable()"> Reset Table</div>-->\n    <div ion-button (click)= "test()">test</div>\n</ion-content>'/*ion-inline-end:"/Users/chamara/Desktop/project/SocialQue/src/pages/home/home.html"*/
+            selector: 'page-home',template:/*ion-inline-start:"/Users/chamara/Desktop/project/SocialQue/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <section style="font-weight:500; padding-top: 16px;">\n    <table style="width: -webkit-fill-available; text-align: center;">\n      <tr>        \n        <td><input class="roundlabel" readonly value="{{exchangeData.insideCustomerCount}}"></td>\n        <td><input class="roundlabel" readonly value="{{exchangeData.maxCustomers-exchangeData.insideCustomerCount}}"></td>\n      </tr>\n      <tr>\n        <td style=" padding-top: 3%;"><label style="font-size:16px;">Current Occupants</label></td>\n        <td style=" padding-top: 3%;"><label style="font-size:16px;">Available Occupants</label></td>\n      </tr>\n    </table>\n  </section>\n\n  <section>\n    <table style="margin-top: 5%; width: -webkit-fill-available; text-align: center;">\n      <!-- <tr>\n        <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>\n      </tr> -->\n      <tr>\n        <td><label class="quelabel">Current Que Numbers</label></td>\n      </tr>\n      <tr>\n        <td>\n          <ion-scroll scrollY="true" style="height: 170px;">\n            <label class="numberset">\n              <span *ngFor="let cstmrDetails of exchangeData.customerList">\n                <span ion-button class="btngetin" *ngIf="cstmrDetails.status ==\'pending\'" (click)="countGetIn(cstmrDetails)">\n                  {{cstmrDetails.id}}\n                </span>\n              </span>\n              <span *ngFor="let dmy of this.dummyOccupents">\n                <span #empty ion-button class="btngetin"></span>\n              </span>              \n            </label>\n          </ion-scroll>\n        </td>\n      </tr>\n      <tr>\n        <td style="text-align: -webkit-center;">\n          <div class = "clockouter">\n            <circle-progress\n              [min]="0"\n              [percent]="setPresentage"\n              [title]="percent+\' Sec\'"\n              (click)="holdClock()">\n            </circle-progress>\n          </div>\n        </td>\n      </tr>\n    </table>\n  </section>\n\n    <ion-fab left bottom>\n      <button ion-fab class="custom-actionbutton" style="left: 20px;" (click)="goOut()">Out</button>      \n    </ion-fab>\n    <ion-fab right bottom>\n      <button ion-fab class="custom-actionbutton" style="right: 20px;" (click)="skipCustomer()">Next</button>  \n    </ion-fab>\n    \n\n    <div>     \n      <label *ngFor="let x of messages">\n        <h2>{{x}}</h2>\n      </label>\n    </div>\n\n    <!-- <div style="margin-top: 100px;" ion-button (click)= "getNextTestNumber()"> Add Customers</div> -->\n    <!-- <div ion-button (click)= "exchangeData.onConnected()">Update</div> -->\n</ion-content>'/*ion-inline-end:"/Users/chamara/Desktop/project/SocialQue/src/pages/home/home.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */],
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */],
             __WEBPACK_IMPORTED_MODULE_3__ionic_native_app_minimize__["a" /* AppMinimize */],
             __WEBPACK_IMPORTED_MODULE_2__ionic_native_android_permissions__["a" /* AndroidPermissions */],
             __WEBPACK_IMPORTED_MODULE_0__angular_core__["N" /* NgZone */],
             __WEBPACK_IMPORTED_MODULE_4__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* LoadingController */]])
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* LoadingController */]])
     ], HomePage);
     return HomePage;
 }());
@@ -788,7 +756,7 @@ var HomePage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 355:
+/***/ 356:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -813,14 +781,59 @@ var WaitinglistPage = /** @class */ (function () {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.exchangeData = exchangeData;
+        this.items = [];
+        // this.initializeItems();
     }
-    WaitinglistPage.prototype.ionViewDidEnter = function () { };
+    WaitinglistPage.prototype.ionViewDidEnter = function () {
+        this.exchangeData.customerList;
+        this.initializeItems();
+    };
+    WaitinglistPage.prototype.initializeItems = function () {
+        var _this = this;
+        this.items = [];
+        if (this.exchangeData.customerList) {
+            this.exchangeData.customerList.forEach(function (element) {
+                if (element.status == 'waiting') {
+                    _this.items.push(element.id.toString());
+                }
+            });
+        }
+    };
+    WaitinglistPage.prototype.getItems = function (ev) {
+        this.initializeItems();
+        if (ev) {
+            var val_1 = ev.target.value;
+            if (val_1 && val_1.trim != '') {
+                this.items = this.items.filter(function (item) {
+                    return (item.indexOf(val_1) > -1);
+                });
+            }
+        }
+    };
+    WaitinglistPage.prototype.forceGetIn = function (id) {
+        var _this = this;
+        var index = 0;
+        this.exchangeData.customerList.forEach(function (element) {
+            if (element.id == id) {
+                index = _this.exchangeData.customerList.indexOf(element);
+            }
+        });
+        this.exchangeData.customerList[index].status = "inside";
+        this.exchangeData.updateStatus(this.exchangeData.customerList[index].id, "inside");
+        this.exchangeData.insideCustomerCount++;
+        this.searchbar.clearInput(null);
+        this.initializeItems();
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_9" /* ViewChild */])('searchbarid'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* Searchbar */])
+    ], WaitinglistPage.prototype, "searchbar", void 0);
     WaitinglistPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-waitinglist',template:/*ion-inline-start:"/Users/chamara/Desktop/project/SocialQue/src/pages/waitinglist/waitinglist.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>waitinglist</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding style="text-align: -webkit-center;">\n  <label class="numberset">\n    <span *ngFor="let waiting of exchangeData.customerList">\n      <span ion-button class="btngetin" *ngIf="waiting.status==\'waiting\'">\n        {{waiting.id}}\n      </span>\n    </span>\n  </label>\n</ion-content>'/*ion-inline-end:"/Users/chamara/Desktop/project/SocialQue/src/pages/waitinglist/waitinglist.html"*/,
+            selector: 'page-waitinglist',template:/*ion-inline-start:"/Users/chamara/Desktop/project/SocialQue/src/pages/waitinglist/waitinglist.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>waitinglist</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding style="text-align: -webkit-center;">\n\n  <section>\n    <ion-searchbar #searchbarid (ionInput)="getItems($event)" [showCancelButton]="true"></ion-searchbar>\n  </section>\n\n  <label class="numberset">\n      <ion-list>\n        <ion-row>\n          <ion-col col-12 *ngFor = "let item of items" style="text-align-last: center; padding: unset;">\n            <ion-item-sliding>\n              <ion-item>\n                <span ion-button class="btngetin">{{ item }}</span>\n              </ion-item>\n              <ion-item-options side="left">\n                <span ion-button color="danger" style="height: 50%; align-self: center;" (click)="forceGetIn(item)">Get Inside</span>\n              </ion-item-options>\n            </ion-item-sliding>\n          </ion-col>\n        </ion-row>\n      </ion-list>\n  </label>\n  \n</ion-content>'/*ion-inline-end:"/Users/chamara/Desktop/project/SocialQue/src/pages/waitinglist/waitinglist.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */],
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */],
             __WEBPACK_IMPORTED_MODULE_2__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */]])
     ], WaitinglistPage);
     return WaitinglistPage;
@@ -830,7 +843,7 @@ var WaitinglistPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 356:
+/***/ 357:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -864,9 +877,9 @@ var SkippedPage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'page-skipped',template:/*ion-inline-start:"/Users/chamara/Desktop/project/SocialQue/src/pages/skipped/skipped.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>skipped</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding style="text-align: -webkit-center;">\n  <label class="numberset">\n    <span *ngFor="let skip of exchangeData.customerList">\n      <span ion-button class="btngetin" *ngIf="skip.status==\'skipped\'">\n        {{skip.id}}\n      </span>\n    </span>\n  </label>\n</ion-content>\n'/*ion-inline-end:"/Users/chamara/Desktop/project/SocialQue/src/pages/skipped/skipped.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */],
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */],
             __WEBPACK_IMPORTED_MODULE_2__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */]])
     ], SkippedPage);
     return SkippedPage;
@@ -876,7 +889,7 @@ var SkippedPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 357:
+/***/ 358:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -950,11 +963,12 @@ var SignupPage = /** @class */ (function () {
         }
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]({ 'Content-Type': 'application/json' }), options = { "MSISDN": arrangedMobile, "Categories": this.signup.value.category, "Language": this.signup.value.language, "BusinessName": this.signup.value.shopName,
             "City": this.signup.value.city, "Type": "Free", "GPS": "6.8923865,79.8717421", "OccupantCount": 5, "CreatedDate": Date.now() }, url = this.baseURL;
+        console.log(options, '22222');
         this.http.post(url, JSON.stringify(options), headers)
             .subscribe(function (data) {
-            console.log("Congratulations data was successfully added", data);
+            console.log("Congratulations data added successfully", data);
             _this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": '0' + data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount, "QueueLength": 5 };
-            console.log(_this.exchangeData.userDetails);
+            console.log(_this.exchangeData.userDetails, '333333');
         }, function (error) {
             console.log('Something went wrong!', error);
         });
@@ -968,8 +982,8 @@ var SignupPage = /** @class */ (function () {
             selector: 'page-signup',template:/*ion-inline-start:"/Users/chamara/Desktop/project/SocialQue/src/pages/signup/signup.html"*/'<ion-content padding class="mainbody">\n  <form [formGroup]="signup" (ngSubmit)="submitSellerDetails()">\n\n    <div style="margin-top: 50px;">\n      <ion-list>\n        <ion-label class="signuplabels">Select your Business Category</ion-label>\n        <ion-item class="inputboxdecoration">\n          <ion-label class="signuplabels" style="color: #6A77ED">Category</ion-label>\n          <ion-select  class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="signup.category" formControlName="category">\n            <ion-option value="Pharmacy">Pharmacy</ion-option>\n            <ion-option value="Stores">Stores</ion-option>\n            <ion-option value="Shop">Shop</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Shop Name</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" placeholder="Enter your shop name here" type="text" [(ngModel)]="signup.shopName" formControlName="shopName"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.shopName">\n          <div class="error-message" *ngIf="signup.get(\'shopName\').hasError(validation.type) && (signup.get(\'shopName\').dirty || signup.get(\'shopName\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n\n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">City</ion-label>\n      <ion-item class="inputboxdecoration">\n        <ion-input class="inputtext" placeholder="Enter your nearest city" type="text" [(ngModel)]="signup.city" formControlName="city"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.city">\n          <div class="error-message" *ngIf="signup.get(\'city\').hasError(validation.type) && (signup.get(\'city\').dirty || signup.get(\'city\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-list>\n        <ion-label class="signuplabels">Language</ion-label>\n        <ion-item class="inputboxdecoration">   \n          <ion-label class="signuplabels" style="color: #6A77ED">Language</ion-label>     \n          <ion-select class="inputtext" style="min-width: -webkit-fill-available;" [(ngModel)]="signup.language" formControlName="language">\n            <ion-option value="English">English</ion-option>\n            <ion-option value="Sinhala">Sinhala</ion-option>\n            <ion-option value="Tamil">Tamil</ion-option>\n          </ion-select>\n        </ion-item>\n      </ion-list>\n    </div>\n  \n    <div style="margin-top: 30px;">\n      <ion-label class="signuplabels">Enter Your Mobile Number</ion-label>\n      <ion-item class="inputboxdecoration">        \n        <ion-input class="inputtext" type="tel" maxlength="10" minlength="10" placeholder="07X XX XX XXX" [(ngModel)]="signup.mobile" formControlName="mobile"></ion-input>\n      </ion-item>\n      <div class="validation-errors">\n        <ng-container *ngFor="let validation of validation_messages.mobile">\n          <div class="error-message" *ngIf="signup.get(\'mobile\').hasError(validation.type) && (signup.get(\'mobile\').dirty || signup.get(\'mobile\').touched)">\n            {{ validation.message }}\n          </div>\n        </ng-container>\n      </div>  \n    </div>\n  \n    <div style="margin-top: 50px; text-align: center;">\n      <button type="submit" [disabled]="!signup.valid" class="submitbutton" ion-button round outline >Sign Up</button>\n    </div>\n\n  </form>\n</ion-content>\n\n'/*ion-inline-end:"/Users/chamara/Desktop/project/SocialQue/src/pages/signup/signup.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */],
-            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["g" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["g" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* NavParams */],
             __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */],
             __WEBPACK_IMPORTED_MODULE_4__angular_forms__["a" /* FormBuilder */]])
     ], SignupPage);
@@ -980,7 +994,7 @@ var SignupPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 358:
+/***/ 359:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1015,7 +1029,7 @@ var AboutPage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'page-about',template:/*ion-inline-start:"/Users/chamara/Desktop/project/SocialQue/src/pages/about/about.html"*/'<ion-header>  \n  <ion-navbar color="navbar">    \n    <button ion-button (click)=goHome()>\n      <ion-icon name="arrow-back" style="font-size: x-large;"></ion-icon>\n    </button>\n    <label class="backBtnLable">About</label>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos at amet possimus eveniet recusandae? Quos consectetur earum quia ipsam hic provident quis voluptatum enim iusto, illum, eligendi perferendis, sapiente ex?/p>\n</ion-content>\n'/*ion-inline-end:"/Users/chamara/Desktop/project/SocialQue/src/pages/about/about.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]])
     ], AboutPage);
     return AboutPage;
 }());
@@ -1024,7 +1038,7 @@ var AboutPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 359:
+/***/ 360:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1059,7 +1073,7 @@ var TermsPage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'page-terms',template:/*ion-inline-start:"/Users/chamara/Desktop/project/SocialQue/src/pages/terms/terms.html"*/'<ion-header>  \n  <ion-navbar color="navbar">    \n    <button ion-button (click)=goHome()>\n      <ion-icon name="arrow-back" style="font-size: x-large;"></ion-icon>\n    </button>\n    <label class="backBtnLable">Terms</label>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos at amet possimus eveniet recusandae? Quos consectetur earum quia ipsam hic provident quis voluptatum enim iusto, illum, eligendi perferendis, sapiente ex?/p>\n</ion-content>'/*ion-inline-end:"/Users/chamara/Desktop/project/SocialQue/src/pages/terms/terms.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]])
     ], TermsPage);
     return TermsPage;
 }());
@@ -1068,13 +1082,13 @@ var TermsPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 360:
+/***/ 361:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(361);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(365);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(362);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(366);
 
 
 //platformBrowserDynamic().bootstrapModule(AppModule);
@@ -1090,7 +1104,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 /***/ }),
 
-/***/ 365:
+/***/ 366:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1098,35 +1112,37 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common_http__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(366);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(367);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(266);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_splash_screen__ = __webpack_require__(268);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_sqlite__ = __webpack_require__(269);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_android_permissions__ = __webpack_require__(111);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_network__ = __webpack_require__(270);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_file__ = __webpack_require__(654);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_file__ = __webpack_require__(655);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_native_camera__ = __webpack_require__(271);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__ionic_native_app_minimize__ = __webpack_require__(272);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_storage__ = __webpack_require__(80);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_ionic_angular__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_ng_circle_progress__ = __webpack_require__(690);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__app_component__ = __webpack_require__(691);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_home_home__ = __webpack_require__(354);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pages_waitinglist_waitinglist__ = __webpack_require__(355);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pages_skipped_skipped__ = __webpack_require__(356);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pages_signup_signup__ = __webpack_require__(357);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__pages_otp_otp__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__pages_settings_settings__ = __webpack_require__(353);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__pages_tabs_tabs__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pages_about_about__ = __webpack_require__(358);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pages_terms_terms__ = __webpack_require__(359);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__providers_exchange_data_exchange_data__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_native_market__ = __webpack_require__(273);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_storage__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_ionic_angular__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_ng_circle_progress__ = __webpack_require__(691);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__app_component__ = __webpack_require__(692);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pages_home_home__ = __webpack_require__(355);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pages_waitinglist_waitinglist__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pages_skipped_skipped__ = __webpack_require__(357);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__pages_signup_signup__ = __webpack_require__(358);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__pages_otp_otp__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__pages_settings_settings__ = __webpack_require__(354);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pages_tabs_tabs__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pages_about_about__ = __webpack_require__(359);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__pages_terms_terms__ = __webpack_require__(360);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__providers_exchange_data_exchange_data__ = __webpack_require__(40);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -1160,26 +1176,26 @@ var AppModule = /** @class */ (function () {
     AppModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["J" /* NgModule */])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_15__app_component__["a" /* SocialQue */],
-                __WEBPACK_IMPORTED_MODULE_16__pages_home_home__["a" /* HomePage */],
-                __WEBPACK_IMPORTED_MODULE_19__pages_signup_signup__["a" /* SignupPage */],
-                __WEBPACK_IMPORTED_MODULE_20__pages_otp_otp__["a" /* OtpPage */],
-                __WEBPACK_IMPORTED_MODULE_21__pages_settings_settings__["a" /* SettingsPage */],
-                __WEBPACK_IMPORTED_MODULE_17__pages_waitinglist_waitinglist__["a" /* WaitinglistPage */],
-                __WEBPACK_IMPORTED_MODULE_18__pages_skipped_skipped__["a" /* SkippedPage */],
-                __WEBPACK_IMPORTED_MODULE_22__pages_tabs_tabs__["a" /* TabsPage */],
-                __WEBPACK_IMPORTED_MODULE_23__pages_about_about__["a" /* AboutPage */],
-                __WEBPACK_IMPORTED_MODULE_24__pages_terms_terms__["a" /* TermsPage */]
+                __WEBPACK_IMPORTED_MODULE_16__app_component__["a" /* SocialQue */],
+                __WEBPACK_IMPORTED_MODULE_17__pages_home_home__["a" /* HomePage */],
+                __WEBPACK_IMPORTED_MODULE_20__pages_signup_signup__["a" /* SignupPage */],
+                __WEBPACK_IMPORTED_MODULE_21__pages_otp_otp__["a" /* OtpPage */],
+                __WEBPACK_IMPORTED_MODULE_22__pages_settings_settings__["a" /* SettingsPage */],
+                __WEBPACK_IMPORTED_MODULE_18__pages_waitinglist_waitinglist__["a" /* WaitinglistPage */],
+                __WEBPACK_IMPORTED_MODULE_19__pages_skipped_skipped__["a" /* SkippedPage */],
+                __WEBPACK_IMPORTED_MODULE_23__pages_tabs_tabs__["a" /* TabsPage */],
+                __WEBPACK_IMPORTED_MODULE_24__pages_about_about__["a" /* AboutPage */],
+                __WEBPACK_IMPORTED_MODULE_25__pages_terms_terms__["a" /* TermsPage */]
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_12__ionic_storage__["a" /* IonicStorageModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_13__ionic_storage__["a" /* IonicStorageModule */].forRoot(),
                 __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["b" /* HttpClientModule */],
                 __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* HttpModule */],
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-                __WEBPACK_IMPORTED_MODULE_13_ionic_angular__["c" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_15__app_component__["a" /* SocialQue */], {}, {
+                __WEBPACK_IMPORTED_MODULE_14_ionic_angular__["d" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_16__app_component__["a" /* SocialQue */], {}, {
                     links: []
                 }),
-                __WEBPACK_IMPORTED_MODULE_14_ng_circle_progress__["a" /* NgCircleProgressModule */].forRoot({
+                __WEBPACK_IMPORTED_MODULE_15_ng_circle_progress__["a" /* NgCircleProgressModule */].forRoot({
                     // set defaults here
                     radius: 55,
                     outerStrokeWidth: 2,
@@ -1197,27 +1213,28 @@ var AppModule = /** @class */ (function () {
                     titleColor: "black"
                 }),
             ],
-            bootstrap: [__WEBPACK_IMPORTED_MODULE_13_ionic_angular__["a" /* IonicApp */]],
+            bootstrap: [__WEBPACK_IMPORTED_MODULE_14_ionic_angular__["b" /* IonicApp */]],
             entryComponents: [
-                __WEBPACK_IMPORTED_MODULE_15__app_component__["a" /* SocialQue */],
-                __WEBPACK_IMPORTED_MODULE_16__pages_home_home__["a" /* HomePage */],
-                __WEBPACK_IMPORTED_MODULE_19__pages_signup_signup__["a" /* SignupPage */],
-                __WEBPACK_IMPORTED_MODULE_20__pages_otp_otp__["a" /* OtpPage */],
-                __WEBPACK_IMPORTED_MODULE_21__pages_settings_settings__["a" /* SettingsPage */],
-                __WEBPACK_IMPORTED_MODULE_17__pages_waitinglist_waitinglist__["a" /* WaitinglistPage */],
-                __WEBPACK_IMPORTED_MODULE_18__pages_skipped_skipped__["a" /* SkippedPage */],
-                __WEBPACK_IMPORTED_MODULE_22__pages_tabs_tabs__["a" /* TabsPage */],
-                __WEBPACK_IMPORTED_MODULE_23__pages_about_about__["a" /* AboutPage */],
-                __WEBPACK_IMPORTED_MODULE_24__pages_terms_terms__["a" /* TermsPage */]
+                __WEBPACK_IMPORTED_MODULE_16__app_component__["a" /* SocialQue */],
+                __WEBPACK_IMPORTED_MODULE_17__pages_home_home__["a" /* HomePage */],
+                __WEBPACK_IMPORTED_MODULE_20__pages_signup_signup__["a" /* SignupPage */],
+                __WEBPACK_IMPORTED_MODULE_21__pages_otp_otp__["a" /* OtpPage */],
+                __WEBPACK_IMPORTED_MODULE_22__pages_settings_settings__["a" /* SettingsPage */],
+                __WEBPACK_IMPORTED_MODULE_18__pages_waitinglist_waitinglist__["a" /* WaitinglistPage */],
+                __WEBPACK_IMPORTED_MODULE_19__pages_skipped_skipped__["a" /* SkippedPage */],
+                __WEBPACK_IMPORTED_MODULE_23__pages_tabs_tabs__["a" /* TabsPage */],
+                __WEBPACK_IMPORTED_MODULE_24__pages_about_about__["a" /* AboutPage */],
+                __WEBPACK_IMPORTED_MODULE_25__pages_terms_terms__["a" /* TermsPage */]
             ],
             providers: [
                 __WEBPACK_IMPORTED_MODULE_8__ionic_native_network__["a" /* Network */],
                 __WEBPACK_IMPORTED_MODULE_7__ionic_native_android_permissions__["a" /* AndroidPermissions */],
                 __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__["a" /* StatusBar */],
                 __WEBPACK_IMPORTED_MODULE_11__ionic_native_app_minimize__["a" /* AppMinimize */],
+                __WEBPACK_IMPORTED_MODULE_12__ionic_native_market__["a" /* Market */],
                 __WEBPACK_IMPORTED_MODULE_5__ionic_native_splash_screen__["a" /* SplashScreen */],
-                { provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* ErrorHandler */], useClass: __WEBPACK_IMPORTED_MODULE_13_ionic_angular__["b" /* IonicErrorHandler */] },
-                __WEBPACK_IMPORTED_MODULE_25__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */],
+                { provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* ErrorHandler */], useClass: __WEBPACK_IMPORTED_MODULE_14_ionic_angular__["c" /* IonicErrorHandler */] },
+                __WEBPACK_IMPORTED_MODULE_26__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */],
                 __WEBPACK_IMPORTED_MODULE_6__ionic_native_sqlite__["a" /* SQLite */],
                 // FileTransfer,
                 // FileUploadOptions,
@@ -1245,7 +1262,9 @@ var AppModule = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_sqlite__ = __webpack_require__(269);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_android_permissions__ = __webpack_require__(111);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_network__ = __webpack_require__(270);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_storage__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_network__ = __webpack_require__(270);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_market__ = __webpack_require__(273);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1260,24 +1279,32 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-// import { Storage } from '@ionic/storage';
+
+// import { Connection, Network } from '@ionic-native/network';
+
 
 var ExchangeDataProvider = /** @class */ (function () {
-    function ExchangeDataProvider(network, androidPermissions, http, sqlite, platform) {
+    function ExchangeDataProvider(network, androidPermissions, http, sqlite, platform, alertCtrl, market, storage) {
         this.network = network;
         this.androidPermissions = androidPermissions;
         this.http = http;
         this.sqlite = sqlite;
         this.platform = platform;
+        this.alertCtrl = alertCtrl;
+        this.market = market;
+        this.storage = storage;
         this.occupentCountChanged = false;
+        this.onConnected();
         this.customerList = [];
         this.completedList = [];
         this.absentList = [];
         this.insideCustomerCount = 0;
-        this.lastCustomerNumber = 100000;
+        this.lastCustomerNumber = 1000;
         this.shopName = "";
-        this.onConnected();
-        this.baseURL = 'http://social.evokemusic.net/api/app/social-que/a-v1/putCustomerDetail';
+        this.baseURL = 'http://social.evokemusic.net/api/app/social-que/a-v1/';
+        this.date = new Date().getDate();
+        this.version = '0.0.1';
+        this.checkForUpdates = true;
     }
     ExchangeDataProvider.prototype.setupDB = function () {
         var _this = this;
@@ -1328,7 +1355,6 @@ var ExchangeDataProvider = /** @class */ (function () {
                 location: 'default'
             })
                 .then(function (db) {
-                // db.executeSql("SELECT * FROM customer_details WHERE Status = 'pending' OR Status = 'waiting' OR Status = 'inside'", [])
                 db.executeSql("SELECT * FROM customer_details WHERE Status like '%pending%' OR Status like '%waiting%' OR Status like '%inside%' OR Status like '%skipped%'", [])
                     .then(function (result) {
                     console.log("RETRIEVED SUCCESSFULLY", result.rows);
@@ -1372,7 +1398,7 @@ var ExchangeDataProvider = /** @class */ (function () {
     };
     ExchangeDataProvider.prototype.createEntry = function (syncData) {
         var headers = new __WEBPACK_IMPORTED_MODULE_0__angular_common_http__["c" /* HttpHeaders */]({ 'Content-Type': 'application/json' }), options = { "SellerId": syncData.SellerId, "MSISDN": syncData.MSISDN, "QueNo": syncData.QueNo, "Status": syncData.Status,
-            "CreatedTime": syncData.CreatedTime, "UpdatedTime": syncData.UpdatedTime, "CheckInTime": syncData.CheckInTime }, url = this.baseURL;
+            "CreatedTime": syncData.CreatedTime, "UpdatedTime": syncData.UpdatedTime, "CheckInTime": syncData.CheckInTime }, url = this.baseURL + 'putCustomerDetail';
         this.http.post(url, JSON.stringify(options), headers)
             .subscribe(function (data) {
             console.log("Congratulations data was successfully added", data);
@@ -1438,8 +1464,26 @@ var ExchangeDataProvider = /** @class */ (function () {
             alert(JSON.stringify(Error));
         });
     };
+    ExchangeDataProvider.prototype.checkDate = function () {
+        var _this = this;
+        this.storage.get('currentDate').then(function (val) {
+            if (val == null) {
+                console.log('Add new date');
+                _this.storage.set('currentDate', _this.date);
+            }
+            else if (_this.date != val) {
+                console.log('Updated to new date');
+                _this.resetTable();
+                _this.storage.set('currentDate', _this.date);
+            }
+            else {
+                console.log("Same date", _this.date, val);
+            }
+        });
+    };
     ExchangeDataProvider.prototype.onConnected = function () {
         var _this = this;
+        console.log('Connection checking', this.version);
         this.platform.ready().then(function () {
             _this.network.onConnect().subscribe(function () {
                 console.log('network connected!');
@@ -1449,17 +1493,92 @@ var ExchangeDataProvider = /** @class */ (function () {
                     }
                     console.log('we got a ', _this.network.type, ' connection!');
                     _this.syncData();
+                    _this.checkForUpdate();
                 }, 3000);
             });
         });
     };
+    ExchangeDataProvider.prototype.checkForUpdate = function () {
+        var _this = this;
+        if (this.checkForUpdates) {
+            console.log('checking for updates');
+            this.http.get(this.baseURL + 'checkVersion')
+                .subscribe(function (data) {
+                if (_this.version != data.version) {
+                    var installedVersion = data.version.split('.');
+                    var currentVersion = _this.version.split('.');
+                    if (installedVersion[0] != currentVersion[0]) {
+                        _this.majorUpdate();
+                    }
+                    else {
+                        _this.minorUpdate();
+                    }
+                }
+                else {
+                    console.log('up to date');
+                }
+                _this.checkForUpdates = false;
+            }, function (error) {
+                console.log('Version checking failed!', error);
+            });
+        }
+        else {
+            console.log('already checked');
+        }
+    };
+    ExchangeDataProvider.prototype.minorUpdate = function () {
+        var _this = this;
+        var alert = this.alertCtrl.create({
+            title: 'New Update Available',
+            message: 'Please get latest updates!',
+            buttons: [
+                {
+                    text: 'Later',
+                    role: 'cancel'
+                },
+                {
+                    text: 'Update Now',
+                    handler: function () {
+                        _this.market.open('com.evoke.airtelmusic');
+                    }
+                }
+            ]
+        });
+        alert.present();
+    };
+    ExchangeDataProvider.prototype.majorUpdate = function () {
+        var _this = this;
+        var alert = this.alertCtrl.create({
+            title: 'New Version Available',
+            message: 'New version available! Please update to continue',
+            enableBackdropDismiss: false,
+            buttons: [
+                {
+                    text: 'Quit',
+                    handler: function () {
+                        _this.platform.exitApp();
+                    }
+                },
+                {
+                    text: 'Update Now',
+                    handler: function () {
+                        _this.market.open('com.evoke.airtelmusic');
+                    }
+                }
+            ]
+        });
+        alert.present();
+    };
     ExchangeDataProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["B" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__ionic_native_network__["a" /* Network */],
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_6__ionic_native_network__["a" /* Network */],
             __WEBPACK_IMPORTED_MODULE_4__ionic_native_android_permissions__["a" /* AndroidPermissions */],
             __WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */],
             __WEBPACK_IMPORTED_MODULE_2__ionic_native_sqlite__["a" /* SQLite */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["h" /* Platform */]])
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["i" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["a" /* AlertController */],
+            __WEBPACK_IMPORTED_MODULE_7__ionic_native_market__["a" /* Market */],
+            __WEBPACK_IMPORTED_MODULE_5__ionic_storage__["b" /* Storage */]])
     ], ExchangeDataProvider);
     return ExchangeDataProvider;
 }());
@@ -1475,9 +1594,9 @@ var ExchangeDataProvider = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home__ = __webpack_require__(354);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__waitinglist_waitinglist__ = __webpack_require__(355);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__skipped_skipped__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home__ = __webpack_require__(355);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__waitinglist_waitinglist__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__skipped_skipped__ = __webpack_require__(357);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1513,7 +1632,7 @@ var TabsPage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'page-tabs',template:/*ion-inline-start:"/Users/chamara/Desktop/project/SocialQue/src/pages/tabs/tabs.html"*/'<ion-header>\n  <ion-navbar color="navbar">\n    <ion-title>Social Que</ion-title>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-tabs tabsplacement="top" color="pagedefault">\n    <ion-tab tabTitle="Home" [root]="home"></ion-tab>\n    <ion-tab tabTitle="Waiting List" [root]="waitinglist"></ion-tab>\n    <ion-tab tabTitle="Skipped" [root]="skipped"></ion-tab>\n  </ion-tabs>\n</ion-content>\n'/*ion-inline-end:"/Users/chamara/Desktop/project/SocialQue/src/pages/tabs/tabs.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]])
     ], TabsPage);
     return TabsPage;
 }());
@@ -1522,7 +1641,7 @@ var TabsPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 691:
+/***/ 692:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1532,12 +1651,12 @@ var TabsPage = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(266);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(268);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_camera__ = __webpack_require__(271);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_storage__ = __webpack_require__(80);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_settings_settings__ = __webpack_require__(353);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_storage__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_settings_settings__ = __webpack_require__(354);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_tabs_tabs__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_signup_signup__ = __webpack_require__(357);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_about_about__ = __webpack_require__(358);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_terms_terms__ = __webpack_require__(359);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_signup_signup__ = __webpack_require__(358);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_about_about__ = __webpack_require__(359);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_terms_terms__ = __webpack_require__(360);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_exchange_data_exchange_data__ = __webpack_require__(40);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1569,9 +1688,8 @@ var SocialQue = /** @class */ (function () {
         this.splashScreen = splashScreen;
         this.exchangeData = exchangeData;
         this.storage = storage;
-        this.date = new Date().getDate();
         this.initializeApp();
-        this.checkDate();
+        this.exchangeData.checkDate();
         this.pages = [
             { title: 'Settings', component: __WEBPACK_IMPORTED_MODULE_6__pages_settings_settings__["a" /* SettingsPage */] },
             { title: 'About', component: __WEBPACK_IMPORTED_MODULE_9__pages_about_about__["a" /* AboutPage */] },
@@ -1629,32 +1747,15 @@ var SocialQue = /** @class */ (function () {
             console.log(err);
         });
     };
-    SocialQue.prototype.checkDate = function () {
-        var _this = this;
-        this.storage.get('currentDate').then(function (val) {
-            if (val == null) {
-                console.log('Add new date');
-                _this.storage.set('currentDate', _this.date);
-            }
-            else if (_this.date != val) {
-                console.log('Updated to new date');
-                _this.exchangeData.resetTable();
-                _this.storage.set('currentDate', _this.date);
-            }
-            else {
-                console.log("Same date", _this.date, val);
-            }
-        });
-    };
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_9" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* Nav */]),
-        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* Nav */])
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_9" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* Nav */]),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* Nav */])
     ], SocialQue.prototype, "nav", void 0);
     SocialQue = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/chamara/Desktop/project/SocialQue/src/app/app.html"*/'<ion-menu [content]="content" type="overlay">\n  <ion-content style= "background: rgb(35, 39, 83);">\n    <ion-list style="text-align-last: center; margin: 50px 0 50px 0;">\n      <ion-icon name="cloud-upload" style="font-size: xx-large; color: white;" (click)="getImage()">\n        <img src="{{imageURI}}" style="border-radius: 50%; width: 50%;" alt="Add Image">\n      </ion-icon>\n      \n      <br><br>\n      <label style="font-size: x-large; margin:20px; color: #ffffff;">{{this.exchangeData.shopName}}</label>\n    </ion-list>\n    <ion-list> \n      <button class="custommenubutton" menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n        {{p.title}}<ion-icon name="arrow-dropright" style="font-size: x-large; float:right"></ion-icon>\n      </button>\n    </ion-list>\n  </ion-content>\n  <ion-footer>\n    <label style="color: #ffffff; margin:20px; vertical-align: super;">Version 0.0.1</label>\n  </ion-footer>\n</ion-menu>\n\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>'/*ion-inline-end:"/Users/chamara/Desktop/project/SocialQue/src/app/app.html"*/
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/chamara/Desktop/project/SocialQue/src/app/app.html"*/'<ion-menu [content]="content" type="overlay">\n  <ion-content style= "background: rgb(35, 39, 83);">\n    <ion-list style="text-align-last: center; margin: 50px 0 50px 0;">\n      <ion-icon name="cloud-upload" style="font-size: xx-large; color: white;" (click)="getImage()">\n        <img src="{{imageURI}}" style="border-radius: 50%; width: 50%;" alt="Add Image">\n      </ion-icon>\n      \n      <br><br>\n      <label style="font-size: x-large; margin:20px; color: #ffffff;">{{this.exchangeData.shopName}}</label>\n    </ion-list>\n    <ion-list> \n      <button class="custommenubutton" menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n        {{p.title}}<ion-icon name="arrow-dropright" style="font-size: x-large; float:right"></ion-icon>\n      </button>\n    </ion-list>\n  </ion-content>\n  <ion-footer>\n    <label style="color: #ffffff; margin:20px; vertical-align: super;">Version {{exchangeData.version}}</label>\n  </ion-footer>\n</ion-menu>\n\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>'/*ion-inline-end:"/Users/chamara/Desktop/project/SocialQue/src/app/app.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__ionic_native_camera__["a" /* Camera */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */],
             __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */],
             __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */],
             __WEBPACK_IMPORTED_MODULE_11__providers_exchange_data_exchange_data__["a" /* ExchangeDataProvider */],
@@ -1667,5 +1768,5 @@ var SocialQue = /** @class */ (function () {
 
 /***/ })
 
-},[360]);
+},[361]);
 //# sourceMappingURL=main.js.map

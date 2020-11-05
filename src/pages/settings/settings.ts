@@ -25,25 +25,17 @@ export class SettingsPage {
     public storage: Storage
   ) {
     this.baseURL = 'http://social.evokemusic.net/api/app/social-que/a-v1/putSellerDetail'
-    // this.editsignup = this.formBuilder.group({
-    //   category: ['Pharmacy'],
-    //   shopName: ['', Validators.required],
-    //   city: ['', Validators.required],
-    //   language: ['English'],
-    //   occupant: ['', Validators.required],
-    //   mobile: ['', [Validators.required, Validators.pattern('[0]{1}[7]{1}[0-9]{8}'), Validators.minLength(10)]]
-    // });
   }
 
   ionViewWillLoad() {
     this.editsignup = this.formBuilder.group({
-      category:['Pharmacy'],
-      shopName:['', Validators.required],
-      city: ['', Validators.required],        
+      category: ['Pharmacy'],
+      shopName: ['', Validators.required],
+      city: ['', Validators.required],
       language: ['English'],
-      occupant: ['', [Validators.required, Validators.pattern('[0-9]{1,5}')]],
-      que: ['', [Validators.required, Validators.pattern('[0-9]{1,5}')]],
-      mobile:['', [Validators.required, Validators.pattern('[0]{1}[7]{1}[0-9]{8}'), Validators.minLength(10)]]
+      occupant: ['', [Validators.required, Validators.pattern('[0-9]{1,4}'), Validators.min(1)]],
+      que: ['', [Validators.required, Validators.pattern('[0-9]{1,4}'), Validators.min(1)]],
+      mobile: ['', [Validators.required, Validators.pattern('[0]{1}[7]{1}[0-9]{8}'), Validators.minLength(10)]]
     });
   }
 
@@ -59,20 +51,20 @@ export class SettingsPage {
       { type: 'pattern', message: '*Not a valid mobile number!' }
     ],
     'occupant': [
-      { type: 'required', message: '*Occupant capacity is required!' }
+      { type: 'required', message: '*Occupant capacity required!' }
     ],
     'que': [
-      { type: 'required', message: '*Queue length is required!' }
+      { type: 'required', message: '*Queue length required!' }
     ]
   };
 
   updateUserDetails() {
     let arrangedMobile = this.editsignup.value.mobile.substring(1, 11);
 
-    if(this.exchangeData.maxCustomers != this.editsignup.value.occupant || this.exchangeData.queLength != this.editsignup.value.que){
-      this.exchangeData.occupentCountChanged=true;
+    if (this.exchangeData.maxCustomers != this.editsignup.value.occupant || this.exchangeData.queLength != this.editsignup.value.que) {
+      this.exchangeData.occupentCountChanged = true;
     }
-    
+
     this.exchangeData.maxCustomers = this.editsignup.value.occupant;
     this.exchangeData.shopName = this.editsignup.value.shopName;
 
@@ -87,33 +79,31 @@ export class SettingsPage {
       this.editsignup.value.language = "English";
     }
 
-    // if (this.editsignup.value.mobile) {
-      let headers: any = new HttpHeaders({ 'Content-Type': 'application/json' }),
-        options: any = {
-          "ID": this.exchangeData.userDetails.ID, "MSISDN": arrangedMobile, "Categories": this.editsignup.value.category, "Language": this.editsignup.value.language, "BusinessName": this.editsignup.value.shopName,
-          "City": this.editsignup.value.city, "Type": "Free", "GPS": "6.8923865,79.8717421", "OccupantCount": this.editsignup.value.occupant, "CreatedDate": Date.now()
-        },
-        url: any = this.baseURL;
+    let headers: any = new HttpHeaders({ 'Content-Type': 'application/json' }),
+      options: any = {
+        "ID": this.exchangeData.userDetails.ID, "MSISDN": arrangedMobile, "Categories": this.editsignup.value.category, "Language": this.editsignup.value.language, "BusinessName": this.editsignup.value.shopName,
+        "City": this.editsignup.value.city, "Type": "Free", "GPS": "6.8923865,79.8717421", "OccupantCount": this.editsignup.value.occupant, "CreatedDate": Date.now()
+      },
+      url: any = this.baseURL;
 
-      this.http.post(url, JSON.stringify(options), headers)
+    this.http.post(url, JSON.stringify(options), headers)
       .subscribe((data: any) => {
         console.log(`Congratulations data was successfully added`, data);
-        if(this.exchangeData.userDetails.MSISDN == this.editsignup.value.mobile){
-          this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": '0' + data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount, "QueueLength":parseInt(this.editsignup.value.que)};
+        if (this.exchangeData.userDetails.MSISDN == this.editsignup.value.mobile) {
+          this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": '0' + data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount, "QueueLength": parseInt(this.editsignup.value.que) };
           this.storage.set('currentUser', this.exchangeData.userDetails);
           this.exchangeData.queLength = parseInt(this.editsignup.value.que);
           this.goHome();
         } else {
-          this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": '0' + data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount, "QueueLength":parseInt(this.editsignup.value.que)};
+          this.exchangeData.userDetails = { "ID": data.data.id, "MSISDN": '0' + data.data.MSISDN, "Categories": data.data.Categories, "Language": data.data.Language, "BusinessName": data.data.BusinessName, "City": data.data.City, "OccupantCount": data.data.OccupantCount, "QueueLength": parseInt(this.editsignup.value.que) };
           this.storage.set('currentUser', null);
           this.exchangeData.queLength = parseInt(this.editsignup.value.que);
           this.navCtrl.push(OtpPage);
         }
       },
-      (error: any) => {
-        console.log('Something went wrong!', error);
-      });      
-    // }
+        (error: any) => {
+          console.log('Something went wrong!', error);
+        });
   }
   goHome() {
     this.navCtrl.setRoot(TabsPage);

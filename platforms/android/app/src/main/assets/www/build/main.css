@@ -30640,9 +30640,9 @@ ion-input input::placeholder {
 
 .btngetin {
   border-radius: 15px;
-  width: 150px;
-  height: 30px;
-  font-size: larger;
+  width: 150px !important;
+  height: 30px !important;
+  font-size: larger !important;
   background-color: #5e6ae0;
   margin: 2px 20% 2px 20%;
 }
@@ -30809,4 +30809,14 @@ page-tabs .tabs-md .tab-button[aria-selected=true] {
 
 page-terms .button-md {
   background-color: unset;
+}
+
+page-waitinglist .btngetinside {
+  border-radius: 50%;
+  width: 150px;
+  height: 50%;
+}
+
+page-waitinglist .label-md {
+  margin: unset !important;
 }

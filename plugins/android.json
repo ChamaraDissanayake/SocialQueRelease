@@ -10,6 +10,9 @@
     "cordova-plugin-android-permissions": {
       "PACKAGE_NAME": "io.ionic.starter"
     },
+    "cordova-plugin-appminimize": {
+      "PACKAGE_NAME": "io.ionic.starter"
+    },
     "cordova-plugin-camera": {
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "io.ionic.starter"
@@ -45,7 +48,7 @@
     "cordova-sqlite-storage": {
       "PACKAGE_NAME": "io.ionic.starter"
     },
-    "cordova-plugin-appminimize": {
+    "cordova-plugin-market": {
       "PACKAGE_NAME": "io.ionic.starter"
     }
   },

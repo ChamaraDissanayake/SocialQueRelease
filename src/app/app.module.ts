@@ -11,6 +11,8 @@ import { Network } from '@ionic-native/network';
 import { File } from '@ionic-native/file';
 import { Camera } from '@ionic-native/camera';
 import { AppMinimize } from '@ionic-native/app-minimize';
+import { Market } from '@ionic-native/market'
+
 // import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 
 import { IonicStorageModule } from '@ionic/storage';
@@ -28,9 +30,6 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { AboutPage } from '../pages/about/about';
 import { TermsPage } from '../pages/terms/terms';
 import { ExchangeDataProvider } from '../providers/exchange-data/exchange-data';
-
-
-
 
 @NgModule({
   declarations: [
@@ -87,6 +86,7 @@ import { ExchangeDataProvider } from '../providers/exchange-data/exchange-data';
     AndroidPermissions,
     StatusBar,
     AppMinimize,
+    Market,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ExchangeDataProvider,

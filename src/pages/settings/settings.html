@@ -82,7 +82,7 @@
     <div style="margin-top: 30px;">
       <ion-label class="signuplabels">Occupant Count</ion-label>
       <ion-item class="inputboxdecoration">        
-        <ion-input class="inputtext" type="tel" maxlength = "5" [(ngModel)]="editsignup.occupant" formControlName="occupant" value="{{this.exchangeData.userDetails.OccupantCount}}" onfocus="value=''"></ion-input>
+        <ion-input class="inputtext" type="tel" maxlength = "4" [(ngModel)]="editsignup.occupant" formControlName="occupant" value="{{this.exchangeData.userDetails.OccupantCount}}"></ion-input>
       </ion-item>
       <div class="validation-errors">
         <ng-container *ngFor="let validation of validation_messages.occupant">
@@ -96,7 +96,7 @@
     <div style="margin-top: 30px;">
       <ion-label class="signuplabels">Queue Length</ion-label>
       <ion-item class="inputboxdecoration">        
-        <ion-input class="inputtext" type="tel" maxlength = "5" [(ngModel)]="editsignup.que" formControlName="que" value="{{this.exchangeData.userDetails.QueueLength}}" onfocus="value=''"></ion-input>
+        <ion-input class="inputtext" type="tel" maxlength = "4" [(ngModel)]="editsignup.que" formControlName="que" value="{{this.exchangeData.userDetails.QueueLength}}"></ion-input>
       </ion-item>
       <div class="validation-errors">
         <ng-container *ngFor="let validation of validation_messages.que">

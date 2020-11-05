@@ -1,10 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SQLite } from '@ionic-native/sqlite';
-import { Platform } from 'ionic-angular';
+import { Platform, AlertController } from 'ionic-angular';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
-// import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage';
+// import { Connection, Network } from '@ionic-native/network';
 import { Network } from '@ionic-native/network';
+import { Market } from '@ionic-native/market'
 
 @Injectable()
 export class ExchangeDataProvider {
@@ -19,25 +21,32 @@ export class ExchangeDataProvider {
   queLength: number;
   shopName: string;
   occupentCountChanged: boolean;
-  
-  
+  version: any;
+  date: any;
+  checkForUpdates: boolean;
+
   constructor(
     private network: Network,
     public androidPermissions: AndroidPermissions,
     public http: HttpClient,
     private sqlite: SQLite,
     public platform: Platform,
-    // public storage:Storage
+    private alertCtrl: AlertController,
+    private market: Market,
+    public storage:Storage
     ) {
       this.occupentCountChanged = false;
+      this.onConnected()
       this.customerList = [];
       this.completedList = [];
       this.absentList = [];
       this.insideCustomerCount = 0;
-      this.lastCustomerNumber = 100000;
+      this.lastCustomerNumber = 1000;
       this.shopName = "";
-      this.onConnected();
-      this.baseURL = 'http://social.evokemusic.net/api/app/social-que/a-v1/putCustomerDetail'
+      this.baseURL = 'http://social.evokemusic.net/api/app/social-que/a-v1/'
+      this.date = new Date().getDate();
+      this.version = '0.0.1';
+      this.checkForUpdates = true;
   }
 
   setupDB(){
@@ -89,7 +98,6 @@ export class ExchangeDataProvider {
         location: 'default'
       })
         .then((db) => {
-          // db.executeSql("SELECT * FROM customer_details WHERE Status = 'pending' OR Status = 'waiting' OR Status = 'inside'", [])
           db.executeSql("SELECT * FROM customer_details WHERE Status like '%pending%' OR Status like '%waiting%' OR Status like '%inside%' OR Status like '%skipped%'", [])
           .then((result) => {
             console.log("RETRIEVED SUCCESSFULLY", result.rows);
@@ -136,7 +144,7 @@ export class ExchangeDataProvider {
     let headers 	: any		= new HttpHeaders({ 'Content-Type': 'application/json' }),
         options 	: any		= { "SellerId" : syncData.SellerId, "MSISDN" : syncData.MSISDN, "QueNo" : syncData.QueNo, "Status": syncData.Status, 
           "CreatedTime" : syncData.CreatedTime, "UpdatedTime" : syncData.UpdatedTime, "CheckInTime": syncData.CheckInTime},
-        url       : any      	= this.baseURL;
+        url       : any      	= this.baseURL+'putCustomerDetail';
 
       this.http.post(url, JSON.stringify(options), headers)
       .subscribe((data : any) => {
@@ -207,7 +215,25 @@ export class ExchangeDataProvider {
     });
   }
 
+  checkDate(){
+    this.storage.get('currentDate').then((val) => {
+      if(val == null){
+        console.log('Add new date')
+        this.storage.set('currentDate', this.date);
+      }
+      else if(this.date != val){
+        console.log('Updated to new date')
+        this.resetTable();
+        this.storage.set('currentDate', this.date);
+      }      
+      else {
+        console.log("Same date", this.date, val);
+      }      
+    });
+  }
+
   onConnected(){
+    console.log('Connection checking', this.version)
     this.platform.ready().then(() => {
       this.network.onConnect().subscribe(() => {
         console.log('network connected!');
@@ -217,8 +243,79 @@ export class ExchangeDataProvider {
           }
           console.log('we got a ' ,this.network.type, ' connection!');
           this.syncData();
+          this.checkForUpdate();
         }, 3000);
       });
     })
+  }
+
+  checkForUpdate(){
+    if(this.checkForUpdates){
+      console.log('checking for updates')
+      this.http.get(this.baseURL+'checkVersion')
+      .subscribe((data : any) => {
+        if(this.version != data.version){
+          let installedVersion = data.version.split('.');
+          let currentVersion = this.version.split('.');
+          
+          if(installedVersion[0]!=currentVersion[0]){
+            this.majorUpdate();
+          } else {
+            this.minorUpdate();
+          }
+        } else {
+          console.log('up to date')
+        }
+        this.checkForUpdates = false;
+      },
+      (error : any) => {
+        console.log('Version checking failed!',error);
+      });
+    } else {
+      console.log('already checked')
+    }
+  }
+
+  minorUpdate() {
+    let alert = this.alertCtrl.create({
+      title: 'New Update Available',
+      message: 'Please get latest updates!',
+      buttons: [
+        {
+          text: 'Later',
+          role: 'cancel'
+        },
+        {
+          text: 'Update Now',
+          handler: () => {
+            this.market.open('com.evoke.airtelmusic');            
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  majorUpdate() {
+    let alert = this.alertCtrl.create({
+      title: 'New Version Available',
+      message: 'New version available! Please update to continue',
+      enableBackdropDismiss: false,
+      buttons: [
+        {
+          text: 'Quit',
+          handler: () => {
+            this.platform.exitApp();
+          }
+        },
+        {
+          text: 'Update Now',
+          handler: () => {
+            this.market.open('com.evoke.airtelmusic');
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 }
