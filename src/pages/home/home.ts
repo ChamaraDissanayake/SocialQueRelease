@@ -116,16 +116,20 @@ export class HomePage {
 
   onSMSArrive(){
     this.platform.ready().then(() => {
-      if(SMS) SMS.startWatch(function(){
-            console.log('watching started');
-           }, function(){
-          console.log('failed to start watching');
-      });
-      document.addEventListener('onSMSArrive', function(e){
-        console.log('sms arrived')
-        this.checkSMS(e.data);
-        }.bind(this)
-      );
+      try{
+        if(SMS) SMS.startWatch(function(){
+          console.log('watching started');
+          }, function(){
+            console.log('failed to start watching');
+          });
+          document.addEventListener('onSMSArrive', function(e){
+            console.log('sms arrived')
+            this.checkSMS(e.data);
+            }.bind(this)
+          );
+      }catch(e){
+        console.log(e);
+      }
     })
   }
 
